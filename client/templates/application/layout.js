@@ -11,5 +11,5 @@ Template.layout.onRendered(function() {
         $(this).remove();
       });
     }
-  }
+  };
 });
