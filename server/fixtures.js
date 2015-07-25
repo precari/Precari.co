@@ -33,48 +33,57 @@ if (Posts.find().count() === 0) {
     });
   var test3 = Meteor.users.findOne(testId3);
 
+  // Create test data
 
-  var telescopeId = Posts.insert({
-    title: 'Introducing Telescope',
+  var request1Id = Posts.insert({
+    title: 'Request 1',
     userId: test1._id,
     author: test1.profile.name,
-    url: 'http://test1greif.com/introducing-telescope/',
+    prayer_request: 'This is request #1',
     submitted: new Date(now - 7 * 3600 * 1000),
     commentsCount: 2,
     upvoters: [], votes: 0
   });
 
   Comments.insert({
-    postId: telescopeId,
+    postId: request1Id,
     userId: test2._id,
     author: test2.profile.name,
     submitted: new Date(now - 5 * 3600 * 1000),
-    body: 'Interesting project test1, can I get involved?'
+    body: 'User 2 comment for request 1'
   });
 
   Comments.insert({
-    postId: telescopeId,
+    postId: request1Id,
     userId: test1._id,
     author: test1.profile.name,
     submitted: new Date(now - 3 * 3600 * 1000),
-    body: 'You sure can test2!'
+    body: 'User 1 follow up comment for request 1'
   });
 
-  Posts.insert({
-    title: 'Meteor',
+  var request2Id = Posts.insert({
+    title: 'Request 2',
     userId: test2._id,
     author: test2.profile.name,
-    url: 'http://meteor.com',
+    prayer_request: 'This is request #2',
     submitted: new Date(now - 10 * 3600 * 1000),
     commentsCount: 0,
     upvoters: [], votes: 0
   });
 
-  Posts.insert({
-    title: 'The Meteor Book',
+  Comments.insert({
+    postId: request2Id,
+    userId: test3._id,
+    author: test3.profile.name,
+    submitted: new Date(now - 5 * 3600 * 1000),
+    body: 'User 3 comment for request 2'
+  });
+
+  var request3Id = Posts.insert({
+    title: 'Request 3',
     userId: test2._id,
     author: test2.profile.name,
-    url: 'http://themeteorbook.com',
+    prayer_request: 'This is request #3',
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
     upvoters: [], votes: 0
@@ -82,11 +91,11 @@ if (Posts.find().count() === 0) {
 
   for (var i = 0; i < 10; i++) {
     Posts.insert({
-      title: 'Test post #' + i,
+      title: 'Test #' + i,
       author: test1.profile.name,
       userId: test1._id,
-      url: 'http://google.com/?q=test-' + i,
-      submitted: new Date(now - i * 3600 * 1000 + 1),
+      prayer_request: 'Request # ' + i,
+      submitted: new Date(now - i - 15 * 3600 * 1000 + 1),
       commentsCount: 0,
       upvoters: [], votes: 0
     });

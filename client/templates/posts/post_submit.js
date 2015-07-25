@@ -16,14 +16,15 @@ Template.postSubmit.events({
     e.preventDefault();
 
     var post = {
-      url: $(e.target).find('[name=url]').val(),
+      prayer_request: $(e.target).find('[name=prayer_request]').val(),
       title: $(e.target).find('[name=title]').val()
     };
 
     var errors = validatePost(post);
-    if (errors.title || errors.url)
+    if (errors.title || errors.prayer_request)
       return Session.set('postSubmitErrors', errors);
 
+    // TODO: Change postsExists error handling
     Meteor.call('postInsert', post, function(error, result) {
       // display the error to the user and abort
       if (error)
