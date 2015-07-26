@@ -1,10 +1,10 @@
 <template name="postItem">
   <div class="post">
-    <a href="#" class="upvote btn btn-default {{upvotedClass}}">🙏</a>
+    <a href="#" class="prayedFor btn btn-default {{prayedForClass}}">{{userPrayed}}</a>
     <div class="post-content">
       <h3>{{title}}: <span>{{prayer_request}}</span></h3>
       <p>
-        {{pluralize votes "Vote"}} |
+        {{prayedCount}} Prayed |
         submitted by {{author}} |
         <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a>
         {{#if ownPost}}| <a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}

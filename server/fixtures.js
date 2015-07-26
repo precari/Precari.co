@@ -42,7 +42,7 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #1',
     submitted: new Date(now - 7 * 3600 * 1000),
     commentsCount: 2,
-    upvoters: [], votes: 0
+    precatis: [], prayedCount: 0
   });
 
   Comments.insert({
@@ -68,7 +68,7 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #2',
     submitted: new Date(now - 10 * 3600 * 1000),
     commentsCount: 0,
-    upvoters: [], votes: 0
+    precatis: [], prayedCount: 0
   });
 
   Comments.insert({
@@ -86,7 +86,7 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #3',
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
-    upvoters: [], votes: 0
+    precatis: [], prayedCount: 0
   });
 
   for (var i = 0; i < 10; i++) {
@@ -97,7 +97,7 @@ if (Posts.find().count() === 0) {
       prayer_request: 'Request # ' + i,
       submitted: new Date(now - i - 15 * 3600 * 1000 + 1),
       commentsCount: 0,
-      upvoters: [], votes: 0
+      precatis: [], prayedCount: 0
     });
   }
 }
