@@ -6,7 +6,10 @@
       <p>
         {{prayedCount}} Prayed |
         submitted by {{author}} |
-        <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a>
+        <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a> |
+        {{#each tags}}
+          {{ > tagItem}}
+        {{/each}}
         {{#if ownPost}}| <a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
       </p>
     </div>
