@@ -6,7 +6,7 @@ Template.postItem.helpers({
     var userId = Meteor.userId();
 
     // If user not logged in, disable able. Otherwise, display button
-    // based on the user action
+    // based on the user action (if they clicked prayed button, or not)
     if (!userId) {
       return 'disabled';
     } else if (!_.include(this.precatis, userId)) {

@@ -1,3 +1,4 @@
+// Animations for inserting/removing posts
 Template.layout.onRendered(function() {
   this.find('#main')._uihooks = {
     insertElement: function(node, next) {

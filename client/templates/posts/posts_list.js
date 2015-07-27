@@ -1,3 +1,4 @@
+// Handle animations related to post actions
 Template.postsList.onRendered(function () {
   this.find('.wrapper')._uihooks = {
     insertElement: function (node, next) {
