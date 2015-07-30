@@ -17,6 +17,9 @@
         <li class="{{activeRouteClass  'topPosts'}}">
           <a href="{{pathFor 'topPosts'}}">Top Requests</a>
         </li>
+        <li class="{{activeRouteClass 'tags'}}">
+          <a href="{{pathFor 'tagsList'}}">Tags</a>
+        </li>
         {{#if currentUser}}
           <li class="{{activeRouteClass 'postSubmit'}}">
             <a href="{{pathFor 'postSubmit'}}">Submit Request</a>

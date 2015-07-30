@@ -1,7 +1,19 @@
+// ---------------------------- Template helpers -------------------------------
+
 Template.postItem.helpers({
+
+  /**
+   * Returns a boolean value if the current user owns this post.
+   * @return boolean True if the logged in user owns the post, otherwise false
+   */
   ownPost: function() {
     return this.userId == Meteor.userId();
   },
+
+  /**
+   * Returns the CSS class name for the button indicating if the user
+   * has prayed, or not.
+   */
   prayedForClass: function() {
     var userId = Meteor.userId();
 
@@ -15,6 +27,10 @@ Template.postItem.helpers({
       return 'btn-success disabled';
     }
   },
+
+  /**
+   * Returns the text indicating if the user has prayed for the request, or not
+   */
   userPrayed: function() {
     var userId = Meteor.userId();
 
@@ -24,10 +40,23 @@ Template.postItem.helpers({
     } else {
       return 'Thank you!';
     }
+  },
+
+  /**
+   * Displays the value of the tag, as a string
+   */
+    tagName: function() {
+    return this.toString();
   }
 });
 
+// ---------------------------- Template events -------------------------------
+
 Template.postItem.events({
+
+  /**
+   * Click event for the pryaed for button
+   */
   'click .prayable': function(e) {
     e.preventDefault();
     Meteor.call('prayedFor', this._id);

@@ -91,6 +91,10 @@ body {
   .comments li p:last-child {
     margin-bottom: 0; }
 
+.tag a {
+  font-weight: bold;
+}
+
 .dropdown-menu span {
   display: block;
   padding: 3px 20px;

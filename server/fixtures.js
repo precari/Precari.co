@@ -1,6 +1,6 @@
-/*
-  Contains sample data
-*/
+/**
+ * Contains sample data
+ */
 
 // Fixture data
 if (Posts.find().count() === 0) {
@@ -87,10 +87,10 @@ if (Posts.find().count() === 0) {
     body: 'User 3 comment for request 2'
   });
 
-  var request3Id = Posts.insert({
+  Posts.insert({
     title: 'Request 3',
-    userId: test2._id,
-    author: test2.profile.name,
+    userId: test3._id,
+    author: test3.profile.name,
     prayer_request: 'This is request #3',
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
@@ -99,6 +99,19 @@ if (Posts.find().count() === 0) {
     tags:['test-tag1', 'test-tag2', 'test-tag3']
   });
 
+  Posts.insert({
+    title: 'Taggless request',
+    userId: test3._id,
+    author: test3.profile.name,
+    prayer_request: 'This a request without a tag',
+    submitted: new Date(now - 12 * 3600 * 1000),
+    commentsCount: 0,
+    precatis: [],
+    prayedCount: 0,
+    tags:[]
+  });
+
+  // Add some additional data
   for (var i = 0; i < 10; i++) {
     Posts.insert({
       title: 'Test #' + i,
@@ -112,4 +125,26 @@ if (Posts.find().count() === 0) {
       tags:['test-tag' + i]
     });
   }
+
+  // Add Tag data
+  Tags.insert({
+    name:       'test-tag1',
+    visibility: 'public'
+  });
+
+  Tags.insert({
+    name:       'test-tag2',
+    visibility: 'public'
+  });
+
+  Tags.insert({
+    name:       'test-tag3',
+    visibility: 'public'
+  });
+
+  Tags.insert({
+    name:       'private-tag',
+    visibility: 'private'
+  });
+
 }
