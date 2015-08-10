@@ -52,7 +52,14 @@ Meteor.publish('tags', function() {
  * @param string tag The tag to get the posts for
  * @return collection Posts that contain the specified tag
  */
- Meteor.publish('postsFromTag', function(tag) {
+ Meteor.publish('postsContainingTag', function(options, tag) {
+
+   check(options, {
+     sort: Object,
+     limit: Number
+   });
+
   check(tag, String);
-  return Posts.find({tags: tag});
+
+  return Posts.find({tags: tag}, options);
 });

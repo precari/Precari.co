@@ -8,7 +8,7 @@
         submitted by {{author}} |
         <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a> |
         {{#each tags}}
-            <span class="tag"><a href="{{pathFor 'tagsList'}}/{{tagName}}">#{{tagName}}</a></span>
+            <span class="tag"><a href="{{pathFor 'postsContainingTag' data=tagNameKVPair}}">#{{this}}</a></span>
         {{/each}}
         {{#if ownPost}}| <a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
       </p>

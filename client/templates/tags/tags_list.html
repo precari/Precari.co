@@ -2,7 +2,7 @@
   <h2>Tag list</h2>
   <ul>
   {{#each tags}}
-    {{ > tagItem }}
+      <li class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></li>
   {{/each}}
   </ul>
 </template>

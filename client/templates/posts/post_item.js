@@ -43,11 +43,12 @@ Template.postItem.helpers({
   },
 
   /**
-   * Displays the value of the tag, as a string
+   * Gets the key value pair of the tag for the pathFor route
    */
-    tagName: function() {
-    return this.toString();
+  tagNameKVPair: function() {
+    return {name: this};
   }
+
 });
 
 // ---------------------------- Template events -------------------------------
