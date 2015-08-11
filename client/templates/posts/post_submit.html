@@ -14,6 +14,13 @@
           <span class="help-block">{{errorMessage 'prayer_request'}}</span>
       </div>
     </div>
+    <div class="form-group {{errorClass 'tags'}}">
+      <label class="control-label" for="title">Tags</label>
+      <div class="controls">
+          <input name="tags" id="tags" type="text" value="" placeholder="Separate tags by commas" class="form-control"/>
+          <span class="help-block">{{errorMessage 'tags'}}</span>
+      </div>
+    </div>
     <input type="submit" value="Submit" class="btn btn-primary"/>
   </form>
 </template>

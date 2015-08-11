@@ -23,15 +23,19 @@ Template.postSubmit.events({
     // prevents the browser from handling the event and submitting the form
     e.preventDefault();
 
+    // Convert the string to an array
+    var tagArray = Meteor.precariFunctions.convertCommaListToArray($(e.target).find('[name=tags]').val());
+
     // Get the data from the fields
     var post = {
       prayer_request: $(e.target).find('[name=prayer_request]').val(),
-      title: $(e.target).find('[name=title]').val()
+      title: $(e.target).find('[name=title]').val(),
+      tags: tagArray
     };
 
     // Validate the data and return any errors
     var errors = validatePost(post);
-    if (errors.title || errors.prayer_request) {
+    if (errors.title || errors.prayer_request || errors.tags) {
       return Session.set('postSubmitErrors', errors);
     }
 
