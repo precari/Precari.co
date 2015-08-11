@@ -37,8 +37,11 @@ if (Posts.find().count() === 0) {
     });
   var test3 = Meteor.users.findOne(testId3);
 
-  // Create test data
+  var tag1 = 'tag 1';
+  var tag2 = 'tag 2';
+  var tag3 = 'tag 3';
 
+  // Create test data
   var request1Id = Posts.insert({
     title: 'Request 1',
     userId: test1._id,
@@ -48,7 +51,7 @@ if (Posts.find().count() === 0) {
     commentsCount: 2,
     precatis: [],
     prayedCount: 0,
-    tags:['test-tag1']
+    tags:[tag1]
   });
 
   Comments.insert({
@@ -74,9 +77,9 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #2',
     submitted: new Date(now - 10 * 3600 * 1000),
     commentsCount: 0,
-    precatis: [],
-    prayedCount: 0,
-    tags:['test-tag1', 'test-tag2']
+    precatis: [testId1, testId2],
+    prayedCount: 2,
+    tags:[tag1, tag2]
   });
 
   Comments.insert({
@@ -94,9 +97,9 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #3',
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
-    precatis: [],
-    prayedCount: 0,
-    tags:['test-tag1', 'test-tag2', 'test-tag3']
+    precatis: [testId1, testId2, testId3],
+    prayedCount: 3,
+    tags:[tag1, tag2, tag3]
   });
 
   Posts.insert({
@@ -113,6 +116,9 @@ if (Posts.find().count() === 0) {
 
   // Add some additional data
   for (var i = 0; i < 10; i++) {
+
+    var tag = 'tag ' + i;
+
     Posts.insert({
       title: 'Test #' + i,
       author: test1.profile.name,
@@ -122,29 +128,10 @@ if (Posts.find().count() === 0) {
       commentsCount: 0,
       precatis: [],
       prayedCount: 0,
-      tags:['test-tag' + i]
+      tags:[tag]
     });
+
+    // Insert the tags into the Tag collection
+    Meteor.call('tagInsert', tag, function(error, result) { });
   }
-
-  // Add Tag data
-  Tags.insert({
-    name:       'test-tag1',
-    visibility: 'public'
-  });
-
-  Tags.insert({
-    name:       'test-tag2',
-    visibility: 'public'
-  });
-
-  Tags.insert({
-    name:       'test-tag3',
-    visibility: 'public'
-  });
-
-  Tags.insert({
-    name:       'private-tag',
-    visibility: 'private'
-  });
-
 }
