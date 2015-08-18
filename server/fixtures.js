@@ -132,6 +132,6 @@ if (Posts.find().count() === 0) {
     });
 
     // Insert the tags into the Tag collection
-    Meteor.call('tagInsert', tag, function(error, result) { });
+    Meteor.call('tagInsert', tag);
   }
 }

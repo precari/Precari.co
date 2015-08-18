@@ -1,4 +1,22 @@
 /**
+ * Publishes the current user's information
+ * @return collection The user matching the user ID, otherwise null
+ */
+ Meteor.publish("user", function() {
+    // this.userId returns undefined if not logged in
+     if(this.userId) {
+       return Meteor.users.find(
+         { _id: this.userId },
+         { fields:
+           { services: 1, profile: 1 }
+         });
+     } else {
+       // Optionally, return  return []; Functionally, the result is the same
+       return this.ready();
+     }
+ });
+
+/**
  * Publishes the posts based on the options object
  * @param object options The sort and retreival options
  * @return collection The posts matching the sort criteria
