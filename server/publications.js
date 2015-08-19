@@ -8,7 +8,7 @@
        return Meteor.users.find(
          { _id: this.userId },
          { fields:
-           { services: 1, profile: 1 }
+           { emails: 1, username: 1, profile: 1 }
          });
      } else {
        // Optionally, return  return []; Functionally, the result is the same

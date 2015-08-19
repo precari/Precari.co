@@ -9,7 +9,7 @@ if (Posts.find().count() === 0) {
   // create real test users
   var testId1 = Accounts.createUser({
                     username: 'test1',
-                    email : '',
+                    email : 'test1@example.com',
                     password : 'test1',
                     profile  : {
                         name: 'Test User 1'
@@ -19,7 +19,7 @@ if (Posts.find().count() === 0) {
 
   var testId2 = Accounts.createUser({
                     username: 'test2',
-                    email : '',
+                    email : 'test1@example.com',
                     password : 'test2',
                     profile  : {
                         name: 'Test User 2'

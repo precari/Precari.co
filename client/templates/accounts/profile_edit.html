@@ -7,13 +7,24 @@
           <span class="help-block">{{errorMessage 'name'}}</span>
       </div>
     </div>
+  {{#if email}}
     <div class="form-group {{errorClass 'email'}}">
       <label class="control-label" for="email">Email address</label>
       <div class="controls">
-        <input name="email-address" id="email" type="text" value="{{email}}" placeholder="Your email address" class="form-control"/>
+        <input name="email" id="email" type="text" value="{{email}}" placeholder="Your email address" class="form-control"/>
         <span class="help-block">{{errorMessage 'email'}}</span>
       </div>
     </div>
+  {{/if}}
+  {{#if username}}
+    <div class="form-group {{errorClass 'username'}}">
+      <label class="control-label" for="email">User name</label>
+      <div class="controls">
+        <input name="username" id="email" type="text" value="{{username}}" placeholder="Your user name" class="form-control"/>
+        <span class="help-block">{{errorMessage 'username'}}</span>
+      </div>
+    </div>
+  {{/if}}
     <input type="submit" value="Submit" class="btn btn-primary submit"/>
   </form>
 </template>
