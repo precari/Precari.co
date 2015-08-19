@@ -48,47 +48,55 @@ Template.profileEdit.helpers({
     }
 });
 
+// --------------------------- Template event methods --------------------------
+
 Template.profileEdit.events({
 
   // Form sumbit event
   'submit form': function(e) {
 
-  // prevents the browser from handling the event and submitting the form
-  e.preventDefault();
+    // prevents the browser from handling the event and submitting the form
+    e.preventDefault();
 
-  var profileProperties = {};
-  var errors = {};
+    var profileProperties = {};
+    var errors = {};
 
-  // Build the profile data to update. Profiles are different for a locally
-  // created account or for an OAuth account.
+    // Build the profile data to update and perform client side validation.
+    //  Profiles are different for a locally created account or for an
+    // OAuth account.
 
-  if (isLocalProfile()) {
-    profileProperties = getLocalAccountProfileProperties(e);
+    if (isLocalProfile()) {
+      // Get the locally created account data to update
+      profileProperties = getLocalAccountProfileProperties(e);
 
-    // validate the data and check for errors
-    errors = validateProfile(profileProperties);
-    if (errors.name) {
-      return Session.set('profileEditErrors', errors);
+      // validate the data and check for errors
+      errors = validateProfile(profileProperties);
+      if (errors.name || errors.email || errors.username ) {
+        return Session.set('profileEditErrors', errors);
+      }
+    } else {
+      // Get the OAuth account data to update
+      profileProperties = getOAuthAccountProfileProperties(e);
+
+      // validate the data and check for errors
+      errors = validateProfile(profileProperties);
+      if (errors.name) {
+        return Session.set('profileEditErrors', errors);
+      }
     }
-  } else {
-    profileProperties = getOAuthAccountProfileProperties(e);
 
-    // validate the data and check for errors
-    errors = validateProfile(profileProperties);
-    if (errors.name) {
-      return Session.set('profileEditErrors', errors);
-    }
-  }
+    // Update the profile
+    Meteor.call('profileUpdate', profileProperties, function(error, result) {
 
-  // Update the user profile
-  Meteor.users.update(
-    { _id: Meteor.user()._id }, { $set: profileProperties}, function(error) {
+      // Clear errors for UI before refreshing the page
+      Session.set('profileEditErrors', {});
+
+      // Display the error to the user and abort
       if (error) {
-       // display the error to the user
-       throwError('Update failed: ' + error.reason);
+        return throwError('Update failed: ' + error.reason);
       } else {
-        // Clear errors for UI before refreshing the page
-        Session.set('profileEditErrors', {});
+
+        alert('Profile successfully updated.');
         // TODO: Implement naxio:flash. This requires a CSS fix
         // Flash.success('top', 'Profile successfully updated', 5000, true);
       }
@@ -96,6 +104,7 @@ Template.profileEdit.events({
   }
 });
 
+// ------------------------------- Other methods -------------------------------
 
 /**
  * Determines which account type to get the profileProperties for and
@@ -121,10 +130,14 @@ function getLocalAccountProfileProperties(e) {
 
     // Get the name and trimming an leading or trailing spaces
     var name = getControlValue(e, 'display-name');
+    var email = getControlValue(e, 'email');
+    var username = getControlValue(e, 'username');
 
     // Build the profile data to update
     var profileProperties = {
       'profile': { name: name },
+      'emails': [{address: email}],
+      'username': username
     };
 
     return profileProperties;
