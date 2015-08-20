@@ -1,0 +1,24 @@
+<template name="burnerAccount">
+  <div class="data-page">
+    <h2>Burner Accounts</h2>
+    <p>Burner accounts, or anonymous accounts, are designed to allow you to post anonymously, without using your real data.
+      <ul>
+        <li>Burner accounts are designed to protect the person posting the request and the identity of the request.</li>
+        <li>These accounts are meant to be <b>temporary</b>. If no account activity is seen for a period of 21 days, these accounts are removed.</li>
+        <li>Once you create the anonymous account, you can modify the user data through the edit profile button.</li>
+      </ul>
+    </p>
+    <h3>Create your burner account</h3>
+    <ol>
+      <li>To create the account, press the <b>Create</b> button in the create account box: <code>Sign in / Join</code> -> <code>Create account</code></li>
+      <li>If you don't like the chosen name, uncheck the burner account checkbox and then recheck the checkbox to get new data</li>
+      <li>If you still don't like the data, create the account and then modify it to your liking</li>
+    </ol>
+    <h3>Login Details</h3>
+    <p>If you wish to login at a later date using this same account, be sure to save this login information</p>
+    <ul>
+      <li><b>Username:</b> {{getUsername}}</li>
+      <li><b>password:</b> {{getPassword}}</li>
+    </ul>
+  </div>
+</template>

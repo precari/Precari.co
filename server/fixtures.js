@@ -2,40 +2,51 @@
  * Contains sample data
  */
 
-// Fixture data
+// A check for current environment. If production, do not create seed data
+if (process.env.ROOT_URL === 'http://localhost:3000/') {
+     console.log('Starting development server');
+ } else {
+     console.log('Starting production server');
+     return;
+ }
+
+// Fixture user data
+if(Meteor.users.find().count() === 0) {
+
+  console.log('No users found. creating....');
+
+   // create real test users
+   var userId1 = createTestUser('test1', 'test1');
+   console.log('Created user 1: ' + userId1);
+
+   var userId2 = createTestUser('test2', 'test2');
+   console.log('Created user 2: ' + userId2);
+
+   var userId3 = createTestUser('test3', 'test3');
+   console.log('Created user 3: ' + userId3);
+   console.log('');
+ }
+
+// Fixture post data
 if (Posts.find().count() === 0) {
+
+  if(!Meteor.users.findOne()) {
+    console.log('No users exists. Cannot make post data');
+    return;
+  }
+
+  console.log('Created posts...');
+
+  var test1 = Meteor.users.findOne(userId1);
+  var test2 = Meteor.users.findOne(userId2);
+  var test3 = Meteor.users.findOne(userId3);
+
+  if (!test1) {
+    console.log('User data not created. Exiting...');
+    return;
+  }
+
   var now = new Date().getTime();
-
-  // create real test users
-  var testId1 = Accounts.createUser({
-                    username: 'test1',
-                    email : 'test1@example.com',
-                    password : 'test1',
-                    profile  : {
-                        name: 'Test User 1'
-                    }
-    });
-  var test1 = Meteor.users.findOne(testId1);
-
-  var testId2 = Accounts.createUser({
-                    username: 'test2',
-                    email : 'test1@example.com',
-                    password : 'test2',
-                    profile  : {
-                        name: 'Test User 2'
-                    }
-    });
-  var test2 = Meteor.users.findOne(testId2);
-
-  var testId3 = Accounts.createUser({
-                    username: 'test3',
-                    email : '',
-                    password : 'test3',
-                    profile  : {
-                        name: 'Test User 3'
-                    }
-    });
-  var test3 = Meteor.users.findOne(testId3);
 
   var tag1 = 'tag 1';
   var tag2 = 'tag 2';
@@ -77,7 +88,7 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #2',
     submitted: new Date(now - 10 * 3600 * 1000),
     commentsCount: 0,
-    precatis: [testId1, testId2],
+    precatis: [userId1, userId2],
     prayedCount: 2,
     tags:[tag1, tag2]
   });
@@ -97,7 +108,7 @@ if (Posts.find().count() === 0) {
     prayer_request: 'This is request #3',
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
-    precatis: [testId1, testId2, testId3],
+    precatis: [userId1, userId3, userId3],
     prayedCount: 3,
     tags:[tag1, tag2, tag3]
   });
@@ -134,4 +145,23 @@ if (Posts.find().count() === 0) {
     // Insert the tags into the Tag collection
     Meteor.call('tagInsert', tag);
   }
+}
+
+/**
+ * Creates a test user
+ */
+function createTestUser(username, password) {
+  var userId = Accounts.createUser({
+                username: username,
+                email : faker.internet.email(),
+                password : password,
+                profile  : {
+                    name: faker.name.findName()
+                }
+  });
+
+  var user = Meteor.users.findOne(userId);
+  console.log('Created account for: ' + username);
+
+  return userId;
 }

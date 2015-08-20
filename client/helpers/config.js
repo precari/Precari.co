@@ -34,5 +34,11 @@ Accounts.ui.config({
                 return false;
             }
         }
+    }, {
+      fieldName: 'burner',
+      fieldLabel: 'Create a burner/anonymous account',
+      inputType: 'checkbox',
+      visible: true,
+      saveToProfile: true
     }]
 });
