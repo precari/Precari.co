@@ -1,8 +1,10 @@
 <template name="tagsList">
-  <h2>Tag list</h2>
-  <ul>
-  {{#each tags}}
-      <li class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></li>
-  {{/each}}
-  </ul>
+  <div class="main page">
+    <h2>Tag list</h2>
+    <ul>
+    {{#each tags}}
+        <li class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></li>
+    {{/each}}
+    </ul>
+  </div>
 </template>

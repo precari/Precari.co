@@ -14,7 +14,13 @@ Template.postEdit.helpers({
   // If the field has an error, return the class 'has-error'
   errorClass: function (field) {
     return !!Session.get('postEditErrors')[field] ? 'has-error' : '';
+  },
+
+  // If value is true, returns 'checked' for the checkbox
+  checkedIf: function (checked) {
+    return checked ? 'checked' : '';
   }
+
 });
 
 Template.postEdit.events({
@@ -33,7 +39,8 @@ Template.postEdit.events({
     var postProperties = {
       prayer_request: $(e.target).find('[name=prayer_request]').val(),
       title: $(e.target).find('[name=title]').val(),
-      tags: tagArray
+      tags: tagArray,
+      private: $(e.target).find('[name=private]').is(':checked')
     };
 
     // Validate the data and return any errors
@@ -63,7 +70,7 @@ Template.postEdit.events({
     e.preventDefault();
 
     // Prompt user to delete and process accordingly
-    if (confirm("Delete this request?")) {
+    if (confirm('Delete this request?')) {
       var currentPostId = this._id;
       Posts.remove(currentPostId);
       Router.go('home');

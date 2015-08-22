@@ -8,7 +8,7 @@ Meteor.publish('posts', function(options) {
     sort: Object,
     limit: Number
   });
-  return Posts.find({}, options);
+  return Posts.find({private: false}, options);
 });
 
 /**
@@ -62,7 +62,7 @@ Meteor.publish('tags', function() {
 
   check(tag, String);
 
-  return Posts.find({tags: tag}, options);
+  return Posts.find({tags: tag, private: false}, options);
 });
 
 /**

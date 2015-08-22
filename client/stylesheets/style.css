@@ -77,6 +77,17 @@ body {
     float: right;
     margin-top: 7px; }
 
+/**
+ * Highlights private posts
+ */
+.post.private {
+    /* TODO: Fix to use the bootstrap class of bg-warning
+      The problem is that .bg-warning is lower in the hierarchy than .post
+    */
+    background-color: #fcf8e3;
+}
+
+
 .comments {
   list-style-type: none;
   margin: 0; }

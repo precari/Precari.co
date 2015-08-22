@@ -30,7 +30,8 @@ Template.postSubmit.events({
     var post = {
       prayer_request: $(e.target).find('[name=prayer_request]').val(),
       title: $(e.target).find('[name=title]').val(),
-      tags: tagArray
+      tags: tagArray,
+      private: $(e.target).find('[name=private]').is(':checked')
     };
 
     // Validate the data and return any errors

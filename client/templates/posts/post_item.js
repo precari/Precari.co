@@ -7,7 +7,24 @@ Template.postItem.helpers({
    * @return boolean True if the logged in user owns the post, otherwise false
    */
   ownPost: function() {
-    return this.userId == Meteor.userId();
+    return this.userId === Meteor.userId();
+  },
+
+  /**
+   * Returns the CSS class name for a private class. This alerts the user
+   * as to which of their posts are private or public
+   */
+  privateClass: function() {
+
+    /*
+      TODO: Fix to use the bootstrap class of bg-warning
+          The problem is that .bg-warning is lower in the hierarchy than .post
+    */
+
+    // If post is flagged as private, set selector
+    if (this.private) {
+      return 'private';
+    }
   },
 
   /**

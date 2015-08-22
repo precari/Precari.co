@@ -151,7 +151,7 @@ if(Meteor.users.find().count() === 0) {
    });
 
    Posts.insert({
-     title: 'Taggless request (public)',
+     title: 'Request 4 (public)',
      userId: user3._id,
      author: user3.profile.name,
      prayer_request: 'This a request without a tag',
@@ -159,14 +159,25 @@ if(Meteor.users.find().count() === 0) {
      commentsCount: 0,
      precatis: [],
      prayedCount: 0,
-     tags:[user3.profile.name]
+     tags:[user3.profile.name],
+     private: false
    });
+
+   /**
+    * If value is even, return true. Otherwise return false
+    */
+   var determinePrivate = function(value) {
+     if (value % 2) {
+       return true;
+     } else {
+       return false;
+     }
+   };
 
    // Add some additional data
    for (var i = 0; i < 10; i++) {
 
      var tag = 'tag ' + i;
-
      Posts.insert({
        title: 'Test #' + i,
        author: user1.profile.name,
@@ -177,7 +188,7 @@ if(Meteor.users.find().count() === 0) {
        precatis: [],
        prayedCount: 0,
        tags:[tag, user1.profile.name],
-       private: i % 2
+       private: determinePrivate(i)
      });
 
      // Insert the tags into the Tag collection
