@@ -1,22 +1,4 @@
 /**
- * Publishes the current user's information
- * @return collection The user matching the user ID, otherwise null
- */
- Meteor.publish("user", function() {
-    // this.userId returns undefined if not logged in
-     if(this.userId) {
-       return Meteor.users.find(
-         { _id: this.userId },
-         { fields:
-           { emails: 1, username: 1, profile: 1 }
-         });
-     } else {
-       // Optionally, return  return []; Functionally, the result is the same
-       return this.ready();
-     }
- });
-
-/**
  * Publishes the posts based on the options object
  * @param object options The sort and retreival options
  * @return collection The posts matching the sort criteria
@@ -67,6 +49,7 @@ Meteor.publish('tags', function() {
 
 /**
  * Publishes the posts containing the specified tag
+ * @param object options The sort and retreival options
  * @param string tag The tag to get the posts for
  * @return collection Posts that contain the specified tag
  */
@@ -80,4 +63,19 @@ Meteor.publish('tags', function() {
   check(tag, String);
 
   return Posts.find({tags: tag}, options);
+});
+
+/**
+ * Publishes the posts containing the specified tag
+ * @param object options The sort and retreival options
+ * @return collection Posts that contain the specified tag
+ */
+ Meteor.publish('usersOwnPosts', function(options) {
+
+   check(options, {
+     sort: Object,
+     limit: Number
+   });
+
+  return Posts.find({userId: this.userId}, options);
 });
