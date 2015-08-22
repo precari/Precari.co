@@ -22,7 +22,7 @@ Template.profileEdit.helpers({
     name: function() {
       var user = Meteor.user();
 
-      if (user === null) {
+      if (!user || !user.profile) {
         return '';
       } else {
         return user.profile.name;
@@ -52,7 +52,9 @@ Template.profileEdit.helpers({
 
 Template.profileEdit.events({
 
-  // Form sumbit event
+  /**
+   * On form submit, update the user's profile
+   */
   'submit form': function(e) {
 
     // prevents the browser from handling the event and submitting the form
@@ -101,6 +103,33 @@ Template.profileEdit.events({
         // Flash.success('top', 'Profile successfully updated', 5000, true);
       }
     });
+  },
+
+  /**
+   * On click delete button, prompt user to delete their account
+   */
+  'click .delete': function(e) {
+
+    // prevents the browser from handling the event
+    e.preventDefault();
+
+    // Prompt user to delete and process accordingly
+    if (confirm('Are you sure you want to delete your account?')) {
+
+        // Delete the user
+        Meteor.call('deleteUser', Meteor.userId(), function(error, result) {
+
+          // Display the error to the user and abort
+          if (error) {
+            return throwError('Delete failed: ' + error.reason);
+          } else {
+
+            Router.go('home');
+            // TODO: Implement naxio:flash. This requires a CSS fix
+            // Flash.success('top', 'Profile successfully updated', 5000, true);
+          }
+    	 });
+    }
   }
 });
 
