@@ -1,12 +1,66 @@
-<template name="errors">
-  <div class="errors">
-    {{#each errors}}
-      {{> error}}
+
+<!-- --------------------------- Info Messages ----------------------------- -->
+
+<template name="successMessagesContainer">
+  <div class="alert-container">
+    {{#each successMessages}}
+      {{> successMessage}}
     {{/each}}
   </div>
 </template>
 
-<template name="error">
+<template name="successMessage">
+  <div class="alert alert-success" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{message}}
+  </div>
+</template>
+
+<!-- --------------------------- Info Messages ----------------------------- -->
+
+<template name="infoMessagesContainer">
+  <div class="alert-container">
+    {{#each infoMessages}}
+      {{> infoMessage}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="infoMessage">
+  <div class="alert alert-info" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{message}}
+  </div>
+</template>
+
+<!-- ------------------------ Warning Messages ----------------------------- -->
+
+<template name="warningMessagesContainer">
+  <div class="alert-container">
+    {{#each warningMessages}}
+      {{> warningMessage}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="warningMessage">
+  <div class="alert alert-warning" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{message}}
+  </div>
+</template>
+
+<!-- ------------------------ Error Messages ------------------------------- -->
+
+<template name="errorMessagesContainer">
+  <div class="alert-container">
+    {{#each errorMessages}}
+      {{> errorMessage}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="errorMessage">
   <div class="alert alert-danger" role="alert">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     {{message}}

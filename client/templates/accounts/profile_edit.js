@@ -1,3 +1,5 @@
+// -------------------------- Template onCreated -------------------------------
+
 Template.profileEdit.onCreated(function() {
 
   // Initialize the session collection to store errors on submit
@@ -45,7 +47,18 @@ Template.profileEdit.helpers({
       if (user && user.username) {
         return user.username;
       }
-    }
+    },
+
+    // Gets the burner boolean
+    burner: function() {
+      var user = Meteor.user();
+
+      if (!user || !user.profile) {
+        return false;
+      } else {
+        return user.profile.burner;
+      }
+    },
 });
 
 // --------------------------- Template event methods --------------------------
@@ -90,17 +103,14 @@ Template.profileEdit.events({
     // Update the profile
     Meteor.call('profileUpdate', profileProperties, function(error, result) {
 
-      // Clear errors for UI before refreshing the page
+      // Clear errors for UI
       Session.set('profileEditErrors', {});
 
       // Display the error to the user and abort
       if (error) {
         return throwError('Update failed: ' + error.reason);
       } else {
-
-        alert('Profile successfully updated.');
-        // TODO: Implement naxio:flash. This requires a CSS fix
-        // Flash.success('top', 'Profile successfully updated', 5000, true);
+        return throwSuccess('Profile successfully updated');
       }
     });
   },

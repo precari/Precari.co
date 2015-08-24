@@ -1,6 +1,6 @@
 <template name="postItem">
-  <div class="post {{privateClass}}">
-    <a href="#" class="prayedFor btn btn-default {{prayedForClass}}">{{userPrayed}}</a>
+  <div class="post {{getPostSubClass}}">
+    <a href="#" class="prayedFor btn btn-default {{prayedForClass}}" {{disabled}} >{{userPrayed}}</a>
     <div class="post-content">
       <h3>{{title}}: <span>{{prayer_request}}</span></h3>
       <p>

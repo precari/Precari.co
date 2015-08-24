@@ -11,19 +11,17 @@ Template.postItem.helpers({
   },
 
   /**
-   * Returns the CSS class name for a private class. This alerts the user
-   * as to which of their posts are private or public
+   * Returns the CSS class name for the style based on the type of post.
+   * (private or private). This alerts the user as to which of their posts
+   * are private or public
    */
-  privateClass: function() {
-
-    /*
-      TODO: Fix to use the bootstrap class of bg-warning
-          The problem is that .bg-warning is lower in the hierarchy than .post
-    */
+  getPostSubClass: function() {
 
     // If post is flagged as private, set selector
     if (this.private) {
-      return 'private';
+      return 'bg-warning';
+    } else {
+      return 'default';
     }
   },
 
@@ -34,14 +32,24 @@ Template.postItem.helpers({
   prayedForClass: function() {
     var userId = Meteor.userId();
 
-    // If user not logged in, disable able. Otherwise, display button
-    // based on the user action (if they clicked prayed button, or not)
-    if (!userId) {
-      return 'disabled';
-    } else if (!_.include(this.precatis, userId)) {
-      return 'btn-primary prayable';
-    } else {
-      return 'btn-success disabled';
+    // If user logged in, display button based on the user action
+    // (if they clicked prayed button, or not)
+    if (userId) {
+      if (!_.include(this.precatis, userId)) {
+        return 'btn-primary prayable';
+      } else {
+        return 'btn-success disabled';
+      }
+    }
+  },
+
+  /**
+   * Adds Bootstraps disabled icon on mouse over for users not logged in
+   */
+  disabled: function() {
+
+    if (!Meteor.userId()) {
+      return "disabled";
     }
   },
 

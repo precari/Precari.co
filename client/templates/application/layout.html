@@ -1,7 +1,10 @@
 <template name="layout">
   <div class="container">
     {{> header}}
-    {{> errors}}
+    {{> successMessagesContainer}}
+    {{> infoMessagesContainer}}
+    {{> warningMessagesContainer}}
+    {{> errorMessagesContainer}}
     <div id="main">
       {{> yield}}
     </div>

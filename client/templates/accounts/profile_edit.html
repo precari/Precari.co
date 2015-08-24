@@ -25,6 +25,12 @@
       </div>
     </div>
   {{/if}}
+  {{#if burner}}
+    <div class="burner-account bg-warning">
+      <p><b>Please note:</b> This account is a burner account and It will be removed at some point in time.</p>
+    </div>
+    <br />
+  {{/if}}
     <input type="submit" value="Submit" class="btn btn-primary submit"/>
     <hr/>
     <a class="btn btn-danger delete" href="#">Delete profile</a>
