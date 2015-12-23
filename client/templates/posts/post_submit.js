@@ -27,20 +27,26 @@ Template.postSubmit.events({
     var tagArray = Meteor.precariFunctions.convertCommaListToArray($(e.target).find('[name=tags]').val());
 
     // Get the data from the fields
-    var post = {
+    var postData = {
       prayer_request: $(e.target).find('[name=prayer_request]').val(),
       title: $(e.target).find('[name=title]').val(),
       tags: tagArray,
-      private: $(e.target).find('[name=private]').is(':checked')
+      private: $(e.target).find('[name=private-post]').is(':checked'),
+    };
+
+    // Additional data related to the post
+    var postMetadata = {
+      privateTags: $(e.target).find('[name=private-tags]').is(':checked')
     };
 
     // Validate the data and return any errors
-    var errors = validatePost(post);
+    var errors = validatePost(postData);
     if (errors.title || errors.prayer_request || errors.tags) {
       return Session.set('postSubmitErrors', errors);
     }
 
-    Meteor.call('postInsert', post, function(error, result) {
+    // Insert the post
+    Meteor.call('postInsert', postData, postMetadata, function(error, result) {
 
       // Display the error to the user and abort
       if (error) {

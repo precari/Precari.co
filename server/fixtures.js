@@ -14,10 +14,12 @@ if (isLocalHost()) {
      return;
  }
 
+
+// ------------------------- Create test users ---------------------------------
+
 // Fixture user data
 if(Meteor.users.find().count() === 0) {
 
-  // ----------------------------- Methods -------------------------------------
   /**
    * Creates a test user. Have inside of the if block should prevent it from
    * being called from the outside
@@ -45,8 +47,6 @@ if(Meteor.users.find().count() === 0) {
     return userId;
   };
 
-// --------------------------- End Methods -------------------------------------
-
   console.log('No users found. creating....');
 
    // create real test users
@@ -61,6 +61,8 @@ if(Meteor.users.find().count() === 0) {
    console.log('');
  }
 
+ // --------------------------- Add test posts ---------------------------------
+
  // Fixture post data
  if (Posts.find().count() === 0) {
 
@@ -69,7 +71,17 @@ if(Meteor.users.find().count() === 0) {
      return;
    }
 
-   console.log('Created posts...');
+   /**
+    * If value is even, return true. Otherwise return false
+    */
+   var determinePrivate = function(value) {
+
+     if (value % 2) {
+       return true;
+     } else {
+       return false;
+     }
+   };
 
    var user1 = Meteor.users.findOne(userId1);
    var user2 = Meteor.users.findOne(userId2);
@@ -83,7 +95,7 @@ if(Meteor.users.find().count() === 0) {
    var now = new Date().getTime();
 
    var tag1 = 'tag 1';
-   var tag2 = 'tag 2';
+   var tag2 = '~tag 2 (private)';   // private tag
    var tag3 = 'tag 3';
 
    // Create test data
@@ -163,21 +175,19 @@ if(Meteor.users.find().count() === 0) {
      private: false
    });
 
-   /**
-    * If value is even, return true. Otherwise return false
-    */
-   var determinePrivate = function(value) {
-     if (value % 2) {
-       return true;
-     } else {
-       return false;
-     }
-   };
+   // Inserert the tags
+    Meteor.call('tagInsert', tag1);
+    Meteor.call('tagInsert', tag2);
+    Meteor.call('tagInsert', tag3);
+    Meteor.call('tagInsert', user1.profile.name);
+    Meteor.call('tagInsert', user2.profile.name);
+    Meteor.call('tagInsert', user3.profile.name);
 
    // Add some additional data
    for (var i = 0; i < 10; i++) {
 
      var tag = 'tag ' + i;
+
      Posts.insert({
        title: 'Test #' + i,
        author: user1.profile.name,
@@ -191,10 +201,10 @@ if(Meteor.users.find().count() === 0) {
        private: determinePrivate(i)
      });
 
-     // Insert the tags into the Tag collection
+     // Insert the tag for the post
      Meteor.call('tagInsert', tag);
-     Meteor.call('tagInsert', user1.profile.name);
-     Meteor.call('tagInsert', user2.profile.name);
-     Meteor.call('tagInsert', user3.profile.name);
    }
+
+   console.log('Created posts...');
+   console.log('Fixture data created!');
  }

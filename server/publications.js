@@ -40,11 +40,11 @@ Meteor.publish('notifications', function() {
 });
 
 /**
- * Publishes the list of all tags
- * @return collection Entire Tag collection
+ * Publishes the list of public tags
+ * @return collection Tag collection of public tags
  */
 Meteor.publish('tags', function() {
-  return Tags.find();
+  return Tags.find({private: false});
 });
 
 /**

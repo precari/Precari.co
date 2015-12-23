@@ -22,10 +22,14 @@
       </div>
     </div>
     <div class="form-group">
-      <label class="control-label" for="title">Private</label>
+      <label class="control-label" for="title">Privacy</label>
       <div class="checkbox">
-  	    <label><input type="checkbox" name="private" id="private" {{checkedIf private}} >
+  	    <label><input type="checkbox" name="private-post" id="private-post" >
   				Make request private (only viewable through the URL)</label>
+  		</div>
+      <div class="checkbox">
+  	    <label><input type="checkbox" name="private-tags" id="private-tags" >
+  				Make tags private (only viewable through the URL). These tags will begin with an ~. </label>
   		</div>
     </div>
     <br />
