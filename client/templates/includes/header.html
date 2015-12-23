@@ -17,6 +17,9 @@
         <li class="{{activeRouteClass  'topPosts'}}">
           <a href="{{pathFor 'topPosts'}}">Top Requests</a>
         </li>
+        <li class="{{activeRouteClass  'leastPosts'}}">
+          <a href="{{pathFor 'leastPosts'}}">Least Requests</a>
+        </li>
         <li class="{{activeRouteClass 'tags'}}">
           <a href="{{pathFor 'tagsList'}}">Tags</a>
         </li>
@@ -28,7 +31,7 @@
           {{> notifications}}
         </li>
         <li class="{{activeRouteClass 'myPosts'}}">
-          <a href="{{pathFor 'myPosts'}}">My Posts</a>
+          <a href="{{pathFor 'myPosts'}}">My Requests</a>
         </li>
       {{/if}}
       </ul>
