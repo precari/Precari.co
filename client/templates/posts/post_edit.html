@@ -7,29 +7,40 @@
           <span class="help-block">{{errorMessage 'title'}}</span>
       </div>
     </div>
-    <div class="form-group {{errorClass 'prayer_request'}}">
-      <label class="control-label" for="prayer_request">Request</label>
+    <div class="form-group {{errorClass 'prayerRequest'}}">
+      <label class="control-label" for="prayer-request">Request</label>
       <div class="controls">
-          <textarea name="prayer_request" id="prayer_request" type="text" value="{{prayer_request}}" placeholder="Your prayer request" class="form-control"></textarea>
-          <span class="help-block">{{errorMessage 'prayer_request'}}</span>
+          <textarea name="prayer-request" id="prayer-request" type="text" value="{{prayerRequest}}" placeholder="Your prayer request" class="form-control"></textarea>
+          <span class="help-block">{{errorMessage 'prayerRequest'}}</span>
       </div>
     </div>
     <div class="form-group {{errorClass 'tags'}}">
-      <label class="control-label" for="title">Tags</label>
+      <label class="control-label" for="tags">Tags</label>
       <div class="controls">
           <input name="tags" id="tags" type="text" value="{{tags}}" placeholder="Separate tags by commas" class="form-control"/>
           <span class="help-block">{{errorMessage 'tags'}}</span>
       </div>
     </div>
+    <div class="form-group {{errorClass 'privateTags'}}">
+      <label class="control-label" for="private-tags">Private Tags</label><br />
+      <small>Private tags only show up in private posts and private tag lists.<br />
+      Privte tags are denoted with a ~ (squiggly)</small>
+      <div class="controls">
+          <input name="private-tags" id="private-tags" type="text" value="{{privateTags}}" placeholder="Separate tags by commas" class="form-control"/>
+          <span class="help-block">{{errorMessage 'privateTags'}}</span>
+      </div>
+    </div>
     <div class="form-group">
-      <label class="control-label" for="title">Privacy</label>
+      <label class="control-label" for="title">Private Request</label>
       <div class="checkbox">
-  	    <label><input type="checkbox" name="private-post" id="private-post" >
-  				Make request private (only viewable through the URL)</label>
-  		</div>
-      <div class="checkbox">
-  	    <label><input type="checkbox" name="private-tags" id="private-tags" >
-  				Make tags private (only viewable through the URL). These tags will begin with an ~. </label>
+  	    <label><input type="checkbox" name="private-post" id="private-post" {{checked private}} >
+          Make request private (only viewable through the URL)</label>
+        <small>
+          <ul>
+            <li>Private posts are viewable through the URL or in private lists</li>
+            <li>These posts are highlighted yellow</li>
+          </ul>
+        </small>
   		</div>
     </div>
     <br />

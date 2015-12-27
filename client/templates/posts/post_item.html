@@ -2,13 +2,16 @@
   <div class="post {{getPostSubClass}}">
     <a href="#" class="prayedFor btn btn-default {{prayedForClass}}" {{disabled}} >{{userPrayed}}</a>
     <div class="post-content">
-      <h3>{{title}}: <span>{{prayer_request}}</span></h3>
+      <h3>{{title}}: <span>{{prayerRequest}}</span></h3>
       <p>
         {{prayedCount}} Prayed |
         submitted by {{author}} |
         <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a> |
         {{#each tags}}
-            <span class="tag"><a href="{{pathFor 'postsContainingTag' data=tagNameKVPair}}">#{{this}}</a></span>
+            <span class="tag"><a href="{{pathFor 'postsContainingTag' data=tagNameKVPair}}">#{{this}}</a>, </span>
+        {{/each}}
+        {{#each privateTags}}
+            <span class="private-tag bg-warning"><a href="{{pathFor 'postsContainingTag' data=tagNameKVPair}}">#{{this}}</a>, </span>
         {{/each}}
         {{#if ownPost}}| <a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
       </p>

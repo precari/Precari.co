@@ -94,9 +94,13 @@ body {
   .comments li p:last-child {
     margin-bottom: 0; }
 
-.tag a {
-  font-weight: bold;
-}
+  .tag a {
+    font-weight: bold;
+  }
+
+  .private-tag a {
+    font-weight: bold;
+  }
 
 .dropdown-menu span {
   display: block;
