@@ -187,3 +187,12 @@ div.burner-account {
 div.burner-account p {
   margin: 0px;
 }
+
+div.tag-list {
+  border-color: #ddd;
+  border-width: 1px;
+  border-radius: 4px 4px 4px 4px;
+  border-style: solid;
+  padding-left: 5px;
+  margin-bottom: 15px;
+}

@@ -63,7 +63,7 @@ Meteor.publish('allPostsFromTag', function(options, tag) {
 /**
  * Publishes the posts belonging to the logged in user
  * @param object options The sort and retreival options
- * @return collection Posts that contain the specified tag
+ * @return collection Posts that belong to the logged in user
  */
 Meteor.publish('usersOwnPosts', function(options) {
   check(options, {
@@ -73,6 +73,16 @@ Meteor.publish('usersOwnPosts', function(options) {
 
    // Gets the posts for the logged in users
   return Posts.find({userId: this.userId}, options);
+});
+
+/**
+ * Publishes the posts belonging to the logged in user without options
+ * @return collection Posts that belong to the user
+ */
+Meteor.publish('usersPostsForTagList', function(options) {
+
+   // Gets the posts for the logged in users without search optins
+  return Posts.find({userId: this.userId});
 });
 
 /**

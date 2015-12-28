@@ -1,0 +1,20 @@
+<template name="tagsPage">
+  <div class="main page">
+  {{#if currentUser}}
+    <h3>My Tags</h3>
+    <div class="tag-list">
+      <p>
+      {{#each userTags}}
+        <span class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{this}}</a></span>,
+      {{/each}}
+      </p>
+    </div>
+  {{/if}}
+    <h3>Tag List</h3>
+    <div class="tag-list">
+    {{#each tags}}
+      <span class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></span>,
+    {{/each}}
+    </div>
+  </div>
+</template>
