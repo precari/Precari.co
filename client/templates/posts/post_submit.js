@@ -15,7 +15,7 @@ var setFormTagArrays = function() {
   currentUsersPrivateTags = [];
 
   var posts = Posts.find().fetch();
-  tagArrays = Meteor.precariMethods.getTagsFromPosts(posts);
+  tagArrays = Meteor.precariMethods.tags.getTagsFromPosts(posts);
 
   currentUsersTags = tagArrays[0];
   currentUsersPrivateTags = tagArrays[1];
