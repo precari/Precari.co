@@ -19,33 +19,14 @@ Template.tagsPage.onCreated(function() {
 Template.tagsPage.helpers({
 
   /**
-   * Gets the list of tags from the user's own posts.
+   * Gets the list of the current user's own tags from their posts
    */
   userTags: function() {
 
-    // Get the user posts that contain their tags
     var posts = Posts.find().fetch();
+    tagArrays = Meteor.precariMethods.getTagsFromPosts(posts);
 
-    var tagArray = [];
-    var privateTagArray = [];
-
-    for (var i = 0; i < posts.length; i++) {
-
-      // Add the tags to the respective list
-      tagArray = tagArray.concat(posts[i].tags);
-      privateTagArray = privateTagArray.concat(posts[i].privateTags);
-    }
-
-    // Join the tags and privateTags. (keeping public tags first)
-    tagArray = tagArray.concat(privateTagArray);
-
-    // Filter duplicates and then sort alphabetically
-    tagArray = _.uniq(tagArray);
-    tagArray = _.sortBy(tagArray, function (name) {
-      return name;
-    });
-
-    // Return only unique values
+    tagArray = tagArrays[0].concat(tagArrays[1]);
     return tagArray;
   },
 

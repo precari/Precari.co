@@ -25,14 +25,13 @@
       <p>Additionaly, choose from your currently used tags</p>
       <div class="controls">
       {{#each userTags}}
-        <label class="checkbox-inline"><input name="tags-checkbox" type="checkbox" value="{{this}}">{{this}}</label>
+        <label class="checkbox-inline"><input name="tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
       {{/each}}
       </div>
     </div>
     <div class="form-group {{errorClass 'privateTags'}}">
       <label class="control-label" for="private-tags">Private Tags</label><br />
-      <small>Private tags only show up in private posts and private tag lists.<br />
-      Privte tags are denoted with a ~ (squiggly)</small>
+      <small>Private tags only show up in private posts and private tag lists.</small>
       <div class="controls">
           <input name="private-tags" id="private-tags" type="text" value="{{privateTags}}" placeholder="Separate tags by commas" class="form-control"/>
           <span class="help-block">{{errorMessage 'privateTags'}}</span>
@@ -42,7 +41,7 @@
       <p>Additionaly, choose from your currently used tags</p>
       <div class="controls">
       {{#each userPrivateTags}}
-        <label class="checkbox-inline"><input name="private-tags-checkbox" type="checkbox" value="{{this}}">{{this}}</label>
+        <label class="checkbox-inline"><input name="private-tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
       {{/each}}
       </div>
     </div>

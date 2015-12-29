@@ -25,7 +25,7 @@
       <p>Additionaly, choose from your currently used tags</p>
       <div class="controls">
       {{#each userTags}}
-        <label class="checkbox-inline"><input name="tags-checkbox" type="checkbox" value="{{this}}">{{this}}</label>
+        <label class="checkbox-inline"><input name="tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
       {{/each}}
       </div>
     </div>
@@ -41,7 +41,7 @@
       <p>Additionaly, choose from your currently used tags</p>
       <div class="controls">
       {{#each userPrivateTags}}
-        <label class="checkbox-inline"><input name="private-tags-checkbox" type="checkbox" value="{{this}}">{{this}}</label>
+        <label class="checkbox-inline"><input name="private-tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
       {{/each}}
       </div>
     </div>

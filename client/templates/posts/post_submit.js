@@ -1,49 +1,33 @@
 
 /* stores the user's tags */
-var formTagArray;
+var currentUsersTags;
 /* stores the user's private tags */
-var formPrivateTagArray;
+var currentUsersPrivateTags;
 
 /**
- * Gets the list of tags from the user's own posts. This allows the Loop
- * to run once, but access the array data multiple times.
+ * Gets the list of tags from the user's own posts. This allows the data
+ * collection to run once, but access the array data multiple times.
  */
 var setFormTagArrays = function() {
 
   // Initialize and populate
-  formTagArray = [];
-  formPrivateTagArray = [];
+  currentUsersTags = [];
+  currentUsersPrivateTags = [];
 
-  // Get the user posts that contain their tags
   var posts = Posts.find().fetch();
+  tagArrays = Meteor.precariMethods.getTagsFromPosts(posts);
 
-  // Loop through the posts getting the tags used by the user
-  for (var i = 0; i < posts.length; i++) {
-
-    // Add the tags to the respective list
-    formTagArray = formTagArray.concat(posts[i].tags);
-    formPrivateTagArray = formPrivateTagArray.concat(posts[i].privateTags);
-  }
-
-  // Filter duplicates and then sort alphabetically
-  formTagArray = _.uniq(formTagArray);
-  formTagArray = _.sortBy(formTagArray, function (name) {
-    return name;
-  });
-
-  formPrivateTagArray = _.uniq(formPrivateTagArray);
-  formPrivateTagArray = _.sortBy(formPrivateTagArray, function (name) {
-     return name;
-   });
+  currentUsersTags = tagArrays[0];
+  currentUsersPrivateTags = tagArrays[1];
 };
 
 /**
- * Gets the tags from the form to submit with the new post
+ * Gets the checked tags from the form to submit with the new post
  * @param object e Form event data
  * @param string name Name of the tag type (controls) to get the data from
  * @return array An array containing the tag names
  */
- var getTagFormArray = function(e, name) {
+ var getCheckedTagValues = function(e, name) {
 
   // Convert the string to an array
   var tagArray = Meteor.precariMethods.convertCommaListToArray
@@ -56,7 +40,7 @@ var setFormTagArrays = function() {
     tagArray.push(this.value);
   });
 
-  // Return only unique values. Filter out any duplicates
+  // Return only unique values; Filter out any duplicates
   return _.uniq(tagArray);
 };
 
@@ -96,17 +80,22 @@ Template.postSubmit.helpers({
     return !!Session.get('postSubmitErrors')[field] ? 'has-error' : '';
   },
 
+  // If value is true, returns 'checked' for the checkbox
+  checked: function (checked) {
+    return checked ? 'checked' : '';
+  },
+
   /**
    * Gets the list of tags from the user's own posts.
    */
   userTags: function() {
 
     // If the tag array has been built, use it. Otherwise build the arrays
-    if (formTagArray === undefined) {
+    if (currentUsersTags === undefined) {
       setFormTagArrays();
     }
 
-    return formTagArray;
+    return currentUsersTags;
   },
 
   /**
@@ -115,11 +104,11 @@ Template.postSubmit.helpers({
   userPrivateTags: function() {
 
     // If the tag array has been built, use it. Otherwise build the arrays
-    if (formPrivateTagArray === undefined) {
+    if (currentUsersPrivateTags === undefined) {
       setFormTagArrays();
     }
 
-    return formPrivateTagArray;
+    return currentUsersPrivateTags;
   },
 });
 
@@ -131,8 +120,8 @@ Template.postSubmit.events({
     // prevents the browser from handling the event and submitting the form
     e.preventDefault();
 
-    tagArray = getTagFormArray(e, 'tags');
-    privateTagArray = getTagFormArray(e, 'private-tags');
+    tagArray = getCheckedTagValues(e, 'tags');
+    privateTagArray = getCheckedTagValues(e, 'private-tags');
 
     // Get the data from the fields
     var postData = {
