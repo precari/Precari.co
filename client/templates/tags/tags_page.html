@@ -2,18 +2,20 @@
   <div class="main page">
   {{#if currentUser}}
     <h3>My Tags</h3>
-    <div class="tag-list">
-      <p>
+    <div class="tag-cloud border">
       {{#each userTags}}
-        <span class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></span>,
+        {{#if private}}
+          {{ > privateTagItemWithLink}}
+        {{else}}
+          {{ > publicTagItemWithLink}}
+        {{/if}}
       {{/each}}
-      </p>
     </div>
   {{/if}}
-    <h3>Tag List</h3>
-    <div class="tag-list">
+    <h3>Public Tag List</h3>
+    <div class="tag-cloud border">
     {{#each tags}}
-      <span class="tag"><a href="{{pathFor 'postsContainingTag'}}">#{{name}}</a></span>,
+      {{ > publicTagItemWithLink}}
     {{/each}}
     </div>
   </div>

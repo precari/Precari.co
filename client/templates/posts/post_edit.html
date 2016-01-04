@@ -15,40 +15,53 @@
       </div>
     </div>
     <div class="form-group {{errorClass 'tags'}}">
-      <label class="control-label" for="tags">Tags</label>
-      <div class="controls">
-          <input name="tags" id="tags" type="text" value="{{tags}}" placeholder="Separate tags by commas" class="form-control"/>
-          <span class="help-block">{{errorMessage 'tags'}}</span>
-      </div>
+      <label class="control-label" for="tags">Tags</label><br />
+      <small>Add public and/or private tags to this request.</small>
+      <span class="help-block">{{errorMessage 'tags'}}</span>
     </div>
-    <div class="tag-list">
-      <p>Additionaly, choose from your currently used tags</p>
-      <div class="controls">
+    <div class="form-group {{errorClass 'tags'}}">
+      <label class="control-label sub-label">Public Tags</label><br />
+      <div id="tag-cloud" class="tag-cloud">
+        {{#each tags}}
+          {{ > publicTagItemWithRemoveGlyph this }}
+        {{/each}}
+      </div>
+      <input name="tags-input" id="tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control"/>
+    </div>
+  {{#if userTags}}
+    <div class="tag-list-container">
+      <p>Choose from your currently used public tags</p>
+      <div id="user-tag-cloud" class="tag-cloud">
       {{#each userTags}}
-        <label class="checkbox-inline"><input name="tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
+        {{ > publicTagItemWithCheckGlyph this }}
       {{/each}}
       </div>
     </div>
+  {{/if}}
     <div class="form-group {{errorClass 'privateTags'}}">
-      <label class="control-label" for="private-tags">Private Tags</label><br />
-      <small>Private tags only show up in private posts and private tag lists.</small>
-      <div class="controls">
-          <input name="private-tags" id="private-tags" type="text" value="{{privateTags}}" placeholder="Separate tags by commas" class="form-control"/>
-          <span class="help-block">{{errorMessage 'privateTags'}}</span>
+      <label class="control-label sub-label">Private Tags</label><br />
+      <small>Private tags only show up in private posts and private tag lists.<br /></small>
+      <div id="private-tag-cloud" class="tag-cloud">
+        {{#each privateTags}}
+          {{ > privateTagItemWithRemoveGlyph this }}
+        {{/each}}
       </div>
+      <input name="private-tags-input" id="private-tags-input" type="text" value="" placeholder="Add tag through enter key or by comma" class="form-control"/>
     </div>
-    <div class="tag-list">
-      <p>Additionaly, choose from your currently used tags</p>
-      <div class="controls">
+  {{#if userPrivateTags}}
+    <div class="tag-list-container">
+      <p>Choose from your currently used private tags</p>
+      <div id="user-private-tag-cloud" class="tag-cloud">
       {{#each userPrivateTags}}
-        <label class="checkbox-inline"><input name="private-tags-checkbox" type="checkbox" value="{{name}}">{{name}}</label>
+        {{ > privateTagItemWithCheckGlyph this }}
       {{/each}}
       </div>
     </div>
+  {{/if}}
     <div class="form-group">
       <label class="control-label" for="title">Private Request</label>
       <div class="checkbox">
-  	    <label><input type="checkbox" name="private-post" id="private-post" {{checked private}} >
+  	    <label><input type="checkbox" name="private-post" id="private-post" {{checked private}}>
           Make request private (only viewable through the URL)</label>
         <small>
           <ul>
@@ -59,8 +72,6 @@
   		</div>
     </div>
     <br />
-    <input type="submit" value="Submit" class="btn btn-primary submit"/>
-    <hr/>
-    <a class="btn btn-danger delete" href="#">Delete request</a>
+    <input type="submit" value="Submit" class="btn btn-primary"/>
   </form>
 </template>

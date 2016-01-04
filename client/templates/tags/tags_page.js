@@ -24,7 +24,7 @@ Template.tagsPage.helpers({
   userTags: function() {
 
     var posts = Posts.find().fetch();
-    tagArrays = Meteor.precariMethods.tags.getTagsFromPosts(posts);
+    tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
 
     tagArray = tagArrays[0].concat(tagArrays[1]);
     return tagArray;

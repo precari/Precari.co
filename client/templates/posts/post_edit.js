@@ -15,7 +15,7 @@ var setFormTagArrays = function() {
   currentUsersPrivateTags = [];
 
   var posts = Posts.find().fetch();
-  tagArrays = Meteor.precariMethods.tags.getTagsFromPosts(posts);
+  tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
 
   currentUsersTags = tagArrays[0];
   currentUsersPrivateTags = tagArrays[1];
@@ -63,7 +63,7 @@ Template.postEdit.onCreated(function() {
   });
 
   // Now that the updated post data is returned, rebuild the tags lists
-  setFormTagArrays();
+  setUserTagArrays();
 });
 
 // ---------------------------- Template helpers -------------------------------
@@ -80,9 +80,20 @@ Template.postEdit.helpers({
     return !!Session.get('postEditErrors')[field] ? 'has-error' : '';
   },
 
-  // If value is true, returns 'checked' for the checkbox
-  checked: function (checked) {
-    return checked ? 'checked' : '';
+  /**
+   * Converts the tag array to a KV pair for display in template
+   * @return array KV pair array of the tags
+   */
+  tags: function() {
+    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.tags);
+  },
+
+  /**
+   * Converts the private tag array to a KV pair for display in template
+   * @return array KV pair array of the tags
+   */
+  privateTags: function() {
+    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.privateTags);
   },
 
   /**
@@ -115,13 +126,87 @@ Template.postEdit.helpers({
 // ---------------------------- Template events -------------------------------
 
 Template.postEdit.events({
+
+  /**
+   * Supress the submitting of the form with the enter key
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'keypress form input[type="text"]': function(e) {
+
+    // If enter key is pressed on the form, surpress the default action
+    if(event.keyCode == 13 || e.keyCode == 188) {
+      event.preventDefault();
+      return false;
+    }
+  },
+
+  /**
+   * On keyup event, search for trigger keys and create a new tag from the
+   * value in the input control
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'keyup #tags-input': function (e) {
+
+    // If comma ',' or carriage return, add tag
+    if (e.keyCode == 13 || e.keyCode == 188) {
+      var tagText = e.currentTarget.value;
+      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+      Blaze._globalHelpers.insertTag(tagType, tagText);
+      e.currentTarget.value = '';
+    }
+  },
+
+  /**
+   * On keyup event, search for trigger keys and create a new tag from the
+   * value in the input control
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'keyup #private-tags-input': function (e) {
+
+    // If comma ',' or carriage return, add tag
+    if (e.keyCode == 13 || e.keyCode == 188) {
+      var tagText = e.currentTarget.value;
+      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+      Blaze._globalHelpers.insertTag(tagType, tagText);
+      e.currentTarget.value = '';
+    }
+  },
+
+  /**
+   * Add the tag from the list of tags to the post tag list
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'click #user-tag-cloud .tag a.add': function (e) {
+    var tagText = $(e.currentTarget.parentElement).text();
+    var tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+    Blaze._globalHelpers.insertTag(tagType, tagText);
+  },
+
+  /**
+   * Add the private tag from the list of tags to the post tag list
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'click #user-private-tag-cloud .tag a.add': function (e) {
+    var tagText = $(e.currentTarget.parentElement).text();
+    var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+    Blaze._globalHelpers.insertTag(tagType, tagText);
+  },
+
+  /**
+   * Remove the tag from the post tag list
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'click .tag a.remove': function (e) {
+    e.currentTarget.parentElement.remove();
+  },
+
   'submit form': function(e) {
 
     // prevents the browser from handling the event and submitting the form
     e.preventDefault();
 
-    tagArray = getCheckedTagValues(e, 'tags');
-    privateTagArray = getCheckedTagValues(e, 'private-tags');
+    tagArray =   getSelectedTags(e, 'tag-cloud');
+    privateTagArray =   getSelectedTags(e, 'private-tag-cloud');
 
     // Get the data from the fields
     var postData = {
@@ -169,3 +254,43 @@ Template.postEdit.events({
     }
   }
 });
+
+// ---------------------------- Helper methods -------------------------------
+
+/**
+ * Gets the list of tags from the user's own posts. This allows the data
+ * collection to run once, but access the array data multiple times.
+ */
+var setUserTagArrays = function() {
+
+  // Initialize and populate
+  currentUsersTags = [];
+  currentUsersPrivateTags = [];
+
+  var posts = Posts.find().fetch();
+  tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
+
+  currentUsersTags = tagArrays[0];
+  currentUsersPrivateTags = tagArrays[1];
+};
+
+/**
+ * Gets the selected tags from the form to submit with the new post
+ * @param object e Form event data
+ * @param string name Name of the tag type (controls) to get the data from
+ * @return array An array containing the tag names
+ */
+var getSelectedTags = function(e, name) {
+
+  var tagArray = [];
+
+  var selector = '#' + name + ' .tag';
+
+  // Loop through each tag and add it to the array
+  $(selector).each(function () {
+    tagArray.push($(this).text());
+  });
+
+  // Return only unique values; Filter out any duplicates
+  return _.uniq(tagArray);
+};

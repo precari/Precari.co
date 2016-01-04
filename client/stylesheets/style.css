@@ -1,3 +1,8 @@
+/*
+ * These are default styles of the project and were inherited with the project
+ * template
+*/
+
 .grid-block, .main, .post, .comments li, .comment-form {
   border-radius: 3px;
   padding: 10px;
@@ -94,14 +99,6 @@ body {
   .comments li p:last-child {
     margin-bottom: 0; }
 
-  .tag a {
-    font-weight: bold;
-  }
-
-  .private-tag a {
-    font-weight: bold;
-  }
-
 .dropdown-menu span {
   display: block;
   padding: 3px 20px;
@@ -149,35 +146,6 @@ body {
   100% {opacity: 0;}
 }
 
-/**
- * Container box for the alert message. Ensures it is visible
- */
-.alert-container{
-  position: fixed;
-  z-index: 10000;
-  padding: 10px;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  pointer-events: none;
-}
-
-/*
- * Only apply the floating style to the alerts in the main appliaction layout
- * This ignores other alerts, such as in the create user box
- */
-.alert-container .alert {
-          animation: fadeOut 2700ms ease-in 0s 1 forwards;
-  -webkit-animation: fadeOut 2700ms ease-in 0s 1 forwards;
-     -moz-animation: fadeOut 2700ms ease-in 0s 1 forwards;
-  width: 300px;
-  float: right;
-  clear: both;
-  margin-bottom: 5px;
-  pointer-events: auto;
-}
-
 /*
  * Centers the text in the highlighted box
  */
@@ -188,11 +156,9 @@ div.burner-account p {
   margin: 0px;
 }
 
-div.tag-list {
-  border-color: #ddd;
-  border-width: 1px;
-  border-radius: 4px 4px 4px 4px;
-  border-style: solid;
-  padding-left: 5px;
-  margin-bottom: 15px;
+/*
+ * Styles a sub-label smaller then the parent
+ */
+label.sub-label {
+  font-size: small;
 }

@@ -1,0 +1,32 @@
+/*
+	These are styles for the alert messages
+*/
+
+/*
+ * Container box for the alert message. Ensures it is visible
+ */
+.alert-container{
+  position: fixed;
+  z-index: 10000;
+  padding: 10px;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  pointer-events: none;
+}
+
+/*
+ * Only apply the floating style to the alerts in the main appliaction layout
+ * This ignores other alerts, such as in the create user box
+ */
+.alert-container .alert {
+          animation: fadeOut 2700ms ease-in 0s 1 forwards;
+  -webkit-animation: fadeOut 2700ms ease-in 0s 1 forwards;
+     -moz-animation: fadeOut 2700ms ease-in 0s 1 forwards;
+  width: 300px;
+  float: right;
+  clear: both;
+  margin-bottom: 5px;
+  pointer-events: auto;
+}

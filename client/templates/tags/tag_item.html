@@ -1,0 +1,38 @@
+<!-- These tag items are used in the postEdit and postSubmit templates -->
+
+<!-- A tag with primary Bootstrap button color and check glyhp -->
+<template name="publicTagItemWithCheckGlyph">
+  <span class="tag label label-primary">{{name}}<a class="add glyphicon glyphicon-check"></a></span>
+</template>
+
+<!-- A tag with success Bootstrap button color and check glyhp -->
+<template name="privateTagItemWithCheckGlyph">
+  <span class="tag label label-success">{{name}}<a class="add glyphicon glyphicon-check"></a></span>
+</template>
+
+<!-- A tag with primary Bootstrap button color and remove glyph -->
+<template name="publicTagItemWithRemoveGlyph">
+  <span class="tag label label-primary">{{name}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
+</template>
+
+<!-- A tag with success Bootstrap button color and remove glyph -->
+<template name="privateTagItemWithRemoveGlyph">
+  <span class="tag label label-success">{{name}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
+</template>
+
+<!-- *********************************************************************** -->
+<!-- These tag items are used for displaying tags with links -->
+
+<!-- A tag with primary Bootstrap button color and no glyphicon -->
+<template name="publicTagItemWithLink">
+  <a href="{{pathFor 'postsContainingTag'}}" class="tag">
+    <span class="tag label label-primary">{{name}}</span>
+  </a>
+</template>
+
+<!-- A tag with success Bootstrap button color and lock glyphicon -->
+<template name="privateTagItemWithLink">
+  <a href="{{pathFor 'postsContainingTag'}}" class="tag">
+    <span class="tag label label-success =">{{name}}<span class="add glyphicon glyphicon-lock"></span></span>
+  </a>
+</template>

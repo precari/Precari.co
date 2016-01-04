@@ -67,13 +67,22 @@ Template.postItem.helpers({
     }
   },
 
-  /**
-   * Gets the key value pair of the tag for the pathFor route
-   */
-  tagNameKVPair: function() {
-    return {name: this};
-  }
 
+  /**
+   * Converts the private tag array to a KV pair for display in template
+   * @return array KV pair array of the tags
+   */
+  tags: function() {
+    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.tags);
+  },
+
+  /**
+   * Converts the private tag array to a KV pair for display in template
+   * @return array KV pair array of the tags
+   */
+  privateTags: function() {
+    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.privateTags);
+  },
 });
 
 // ---------------------------- Template events -------------------------------
