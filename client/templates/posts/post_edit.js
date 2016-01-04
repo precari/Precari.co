@@ -1,6 +1,6 @@
 
 /* stores the user's tags */
-var currentUsersTags;
+var currentUsersPublicTags;
 /* stores the user's private tags */
 var currentUsersPrivateTags;
 
@@ -11,13 +11,13 @@ var currentUsersPrivateTags;
 var setFormTagArrays = function() {
 
   // Initialize and populate
-  currentUsersTags = [];
+  currentUsersPublicTags = [];
   currentUsersPrivateTags = [];
 
   var posts = Posts.find().fetch();
   tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
 
-  currentUsersTags = tagArrays[0];
+  currentUsersPublicTags = tagArrays[0];
   currentUsersPrivateTags = tagArrays[1];
 };
 
@@ -84,7 +84,7 @@ Template.postEdit.helpers({
    * Converts the tag array to a KV pair for display in template
    * @return array KV pair array of the tags
    */
-  tags: function() {
+  publicTags: function() {
     return Blaze._globalHelpers.convertTagsArrayToKVPair(this.tags);
   },
 
@@ -99,14 +99,14 @@ Template.postEdit.helpers({
   /**
    * Gets the list of tags from the user's own posts.
    */
-  userTags: function() {
+  userPublicTags: function() {
 
     // If the tag array has been built, use it. Otherwise build the arrays
-    if (currentUsersTags === undefined) {
+    if (currentUsersPublicTags === undefined) {
       setFormTagArrays();
     }
 
-    return currentUsersTags;
+    return currentUsersPublicTags;
   },
 
   /**
@@ -145,7 +145,7 @@ Template.postEdit.events({
    * value in the input control
    * @param jQuery.Event e Event object containing the event data
    */
-  'keyup #tags-input': function (e) {
+  'keyup #public-tags-input': function (e) {
 
     // If comma ',' or carriage return, add tag
     if (e.keyCode == 13 || e.keyCode == 188) {
@@ -155,21 +155,27 @@ Template.postEdit.events({
       e.currentTarget.value = '';
     }
   },
-
+  
   /**
-   * On keyup event, search for trigger keys and create a new tag from the
-   * value in the input control
+   * Add a new random private tag
    * @param jQuery.Event e Event object containing the event data
    */
-  'keyup #private-tags-input': function (e) {
+  'click #add-private-tag': function (e) {
 
-    // If comma ',' or carriage return, add tag
-    if (e.keyCode == 13 || e.keyCode == 188) {
-      var tagText = e.currentTarget.value;
+    // Get the random tag
+    Meteor.call('generateRandomTag', function(error, result) {
+
+      // start out with less secure random string
+      tagText = Math.random().toString(36).substr(2, 10);
+
+      // If the result was successfully returned, use it.
+      if (result) {
+        tagText = result;
+      }
+
       var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
       Blaze._globalHelpers.insertTag(tagType, tagText);
-      e.currentTarget.value = '';
-    }
+    });
   },
 
   /**
@@ -205,7 +211,7 @@ Template.postEdit.events({
     // prevents the browser from handling the event and submitting the form
     e.preventDefault();
 
-    tagArray =   getSelectedTags(e, 'tag-cloud');
+    tagArray =   getSelectedTags(e, 'public-tag-cloud');
     privateTagArray =   getSelectedTags(e, 'private-tag-cloud');
 
     // Get the data from the fields
@@ -264,13 +270,13 @@ Template.postEdit.events({
 var setUserTagArrays = function() {
 
   // Initialize and populate
-  currentUsersTags = [];
+  currentUsersPublicTags = [];
   currentUsersPrivateTags = [];
 
   var posts = Posts.find().fetch();
   tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
 
-  currentUsersTags = tagArrays[0];
+  currentUsersPublicTags = tagArrays[0];
   currentUsersPrivateTags = tagArrays[1];
 };
 

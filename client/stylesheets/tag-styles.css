@@ -2,24 +2,26 @@
 	These are styles for tags
 */
 
+/*
+	div.tag-cloud relates to groupings of tags, aka a tag cloud.
+*/
 div.tag-cloud {
-	margin: 10px 10px 20px 10px;
-}
-
-div.tag-cloud.border {
   border-color: #ddd;
   border-width: 1px;
   border-radius: 4px 4px 4px 4px;
   border-style: solid;
   padding: 5px;
 }
-
+div.tag-cloud .label {
+	display: inline-block;
+}
 div.tag-cloud .label a:hover {
-	text-decoration: none;
 	opacity: 1;
+	text-decoration: none;
 }
 
-.label .glyphicon {
+/* Styles the glyphicon inside of the label */
+span.tag .glyphicon {
 	color: yellow;
   margin-left: 5px;
 	vertical-align: text-top;
@@ -27,6 +29,20 @@ div.tag-cloud .label a:hover {
 	cursor: pointer;
 }
 
-a.tag:hover {
-  text-decoration: none;
+/* On mouse over, highlight the tag */
+span.tag a:hover .label, span.tag a:hover {
+	color: yellow;
+	text-decoration: none;
+}
+span.tag a:hover .glyphicon {
+	opacity: 1;
+}
+
+div.add-tags-container {
+	border-color: #ddd;
+	border-width: 1px;
+	border-radius: 4px 4px 4px 4px;
+	border-style: solid;
+	padding: 5px;
+  margin-bottom: 10px;
 }

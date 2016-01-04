@@ -16,6 +16,14 @@ Meteor.methods({
   },
 
   /**
+   * Using package digilord:faker, retrieves a random private tag.
+   * @return Object Random user data
+   */
+  generateRandomTag: function() {
+    return faker.internet.password().toLowerCase();
+  },
+
+  /**
    * Determines the environment
    * @return String The value of the current environment (development or production)
    */

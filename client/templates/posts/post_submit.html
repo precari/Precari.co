@@ -21,35 +21,40 @@
     </div>
     <div class="form-group {{errorClass 'tags'}}">
       <label class="control-label sub-label">Public Tags</label><br />
-      <div id="tag-cloud" class="tag-cloud"></div>
-      <input name="tags-input" id="tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control"/>
+      <div id="public-tag-cloud" class="tag-cloud"></div>
     </div>
-  {{#if userTags}}
-    <div class="tag-list-container">
-      <p>Choose from your currently used tags</p>
-      <div id="user-tag-cloud" class="tag-cloud">
-      {{#each userTags}}
-        {{ > publicTagItemWithCheckGlyph this }}
-      {{/each}}
+    <div class="add-tags-container">
+      <input name="public-tags-input" id="public-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control"/>
+    {{#if userPublicTags}}
+      <div class="tag-list-container">
+        <br />
+        <div id="user-public-tag-cloud" class="tag-cloud">
+        {{#each userPublicTags}}
+          {{ > publicTagItemWithCheckGlyph this }}
+        {{/each}}
+        </div>
       </div>
+    {{/if}}
     </div>
-  {{/if}}
     <div class="form-group {{errorClass 'privateTags'}}">
       <label class="control-label sub-label">Private Tags</label><br />
       <small>Private tags only show up in private posts and private tag lists.<br /></small>
       <div id="private-tag-cloud" class="tag-cloud"></div>
-      <input name="private-tags-input" id="private-tags-input" type="text" value="" placeholder="Add tag through enter key or by comma" class="form-control"/>
     </div>
-  {{#if userPrivateTags}}
-    <div class="tag-list-container">
-      <p>Choose from your currently used tags</p>
-      <div id="user-private-tag-cloud" class="tag-cloud">
-      {{#each userPrivateTags}}
-        {{ > privateTagItemWithCheckGlyph this }}
-      {{/each}}
+    <div class="add-tags-container">
+      <button id="add-private-tag" type="button" class="btn btn-primary btn-xs">Add new private tag</button>
+    {{#if userPrivateTags}}
+      <div class="tag-list-container">
+        <br />
+        <p>Or, choose from your currently used tags</p>
+        <div id="user-private-tag-cloud" class="tag-cloud">
+        {{#each userPrivateTags}}
+          {{ > privateTagItemWithCheckGlyph this }}
+        {{/each}}
+        </div>
       </div>
-    </div>
-  {{/if}}
+    {{/if}}
+  </div>
     <div class="form-group">
       <label class="control-label" for="title">Private Request</label>
       <div class="checkbox">
@@ -57,7 +62,7 @@
           Make request private (only viewable through the URL)</label>
         <small>
           <ul>
-            <li>Private posts are viewable through the URL or in private lists</li>
+            <li>Private posts are viewable through the URL or in private tags</li>
             <li>These posts are highlighted yellow</li>
           </ul>
         </small>

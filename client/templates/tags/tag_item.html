@@ -1,4 +1,7 @@
 <!-- These tag items are used in the postEdit and postSubmit templates -->
+<!-- NOTE: The spacing between span tags and line breaks affects the style.
+           When changing the HTML, take note if the whitespace between the
+           tags dissappears. -->
 
 <!-- A tag with primary Bootstrap button color and check glyhp -->
 <template name="publicTagItemWithCheckGlyph">
@@ -25,14 +28,18 @@
 
 <!-- A tag with primary Bootstrap button color and no glyphicon -->
 <template name="publicTagItemWithLink">
-  <a href="{{pathFor 'postsContainingTag'}}" class="tag">
-    <span class="tag label label-primary">{{name}}</span>
-  </a>
+  <span class="tag">
+    <a href="{{pathFor 'postsContainingTag'}}">
+      <span class="label label-primary">{{name}}</span>
+    </a>
+  </span>
 </template>
 
 <!-- A tag with success Bootstrap button color and lock glyphicon -->
 <template name="privateTagItemWithLink">
-  <a href="{{pathFor 'postsContainingTag'}}" class="tag">
-    <span class="tag label label-success =">{{name}}<span class="add glyphicon glyphicon-lock"></span></span>
-  </a>
+  <span class="tag">
+    <a href="{{pathFor 'postsContainingTag'}}">
+      <span class="label label-success =">{{name}}<span class="glyphicon glyphicon-lock"></span></span>
+    </a>
+  </span>
 </template>

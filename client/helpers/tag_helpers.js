@@ -94,9 +94,11 @@ Template.registerHelper('insertTag', function(tagTypeEnum, tagName) {
 
   if (tagTypeEnum === publicTag) {
     Blaze.renderWithData(Template.publicTagItemWithRemoveGlyph,
-      { name: tagName }, $("#tag-cloud")[0]);
+      { name: tagName }, $("#public-tag-cloud")[0]);
+    return true;
   } else if (tagTypeEnum === privateTag) {
     Blaze.renderWithData(Template.privateTagItemWithRemoveGlyph,
       { name: tagName }, $("#private-tag-cloud")[0]);
+    return true;
   }
 });
