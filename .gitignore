@@ -1,3 +1,6 @@
+# Meteor  ignores
+.deploy
+
 #-------------------- Windows ignores --------------------
 # Windows image file caches
 Thumbs.db
