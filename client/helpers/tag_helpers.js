@@ -49,15 +49,22 @@ Template.registerHelper('getTagsFromPosts', function(posts) {
  * @return Array An array containing the KV data:
  *              [{name: tagName, private: tagPrivacy}]
  */
- Template.registerHelper('convertTagsArrayToKVPair', function(tagArray) {
+Template.registerHelper('convertTagsArrayToKVPair', function(tagArray) {
 
-   // Return empty array to prevent errors
-   if (tagArray === undefined) {
+  // Return empty array to prevent errors
+  if (tagArray === undefined) {
      return [];
    }
 
   // convert to a KV pair
   for (var i = 0; i < tagArray.length; i++) {
+
+    // If there is an undefined entry, continue to next tag
+    // Some browsers (Edge, Opera) Initialize an array with a length of 1
+    // var array = []  is really array = [undefined]
+    if (tagArray[i] === undefined) {
+      continue;
+    }
 
     // If the tag is already formmated in a KV pair, continue to next tag
     if (tagArray[i].name) {
