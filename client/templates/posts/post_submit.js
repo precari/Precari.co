@@ -65,6 +65,14 @@ Template.postSubmit.helpers({
 
     return currentUsersPrivateTags;
   },
+
+  /**
+   * Determines if the user can use public tags
+   */
+  authorizedUser: function() {
+
+    return false;
+  },
 });
 
 // ---------------------------- Template events -------------------------------
@@ -89,13 +97,19 @@ Template.postSubmit.events({
    * value in the input control
    * @param jQuery.Event e Event object containing the event data
    */
-  'keyup #public-tags-input': function (e) {
+  'keyup input.tag-input-textbox': function (e) {
 
     // If comma ',' or carriage return, add tag
     if (e.keyCode == 13 || e.keyCode == 188) {
       var tagText = e.currentTarget.value;
-      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
-      Blaze._globalHelpers.insertTag(tagType, tagText);
+      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+
+      // If public tag, mark public
+      if (e.currentTarget.id.indexOf('public') >= 0) {
+          tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+      }
+
+      Blaze._globalHelpers.addTagToForm(tagType, tagText);
       e.currentTarget.value = '';
     }
   },
@@ -118,7 +132,7 @@ Template.postSubmit.events({
       }
 
       var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
-      Blaze._globalHelpers.insertTag(tagType, tagText);
+      Blaze._globalHelpers.addTagToForm(tagType, tagText);
     });
   },
 
@@ -129,7 +143,7 @@ Template.postSubmit.events({
   'click #user-public-tag-cloud .tag a.add': function (e) {
     var tagText = $(e.currentTarget.parentElement).text();
     var tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
-    Blaze._globalHelpers.insertTag(tagType, tagText);
+    Blaze._globalHelpers.addTagToForm(tagType, tagText);
   },
 
   /**
@@ -139,7 +153,7 @@ Template.postSubmit.events({
   'click #user-private-tag-cloud .tag a.add': function (e) {
     var tagText = $(e.currentTarget.parentElement).text();
     var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
-    Blaze._globalHelpers.insertTag(tagType, tagText);
+    Blaze._globalHelpers.addTagToForm(tagType, tagText);
   },
 
   /**

@@ -14,35 +14,20 @@
           <span class="help-block">{{errorMessage 'prayerRequest'}}</span>
       </div>
     </div>
+    <!-- Start tag section -->
     <div class="form-group {{errorClass 'privateTags'}}">
       <label class="control-label" for="tags">Tags</label><br />
       <small>Add tags to this request.</small>
       <span class="help-block">{{errorMessage 'privateTags'}}</span>
     </div>
-    <div class="form-group {{errorClass 'publicTags'}}">
-      <label class="control-label sub-label">Public Tags</label><br />
-      <div id="public-tag-cloud" class="tag-cloud"></div>
-    </div>
-    <div class="add-tags-container">
-      <input name="public-tags-input" id="public-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control"/>
-    {{#if userPublicTags}}
-      <div class="tag-list-container">
-        <br />
-        <div id="user-public-tag-cloud" class="tag-cloud">
-        {{#each userPublicTags}}
-          {{ > publicTagItemWithCheckGlyph this }}
-        {{/each}}
-        </div>
-      </div>
-    {{/if}}
-    </div>
+    <!-- private tags -->
     <div class="form-group {{errorClass 'privateTags'}}">
       <label class="control-label sub-label">Private Tags</label><br />
-      <small>Private tags only show up in private posts and private tag lists.<br /></small>
+      <small>Private tags are unique and only show up in private posts and private tag lists.<br /></small>
       <div id="private-tag-cloud" class="tag-cloud"></div>
     </div>
     <div class="add-tags-container">
-      <button id="add-private-tag" type="button" class="btn btn-primary btn-xs">Add new private tag</button>
+      <input name="private-tags-input" id="private-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox"/>
     {{#if userPrivateTags}}
       <div class="tag-list-container">
         <br />
@@ -54,7 +39,30 @@
         </div>
       </div>
     {{/if}}
-  </div>
+    </div>
+    <!-- end private tags -->
+  {{#if authorizedUser}}
+    <!-- public tags -->
+    <div class="form-group {{errorClass 'publicTags'}}">
+      <label class="control-label sub-label">Public Tags</label><br />
+      <div id="public-tag-cloud" class="tag-cloud"></div>
+    </div>
+    <div class="add-tags-container">
+      <input name="public-tags-input" id="public-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox"/>
+    {{#if userPublicTags}}
+      <div class="tag-list-container">
+        <br />
+        <div id="user-public-tag-cloud" class="tag-cloud">
+        {{#each userPublicTags}}
+          {{ > publicTagItemWithCheckGlyph this }}
+        {{/each}}
+        </div>
+      </div>
+    {{/if}}
+    </div>
+    <!-- end public tags -->
+  {{/if}}
+  <!-- end tag section -->
     <div class="form-group">
       <label class="control-label" for="title">Private Request</label>
       <div class="checkbox">

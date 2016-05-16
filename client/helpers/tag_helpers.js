@@ -85,7 +85,7 @@ Template.registerHelper('convertTagsArrayToKVPair', function(tagArray) {
  * @param string name Name of the tag
  * @return Boolean True if successful, otherwise false
  */
-Template.registerHelper('insertTag', function(tagTypeEnum, tagName) {
+Template.registerHelper('addTagToForm', function(tagTypeEnum, tagName) {
 
   var publicTag = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
   var privateTag = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
