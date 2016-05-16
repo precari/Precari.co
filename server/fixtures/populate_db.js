@@ -111,7 +111,7 @@ if(Meteor.users.find().count() === 0) {
      commentsCount: 2,
      precatis: [],
      prayedCount: 0,
-     tags:[tag1, user1.profile.name],
+     publicTags:[tag1, user1.profile.name],
      privateTags:[privateTag1],
      private: true
    });
@@ -141,7 +141,7 @@ if(Meteor.users.find().count() === 0) {
      commentsCount: 0,
      precatis: [userId1, userId2],
      prayedCount: 2,
-     tags:[tag1, tag2, user2.profile.name],
+     publicTags:[tag1, tag2, user2.profile.name],
      privateTags:[privateTag1, privateTag2],
      private: false
    });
@@ -163,7 +163,7 @@ if(Meteor.users.find().count() === 0) {
      commentsCount: 0,
      precatis: [userId1, userId3, userId3],
      prayedCount: 3,
-     tags:[tag1, tag2, tag3, user3.profile.name],
+     publicTags:[tag1, tag2, tag3, user3.profile.name],
      privateTags:[privateTag1, privateTag2, privateTag3],
      private: true
    });
@@ -177,18 +177,18 @@ if(Meteor.users.find().count() === 0) {
      commentsCount: 0,
      precatis: [],
      prayedCount: 0,
-     tags:[user3.profile.name],
+     publicTags:[user3.profile.name],
      privateTags:[],
      private: false
    });
 
    // Inserert the tags
-   Meteor.precariFixtureMethods.tagInsert(tag1);
-   Meteor.precariFixtureMethods.tagInsert(tag2);
-   Meteor.precariFixtureMethods.tagInsert(tag3);
-   Meteor.precariFixtureMethods.tagInsert(user1.profile.name);
-   Meteor.precariFixtureMethods.tagInsert(user2.profile.name);
-   Meteor.precariFixtureMethods.tagInsert(user3.profile.name);
+   Meteor.precariFixtureMethods.publicTagInsert(tag1);
+   Meteor.precariFixtureMethods.publicTagInsert(tag2);
+   Meteor.precariFixtureMethods.publicTagInsert(tag3);
+   Meteor.precariFixtureMethods.publicTagInsert(user1.profile.name);
+   Meteor.precariFixtureMethods.publicTagInsert(user2.profile.name);
+   Meteor.precariFixtureMethods.publicTagInsert(user3.profile.name);
 
    // Add some additional data
    for (var i = 0; i <= 20; i++) {
@@ -211,13 +211,13 @@ if(Meteor.users.find().count() === 0) {
        commentsCount: 0,
        precatis: [],
        prayedCount: 0,
-       tags:[tag, user1.profile.name],
+       publicTags:[tag1, tag, user1.profile.name],
        privateTags: [PRIVATE_TAG_CHAR + tag, privateTag2],
        private: determinePrivate(i)
      });
 
      // Insert the tag for the post
-     Meteor.precariFixtureMethods.tagInsert(tag);
+     Meteor.precariFixtureMethods.publicTagInsert(tag);
    }
 
    console.log('Created posts...');

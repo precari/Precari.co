@@ -11,6 +11,7 @@ div.tag-cloud {
   border-radius: 4px 4px 4px 4px;
   border-style: solid;
   padding: 5px;
+  min-height: 32px;
 }
 div.tag-cloud .label {
 	display: inline-block;

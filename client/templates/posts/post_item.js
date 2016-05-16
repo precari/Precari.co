@@ -72,12 +72,13 @@ Template.postItem.helpers({
    * Converts the private tag array to a KV pair for display in template
    * @return array KV pair array of the tags
    */
-  tags: function() {
-    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.tags);
+  publicTags: function() {
+    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.publicTags);
   },
 
   /**
-   * Converts the private tag array to a KV pair for display in template
+   * Converts the private tag array to a KV pair for display in template.
+   *  Note: not all subscriptions return private tags
    * @return array KV pair array of the tags
    */
   privateTags: function() {

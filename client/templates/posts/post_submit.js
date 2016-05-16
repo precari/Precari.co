@@ -159,21 +159,21 @@ Template.postSubmit.events({
     // prevents the browser from handling the event and submitting the form
     e.preventDefault();
 
-    tagArray =   getSelectedTags(e, 'public-tag-cloud');
+    publicTagArray =   getSelectedTags(e, 'public-tag-cloud');
     privateTagArray =   getSelectedTags(e, 'private-tag-cloud');
 
     // Get the data from the fields
     var postData = {
       prayerRequest: $(e.target).find('[name=prayer-request]').val(),
       title: $(e.target).find('[name=title]').val(),
-      tags: tagArray,
+      publicTags: publicTagArray,
       privateTags: privateTagArray,
       private: $(e.target).find('[name=private-post]').is(':checked'),
     };
 
     // Validate the data and return any errors
     var errors = validatePost(postData);
-    if (errors.title || errors.prayerRequest || errors.tags || errors.privateTags) {
+    if (errors.title || errors.prayerRequest || errors.publicTags || errors.privateTags) {
       return Session.set('postSubmitErrors', errors);
     }
 

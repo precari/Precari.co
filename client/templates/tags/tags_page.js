@@ -1,19 +1,3 @@
-// -------------------------- Template onCreated -------------------------------
-
-Template.tagsPage.onCreated(function() {
-
-  var self = this;
-
-  // On template create, refresh the post subscription and rebuild the
-  // tag arrays. Without this, only a page refresh will display any newly
-  // created tags since they are extracted from post data.
-
-  // Use self.subscribe with the data context reactively
-  self.autorun(function () {
-    self.subscribe("usersPostsForTagList");
-  });
-});
-
 // ---------------------------- Template helpers -------------------------------
 
 Template.tagsPage.helpers({
@@ -33,7 +17,7 @@ Template.tagsPage.helpers({
   /**
    * Gets the list of tags
    */
-  tags: function() {
-    return Tags.find({});
+  publicTags: function() {
+    return PublicTags.find({});
   }
 });

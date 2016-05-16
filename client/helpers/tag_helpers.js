@@ -7,40 +7,40 @@
  * Gets the user's tags from their posts.
  * @param Array posts The posts array to get the tags from (Posts.find().fetch())
  * @return Array A 2D array containing the arrays of taga.
- *          [tagArray {name: tagName}], [privateTagArray {name: tagName}]
+ *          [publicTagArray {name: tagName}], [privateTagArray {name: tagName}]
  */
 Template.registerHelper('getTagsFromPosts', function(posts) {
 
-  var tagArray = [];
+  var publicTagArray = [];
   var privateTagArray = [];
 
   // Return empty array to prevent errors
   if (posts === undefined) {
-    return [tagArray, privateTagArray];
+    return [publicTagArray, privateTagArray];
   }
 
   // Loop through the posts scraping all tag data
   for (var i = 0; i < posts.length; i++) {
 
     // Add the tags to the respective list
-    tagArray = tagArray.concat(posts[i].tags);
+    publicTagArray = publicTagArray.concat(posts[i].publicTags);
     privateTagArray = privateTagArray.concat(posts[i].privateTags);
   }
 
   // Filter duplicates and then sort alphabetically
-  tagArray = _.uniq(tagArray);
-  tagArray = _.sortBy(tagArray, function (name) { return name; });
+  publicTagArray = _.uniq(publicTagArray);
+  publicTagArray = _.sortBy(publicTagArray, function (name) { return name; });
 
   privateTagArray = _.uniq(privateTagArray);
   privateTagArray = _.sortBy(privateTagArray, function (name) { return name; });
 
   // convert tag array to a KV pair { name: tag } to keep format with the
-  // Tags collection
-  tagArray = Blaze._globalHelpers.convertTagsArrayToKVPair(tagArray);
+  // tag collections
+  publicTagArray = Blaze._globalHelpers.convertTagsArrayToKVPair(publicTagArray);
   privateTagArray = Blaze._globalHelpers.convertTagsArrayToKVPair(privateTagArray);
 
   // Return the two tag arrays
-  return [tagArray, privateTagArray];
+  return [publicTagArray, privateTagArray];
 });
 
 /**

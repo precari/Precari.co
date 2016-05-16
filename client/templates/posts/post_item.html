@@ -8,7 +8,7 @@
         submitted by {{author}} |
         <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a> |
 
-        {{#each tags}}
+        {{#each publicTags}}
           {{ > publicTagItemWithLink}}
         {{/each}}
 

@@ -37,7 +37,7 @@ Meteor.publish('publicPostsFromTag', function(options, tag) {
   check(tag, String);
 
   // Gets public posts containing a specific tag
-  return Posts.find({ tags: tag, private: false },
+  return Posts.find({ publicTags: tag, private: false },
                     { fields: { privateTags:0 } }, options);
 });
 
@@ -108,12 +108,12 @@ Meteor.publish('singlePost', function(id) {
 
 /**
  * Publishes the list of public tags
- * @return collection Tag collection of public tags
+ * @return collection PublicTag collection of public tags
  */
-Meteor.publish('tags', function() {
+Meteor.publish('publicTags', function() {
 
   // Gets all tags that are public
-  return Tags.find({private: false});
+  return PublicTags.find();
 });
 
 // ------------------------ Comments publications ------------------------------
