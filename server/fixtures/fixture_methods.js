@@ -4,13 +4,6 @@
     generating errors when tryign to access Meteor methods in lib.
 */
 
-//----------------------------- Constannsts ------------------------------------
-
-/* Denotes a private tag */
-PRIVATE_TAG_CHAR = '~';
-
-//--------------------------- Precari methods ----------------------------------
-
 Meteor.precariFixtureMethods = {
 
   /**
@@ -25,16 +18,17 @@ Meteor.precariFixtureMethods = {
     check(tag, String);
 
     // Get the tag by name to check if it exists
-    var tagExists = PublicTags.findOne({name: tag});
+    var existingTag = PublicTags.findOne({name: tag});
 
     // If the tag does not exist, add it
-    if (!tagExists) {
+    if (!existingTag) {
 
       tagObj = {
         name: tag
       };
 
       // validate and insert
+      PublicTags.schema.clean(tagObj);
       PublicTags.schema.validate(tagObj);
       var tagId = PublicTags.insert(tagObj);
 
@@ -46,8 +40,42 @@ Meteor.precariFixtureMethods = {
 
       // Return the ID of the existing tag
       return {
-        _id: tagExists._id
+        _id: existingTag._id
       };
     }
+  },
+  /**
+   * Inserts the tag into the PrivateTags collection (or db). If a tag by the same
+   * name already exists, the ID of the exising tag is returned
+   * @param string tagLabel The human readable form of the label
+   * @param String userId The ID of the user who created the tag
+   * @return object The newly created tag, or an existing tag if a match was found
+   */
+  privateTagInsert: function(tagLabel, userId) {
+
+    check(tagLabel, String);
+    check(userId, String);
+
+    // Search for an exising tag with the same label.
+    // (note: different users can use the same label)
+    var existingTag = PrivateTags.findOne({label: tagLabel, userId: userId});
+    if (existingTag) {
+      return existingTag;
+    }
+
+    // If the tag does not exist, add it
+    tagObj = {
+      name: PRIVATE_TAG_CHAR + Random.id(12),
+      label: tagLabel,
+      userId: userId
+    };
+
+    // validate and insert the tag
+    PrivateTags.schema.clean(tagObj);
+    PrivateTags.schema.validate(tagObj);
+    var id = PrivateTags.insert(tagObj);
+
+    // return the new tag
+    return PrivateTags.findOne({_id: id});
   }
 };

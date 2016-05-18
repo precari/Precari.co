@@ -1,69 +1,10 @@
 
-/* stores the user's tags */
-var currentUsersPublicTags;
-/* stores the user's private tags */
-var currentUsersPrivateTags;
-
-/**
- * Gets the list of tags from the user's own posts. This allows the data
- * collection to run once, but access the array data multiple times.
- */
-var setFormTagArrays = function() {
-
-  // Initialize and populate
-  currentUsersPublicTags = [];
-  currentUsersPrivateTags = [];
-
-  var posts = Posts.find().fetch();
-  tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
-
-  currentUsersPublicTags = tagArrays[0];
-  currentUsersPrivateTags = tagArrays[1];
-};
-
-/**
- * Gets the checked tags from the form to submit with the new post
- * @param object e Form event data
- * @param string name Name of the tag type (controls) to get the data from
- * @return array An array containing the tag names
- */
- var getCheckedTagValues = function(e, name) {
-
-  // Convert the string to an array
-  var tagArray = Meteor.precariMethods.convertCommaListToArray
-                  ($(e.target).find('[name=' + name + ']').val());
-
-  // Get the checkbox data
-  name += '-checkbox';
-
-  $(e.target).find('[name=' + name + ']:checked').each(function () {
-    tagArray.push(this.value);
-  });
-
-  // Return only unique values; Filter out any duplicates
-  return _.uniq(tagArray);
-};
-
 // -------------------------- Template onCreated -------------------------------
 
 Template.postEdit.onCreated(function() {
 
   // Initialize the session collection to store errors on submit
   Session.set('postEditErrors', {});
-
-  var self = this;
-
-  // On template create, refresh the post subscription and rebuild the
-  // tag arrays. Without this, only a page refresh will display any newly
-  // created tags since they are extracted from post data.
-
-  // Use self.subscribe with the data context reactively
-  self.autorun(function () {
-    self.subscribe("usersPostsForTagList");
-  });
-
-  // Now that the updated post data is returned, rebuild the tags lists
-  setUserTagArrays();
 });
 
 // ---------------------------- Template helpers -------------------------------
@@ -93,33 +34,21 @@ Template.postEdit.helpers({
    * @return array KV pair array of the tags
    */
   privateTags: function() {
-    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.privateTags);
+    return Blaze._globalHelpers.convertPrivateTagsArrayToKVPair(this.privateTags);
   },
 
   /**
-   * Gets the list of tags from the user's own posts.
+   * Gets the list of public tags.
    */
   userPublicTags: function() {
-
-    // If the tag array has been built, use it. Otherwise build the arrays
-    if (currentUsersPublicTags === undefined) {
-      setFormTagArrays();
-    }
-
-    return currentUsersPublicTags;
+    return PublicTags.find().fetch();
   },
 
   /**
-   * Gets the list of private tags from the user's own posts.
+   * Gets the list of private tags used by the user
    */
   userPrivateTags: function() {
-
-    // If the tag array has been built, use it. Otherwise build the arrays
-    if (currentUsersPrivateTags === undefined) {
-      setFormTagArrays();
-    }
-
-    return currentUsersPrivateTags;
+    return PrivateTags.find().fetch();
   },
 
   /**
@@ -276,23 +205,6 @@ Template.postEdit.events({
 });
 
 // ---------------------------- Helper methods -------------------------------
-
-/**
- * Gets the list of tags from the user's own posts. This allows the data
- * collection to run once, but access the array data multiple times.
- */
-var setUserTagArrays = function() {
-
-  // Initialize and populate
-  currentUsersPublicTags = [];
-  currentUsersPrivateTags = [];
-
-  var posts = Posts.find().fetch();
-  tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
-
-  currentUsersPublicTags = tagArrays[0];
-  currentUsersPrivateTags = tagArrays[1];
-};
 
 /**
  * Gets the selected tags from the form to submit with the new post

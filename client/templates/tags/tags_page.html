@@ -4,11 +4,7 @@
     <h3>My Tags</h3>
     <div class="tag-cloud border">
       {{#each userTags}}
-        {{#if private}}
-          {{ > privateTagItemWithLink}}
-        {{else}}
-          {{ > publicTagItemWithLink}}
-        {{/if}}
+        {{ > privateTagItemWithLink}}
       {{/each}}
     </div>
   {{/if}}

@@ -37,7 +37,7 @@ Template.registerHelper('getTagsFromPosts', function(posts) {
   // convert tag array to a KV pair { name: tag } to keep format with the
   // tag collections
   publicTagArray = Blaze._globalHelpers.convertTagsArrayToKVPair(publicTagArray);
-  privateTagArray = Blaze._globalHelpers.convertTagsArrayToKVPair(privateTagArray);
+  privateTagArray = Blaze._globalHelpers.convertPrivateTagsArrayToKVPair(privateTagArray);
 
   // Return the two tag arrays
   return [publicTagArray, privateTagArray];
@@ -71,9 +71,45 @@ Template.registerHelper('convertTagsArrayToKVPair', function(tagArray) {
       continue;
     }
 
-    // Determine the tags privacy setting and build the KV pair
-    var tagPrivacy = Meteor.precariMethods.tags.isPrivateTag(tagArray[i]);
-    tagArray[i] = { name: tagArray[i], private: tagPrivacy };
+    // Build the KV pair
+    tagArray[i] = { name: tagArray[i] };
+  }
+
+  return tagArray;
+});
+
+Template.registerHelper('convertPrivateTagsArrayToKVPair', function(tagArray) {
+
+  // Return empty array to prevent errors
+  if (tagArray === undefined) {
+     return [];
+   }
+
+  // convert to a KV pair
+  for (var i = 0; i < tagArray.length; i++) {
+
+    // If there is an undefined entry, continue to next tag
+    // Some browsers (Edge, Opera) Initialize an array with a length of 1
+    // var array = []  is really array = [undefined]
+    if (tagArray[i] === undefined) {
+      continue;
+    }
+
+    // If the tag is already formmated in a KV pair, continue to next tag
+    if (tagArray[i].name) {
+      continue;
+    }
+
+    // Attempt to get the tag
+    var privateTag = Blaze._globalHelpers.getTagData(tagArray[i],
+                        Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name);
+
+    if (privateTag === undefined) {
+      continue;
+    }
+
+    // Add to array
+    tagArray[i] = privateTag;
   }
 
   return tagArray;
@@ -87,8 +123,8 @@ Template.registerHelper('convertTagsArrayToKVPair', function(tagArray) {
  */
 Template.registerHelper('addTagToForm', function(tagTypeEnum, tagName) {
 
-  var publicTag = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
-  var privateTag = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+  var publicTagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+  var privateTagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
 
   // Perform basic text fomatting
   tagName = tagName.replace(',', '');
@@ -99,13 +135,83 @@ Template.registerHelper('addTagToForm', function(tagTypeEnum, tagName) {
     return false;
   }
 
-  if (tagTypeEnum === publicTag) {
+  if (tagTypeEnum === publicTagType) {
+
+    // Gets the correct tag format / fields
+    var publicTag = Blaze._globalHelpers.buildMinimalTag(tagName, publicTagType);
+
     Blaze.renderWithData(Template.publicTagItemWithRemoveGlyph,
-      { name: tagName }, $("#public-tag-cloud")[0]);
+      publicTag, $("#public-tag-cloud")[0]);
     return true;
-  } else if (tagTypeEnum === privateTag) {
+  } else if (tagTypeEnum === privateTagType) {
+
+    // Gets the correct tag format / fields
+    var privateTag = Blaze._globalHelpers.buildMinimalTag(tagName, privateTagType);
+
     Blaze.renderWithData(Template.privateTagItemWithRemoveGlyph,
-      { name: tagName }, $("#private-tag-cloud")[0]);
+      privateTag, $("#private-tag-cloud")[0]);
     return true;
   }
+});
+
+/**
+ * Builds a tag for display in the form
+ * @param String tag Label of the tag to display
+ * @param Meteor.precariMethods.tags.tagTypeEnum tagTypeEnum tag type to find
+ * @return Tag object A minimal PrivateTag/PublicTag object is successful
+ */
+Template.registerHelper('buildMinimalTag', function(tag, tagTypeEnum) {
+
+  // Determine collection to query
+  if(tagTypeEnum === Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name) {
+    return { name: tag };
+  } else if(tagTypeEnum === Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name) {
+    return { label: tag };
+  } else {
+    // Wrong enum type. Return empty object
+    return {};
+  }
+});
+
+/**
+ * Gets the a tag object from a search criteria (tagName, tagLabel)
+ * @param String queryData name, label, id, ect in which to find the tag
+ * @param Meteor.precariMethods.tags.tagTypeEnum tagTypeEnum tag type to find
+ * @return Tag object A matching PrivateTag/PublicTag object is successful
+ */
+Template.registerHelper('getTagData', function(queryData, tagTypeEnum) {
+
+  var collection;
+  var userId = Meteor.user()._id;
+  var result;
+
+  // Determine collection to query
+  if(tagTypeEnum === Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name) {
+    collection = PublicTags;
+  } else if(tagTypeEnum === Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name) {
+    collection = PrivateTags;
+  } else {
+    return result;
+  }
+
+  // search for a label
+  result = collection.findOne({label: queryData, userId: userId });
+  if (result) {
+    return result;
+  }
+
+  // search for a name
+  result = collection.findOne({name: queryData, userId: userId });
+  if (result) {
+    return result;
+  }
+
+  // search for an id
+  result = collection.findOne({_id: queryData, userId: userId });
+  if (result) {
+    return result;
+  }
+
+  // Nothing found. Returns undefined
+  return result;
 });

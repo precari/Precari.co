@@ -67,7 +67,6 @@ Template.postItem.helpers({
     }
   },
 
-
   /**
    * Converts the private tag array to a KV pair for display in template
    * @return array KV pair array of the tags
@@ -77,12 +76,24 @@ Template.postItem.helpers({
   },
 
   /**
-   * Converts the private tag array to a KV pair for display in template.
-   *  Note: not all subscriptions return private tags
+   * Converts the tag array to a KV pair for display in template.
    * @return array KV pair array of the tags
    */
   privateTags: function() {
-    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.privateTags);
+
+    // If the subscription did not return the PrivateTags collection, exit.
+    if (this.privateTags === undefined) {
+      return;
+    }
+
+    // The tags in the post are only stored as the human readable form (label)
+    // The actual tag name (the private key) needs to be retried from the
+    // user's private tags collection.
+
+    // If no tags, continue
+    if (PrivateTags.find().count() > 0) {
+      return Blaze._globalHelpers.convertPrivateTagsArrayToKVPair(this.privateTags);
+    }
   },
 });
 

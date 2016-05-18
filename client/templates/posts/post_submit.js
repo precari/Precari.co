@@ -1,29 +1,10 @@
 
-/* stores the user's tags */
-var currentUsersPublicTags;
-/* stores the user's private tags */
-var currentUsersPrivateTags;
-
 // -------------------------- Template onCreated -------------------------------
 
 Template.postSubmit.onCreated(function() {
 
   // Initialize the session collection to store errors on submit
   Session.set('postSubmitErrors', {});
-
-  var self = this;
-
-  // On template create, refresh the post subscription and rebuild the
-  // tag arrays. Without this, only a page refresh will display any newly
-  // created tags since they are extracted from post data.
-
-  // Use self.subscribe with the data context reactively
-  self.autorun(function () {
-    self.subscribe("usersPostsForTagList");
-  });
-
-  // Now that the updated post data is returned, rebuild the tags lists
-  setUserTagArrays();
 });
 
 // ---------------------------- Template helpers -------------------------------
@@ -41,29 +22,17 @@ Template.postSubmit.helpers({
   },
 
   /**
-   * Gets the list of tags from the user's own posts.
+   * Gets the list of public tags.
    */
   userPublicTags: function() {
-
-    // If the tag array has been built, use it. Otherwise build the arrays
-    if (currentUsersPublicTags === undefined) {
-      Blaze._globalHelpers.setUserTagArrays();
-    }
-
-    return currentUsersPublicTags;
+    return PublicTags.find().fetch()
   },
 
   /**
-   * Gets the list of private tags from the user's own posts.
+   * Gets the list of private tags used by the user
    */
   userPrivateTags: function() {
-
-    // If the tag array has been built, use it. Otherwise build the arrays
-    if (currentUsersPrivateTags === undefined) {
-      setUserTagArrays();
-    }
-
-    return currentUsersPrivateTags;
+    return PrivateTags.find().fetch();
   },
 
   /**
@@ -206,23 +175,6 @@ Template.postSubmit.events({
 });
 
 // ---------------------------- Helper methods -------------------------------
-
-/**
- * Gets the list of tags from the user's own posts. This allows the data
- * collection to run once, but access the array data multiple times.
- */
-var setUserTagArrays = function() {
-
-  // Initialize and populate
-  currentUsersPublicTags = [];
-  currentUsersPrivateTags = [];
-
-  var posts = Posts.find().fetch();
-  tagArrays = Blaze._globalHelpers.getTagsFromPosts(posts);
-
-  currentUsersPublicTags = tagArrays[0];
-  currentUsersPrivateTags = tagArrays[1];
-};
 
 /**
  * Gets the selected tags from the form to submit with the new post

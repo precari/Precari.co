@@ -5,14 +5,58 @@
  *  Omit using: { fields: { privateTags:0 } }
  */
 
+/******************************************************************************
+  URL Query Conditions:
+   - Home page:
+     * Posts: Only display PUBLIC posts
+     * Tags: Always display the public tags
+   - PublicTags
+      * Posts: Display ALL posts with the tag attached
+      * Tags: Dispaly ALL public tags; hide ALL private tags for non-logged in user
+              Display private tags if the logged in user owns them
+   - PrivateTags
+     * Posts: Display ALL posts with the tag attached
+     * Tags:Dispaly ALL public tags; ; hide ALL private tags for non-logged in user
+            Display private tags if the logged in user owns them
+
+ * mongodb query examples:
+
+ // Omits a field:
+ db.posts.find({ publicTags: 'tag 2', private: false }, { privateTags:0 })
+
+ // Or statement with field omission
+ db.posts.find( { $or: [{ publicTags: 'tag 2', private: false },
+                        { privateTags: 'tag 2', private: false }] },
+                { privateTags:0 } )
+
+  // Meteor query (mongodb console doesn't like it for some reason)
+  // Gets public posts containing a specific tag (omitting private data)
+  return Posts.find( {
+                      $or: [
+                              { publicTags: tag, private: false },
+                              { privateTags: tag, private: false }
+                           ]
+                     },
+                     {
+                       fields: { privateTags:0 }
+                     }, options );
+
+   // Gets tag from public tag (omitting private )
+   return Posts.find( { publicTags: tag },
+                      { fields: { privateTags:0 } }, options );
+
+
+
+ ******************************************************************************/
+
 // ------------------------- Post publications ---------------------------------
 
 /**
- * Publishes the all public posts
+ * Publishes all public posts and tags (omitting private data)
  * @param object options The sort and retreival options
  * @return collection The posts matching the sort criteria
  */
-Meteor.publish('posts', function(options) {
+Meteor.publish('publicPosts', function(options) {
   check(options, {
     sort: Object,
     limit: Number
@@ -23,12 +67,12 @@ Meteor.publish('posts', function(options) {
 });
 
 /**
- * Publishes the public posts containing the specified tag
+ * Publishes the posts containing the specified public or private tag
  * @param object options The sort and retreival options
  * @param string tag The tag to get the posts for
  * @return collection Posts that contain the specified tag
  */
-Meteor.publish('publicPostsFromTag', function(options, tag) {
+Meteor.publish('postsFromTag', function(options, tag) {
   check(options, {
     sort: Object,
     limit: Number
@@ -36,28 +80,30 @@ Meteor.publish('publicPostsFromTag', function(options, tag) {
 
   check(tag, String);
 
-  // Gets public posts containing a specific tag
-  return Posts.find({ publicTags: tag, private: false },
-                    { fields: { privateTags:0 } }, options);
-});
+  // Process private tag
+  if (Meteor.call('isPrivateTag', tag)) {
 
-/**
- * Publishes the public posts containing the specified tag
- * @param object options The sort and retreival options
- * @param string tag The tag to get the posts for
- * @return collection Posts that contain the specified tag
- */
-Meteor.publish('allPostsFromTag', function(options, tag) {
-  check(options, {
-    sort: Object,
-    limit: Number
-  });
+    // Since the tags are stored in the post in human readable form (label),
+    // we need to find the corresponding label from the key.
+    // While many of the same labels may exist for different users, the labels
+    // for each user will be unique.
 
-  check(tag, String);
+    // Based on the tag name/key (~5kQcBDugTEad), locate the label ('my tag')
+    var privateTag = PrivateTags.findOne({name: tag});
+    if (privateTag === undefined) {
+      // set to empty object and let Meteor handle as dataNotFound
+      privateTag = [{}];
+    }
 
-  // Gets ALL posts containing a specific tag
-  return Posts.find({ privateTags: tag }, //options );
-                    { fields: { privateTags:0 } }, options );
+    // Find the posts matching only that tag and the tags owner
+    return Posts.find( { privateTags: privateTag.label, userId: privateTag.userId },
+                        { fields: { privateTags:0 } }, options );
+
+  // Process public tag
+  } else {
+    return Posts.find( { publicTags: tag },
+                        { fields: { privateTags:0 } }, options );
+  }
 });
 
 /**
@@ -73,16 +119,6 @@ Meteor.publish('usersOwnPosts', function(options) {
 
    // Gets the posts for the logged in users
   return Posts.find({userId: this.userId}, options);
-});
-
-/**
- * Publishes the posts belonging to the logged in user without options
- * @return collection Posts that belong to the user
- */
-Meteor.publish('usersPostsForTagList', function(options) {
-
-   // Gets the posts for the logged in users without search optins
-  return Posts.find({userId: this.userId});
 });
 
 /**
@@ -105,6 +141,17 @@ Meteor.publish('singlePost', function(id) {
 });
 
 // -------------------------- Tag publications ---------------------------------
+
+/**
+ * Publishes the list of a specific user's tags
+ * @return collection PrivateTag collection of a user's tags
+ */
+Meteor.publish('usersPrivateTags', function() {
+
+  // Gets all tags owned by the user
+  return PrivateTags.find({userId: this.userId});
+});
+
 
 /**
  * Publishes the list of public tags
