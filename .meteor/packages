@@ -32,3 +32,6 @@ check
 standard-minifier-css
 standard-minifier-js
 aldeed:simple-schema
+meteorhacks:kadira
+meteorhacks:kadira-profiler
+kadira:debug

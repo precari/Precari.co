@@ -2,18 +2,52 @@
  * Contains sample data
  */
 
- var isLocalHost = function() {
-   return process.env.ROOT_URL === 'http://localhost:3000/';
- };
+/*
+  Use to determine state
+  Meteor.isDevelopment
+  Meteor.isProduction
+  Meteor.isTest
+  Meteor.isAppTest
+*/
 
-// A check for current environment. If production, do not create seed data
-if (isLocalHost()) {
-     console.log('Starting development server');
- } else {
-     console.log('Starting production server');
+// Determine if staging a test instance
+var isStaging = function() {
+
+  // Attempt to get staging flag
+  try {
+    // If undefined, generates a TypeError
+    var staging = Meteor.settings.private.staging;
+
+    // Retrieved from the correct staging settings file. Determine value
+    if (staging === 'true') {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+      console.log(e);
+      return false;
+  }
+
+};
+
+// Print some start up info
+console.log('** Starting server **');
+console.log('staging var ----------------> ' + isStaging());
+console.log('ROOT_URL: ------------------> ' + process.env.ROOT_URL);
+console.log('isDevelopment : ------------> ' + Meteor.isDevelopment);
+console.log('isProduction : -------------> ' + Meteor.isProduction);
+console.log('isTest : -------------------> ' + Meteor.isTest);
+console.log('isAppTest : ----------------> ' + Meteor.isAppTest);
+
+// A check for current environment and stage as necessary
+if (isStaging() || Meteor.isDevelopment) {
+    console.log('Staging flag set. Continue to staging...');
+    console.log('');
+} else if (Meteor.isProduction) {
+     console.log('Starting production server without stage.');
      return;
- }
-
+}
 
 // ------------------------- Create test users ---------------------------------
 
@@ -26,8 +60,8 @@ if(Meteor.users.find().count() === 0) {
    */
   var createTestUser = function (username, password, burner) {
 
-    // Security check
-    if (!isLocalHost()) {
+    // Final check to be sure the wrong environment isn't acessing this.
+    if (!Meteor.isDevelopment && !isStaging()) {
       return;
     }
 
@@ -58,6 +92,12 @@ if(Meteor.users.find().count() === 0) {
 
    var userId3 = createTestUser('test3', 'test3', false);
    console.log('Created user 3: ' + userId3);
+
+   var userId4 = createTestUser('test4', 'test4', false);
+   console.log('Created user 4: ' + userId4);
+   console.log('');
+ } else {
+   console.log('Server already staged.');
    console.log('');
  }
 
@@ -86,6 +126,7 @@ if(Meteor.users.find().count() === 0) {
    var user1 = Meteor.users.findOne(userId1);
    var user2 = Meteor.users.findOne(userId2);
    var user3 = Meteor.users.findOne(userId3);
+   var user4 = Meteor.users.findOne(userId4);
 
    if (!user1) {
      console.log('User data not created. Exiting...');
@@ -116,6 +157,10 @@ if(Meteor.users.find().count() === 0) {
    var u3pvtTag1 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel1, user3._id);
    var u3pvtTag2 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel2, user3._id);
    var u3pvtTag3 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel3, user3._id);
+   var u4pvtTag1 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel1, user4._id);
+   var u4pvtTag2 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel2, user4._id);
+   var u4pvtTag3 = Meteor.precariFixtureMethods.privateTagInsert(privateTagLabel3, user4._id);
+
 
    // Create test data
    var request1Id = Posts.insert({
@@ -170,19 +215,33 @@ if(Meteor.users.find().count() === 0) {
      body: 'User 3 comment for request 2'
    });
 
-   Posts.insert({
-     title: 'Request 3 (private)',
-     userId: user3._id,
-     author: user3.profile.name,
-     prayerRequest: 'This is request #3',
-     submitted: new Date(now - 12 * 3600 * 1000),
-     commentsCount: 0,
-     precatis: [userId1, userId3, userId3],
-     prayedCount: 3,
-     publicTags:[tag1, tag2, tag3, user3.profile.name],
-     privateTags:[u3pvtTag1.label, u3pvtTag2.label, u3pvtTag3.label],
-     private: true
-   });
+    Posts.insert({
+      title: 'Request 3 (private)',
+      userId: user3._id,
+      author: user3.profile.name,
+      prayerRequest: 'This is request #3',
+      submitted: new Date(now - 12 * 3600 * 1000),
+      commentsCount: 0,
+      precatis: [userId1, userId3, userId3],
+      prayedCount: 3,
+      publicTags:[tag1, tag2, tag3, user3.profile.name],
+      privateTags:[u3pvtTag1.label, u3pvtTag2.label, u3pvtTag3.label],
+      private: true
+    });
+
+     Posts.insert({
+       title: 'test4 request - no public tags',
+       userId: user4._id,
+       author: user4.profile.name,
+       prayerRequest: 'This is request for test4',
+       submitted: new Date(now - 12 * 3600 * 1000),
+       commentsCount: 0,
+       precatis: [userId1, userId3, userId3],
+       prayedCount: 3,
+       publicTags:[],
+       privateTags:[u4pvtTag1.label, u4pvtTag2.label, u4pvtTag3.label],
+       private: true
+     });
 
    Posts.insert({
      title: 'Request 4 (public)',
