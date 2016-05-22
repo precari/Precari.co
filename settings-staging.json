@@ -1,0 +1,6 @@
+{
+  "public": {
+    "postsPerPage" : "10",
+    "environment": "staging"
+  }
+}

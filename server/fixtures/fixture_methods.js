@@ -7,6 +7,56 @@
 Meteor.precariFixtureMethods = {
 
   /**
+   * Determines if the environment is specifically a staging environment
+   * @return Boolean true if the environment is a staging env, otherwise false
+   */
+  isStagingEnvironment: function() {
+
+    // Attempt to get settings var. If undefined, generates a TypeError
+    try {
+
+      // If env is staging, return true
+      if (Meteor.settings.public.environment === 'staging') {
+        return true;
+      } else {
+        return false;
+      }
+
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+  },
+
+  /**
+   * Determine if the instance should be staged
+   * @return Boolean true to stage the instance, otherwise false
+   */
+  stageCurrentInstance: function() {
+
+    // Attempt to get staging flag. If undefined, generates a TypeError
+    try {
+
+      // If env is staging, always stage
+      if (Meteor.precariFixtureMethods.isStagingEnvironment()) {
+        return true;
+      }
+
+      // If development with staging flag set for instance, stage
+      if (Meteor.isDevelopment && Meteor.settings.public.stage === 'true') {
+        return true;
+      }
+
+      // Otherwise. Do not stage.
+      return false;
+
+    } catch (e) {
+        console.log(e);
+        return false;
+    }
+  },
+
+  /**
    * Inserts the tag into the PublicTags collection (or db). If a tag by the same
    * name already exists, the ID of the exising tag is returned
    * @param string tag The tag to insert
@@ -44,6 +94,7 @@ Meteor.precariFixtureMethods = {
       };
     }
   },
+
   /**
    * Inserts the tag into the PrivateTags collection (or db). If a tag by the same
    * name already exists, the ID of the exising tag is returned

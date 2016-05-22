@@ -1,6 +1,6 @@
 # Meteor  ignores
 .deploy
-*settings.json
+settings-production.json
 
 #-------------------- Windows ignores --------------------
 # Windows image file caches

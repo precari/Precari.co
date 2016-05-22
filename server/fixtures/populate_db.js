@@ -10,43 +10,41 @@
   Meteor.isAppTest
 */
 
-// Determine if staging a test instance
-var isStaging = function() {
-
-  // Attempt to get staging flag
-  try {
-    // If undefined, generates a TypeError
-    var staging = Meteor.settings.private.staging;
-
-    // Retrieved from the correct staging settings file. Determine value
-    if (staging === 'true') {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (e) {
-      console.log(e);
-      return false;
-  }
-
-};
+var isStagingEnvironment = Meteor.precariFixtureMethods.isStagingEnvironment();
+var stageCurrentInstance = Meteor.precariFixtureMethods.stageCurrentInstance();
 
 // Print some start up info
 console.log('** Starting server **');
-console.log('staging var ----------------> ' + isStaging());
 console.log('ROOT_URL: ------------------> ' + process.env.ROOT_URL);
+console.log('isStagingEnvironment--------> ' + isStagingEnvironment);
 console.log('isDevelopment : ------------> ' + Meteor.isDevelopment);
-console.log('isProduction : -------------> ' + Meteor.isProduction);
 console.log('isTest : -------------------> ' + Meteor.isTest);
 console.log('isAppTest : ----------------> ' + Meteor.isAppTest);
+console.log('isProduction : -------------> ' + Meteor.isProduction);
+console.log('stageCurrentInstance : -----> ' + stageCurrentInstance);
+console.log('');
 
-// A check for current environment and stage as necessary
-if (isStaging() || Meteor.isDevelopment) {
-    console.log('Staging flag set. Continue to staging...');
-    console.log('');
+var stage = false;
+
+// Check for current environment, output some messages, and stage as necessary
+if (isStagingEnvironment) {
+  console.log('Staging environment found. Staging instance...');
+  console.log('');
+  stage = true;
+} else if (Meteor.isDevelopment && stageCurrentInstance) {
+  console.log('Staging development instance...');
+  console.log('');
+  stage = true;
+} else if (Meteor.isDevelopment && !stageCurrentInstance) {
+  console.log('Development instance without stage');
+  console.log('');
 } else if (Meteor.isProduction) {
-     console.log('Starting production server without stage.');
-     return;
+  console.log('Production instance without stage');
+  console.log('');
+}
+
+if (!stage) {
+  return;
 }
 
 // ------------------------- Create test users ---------------------------------
@@ -59,12 +57,6 @@ if(Meteor.users.find().count() === 0) {
    * being called from the outside
    */
   var createTestUser = function (username, password, burner) {
-
-    // Final check to be sure the wrong environment isn't acessing this.
-    if (!Meteor.isDevelopment && !isStaging()) {
-      return;
-    }
-
     var userId = Accounts.createUser({
                   username: username,
                   email : faker.internet.email(),
@@ -81,8 +73,6 @@ if(Meteor.users.find().count() === 0) {
     return userId;
   };
 
-  console.log('No users found. creating....');
-
    // create real test users
    var userId1 = createTestUser('test1', 'test1', false);
    console.log('Created user 1: ' + userId1);
@@ -97,7 +87,7 @@ if(Meteor.users.find().count() === 0) {
    console.log('Created user 4: ' + userId4);
    console.log('');
  } else {
-   console.log('Server already staged.');
+   console.log('Instance already staged.');
    console.log('');
  }
 
