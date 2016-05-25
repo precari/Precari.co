@@ -63,17 +63,20 @@
     <!-- end public tags -->
   {{/if}}
   <!-- end tag section -->
-    <div class="form-group">
-      <label class="control-label" for="title">Private Request</label>
-      <div class="checkbox">
-  	    <label><input type="checkbox" name="private-post" id="private-post">
-          Make request private (only viewable through the URL)</label>
-        <small>
-          <ul>
-            <li>Private posts are viewable through the URL or in private tags</li>
-            <li>These posts are highlighted yellow</li>
-          </ul>
-        </small>
+    <div class="form-group" id="privacy-radio-group">
+      <label class="control-label" for="title">Request Visibility</label><br />
+      <small>Each level inherits the visiblity settings above it.</small><br />
+      <div class="radio">
+  	    <label><input type="radio" name="privacy-radio" value="{{visibilityValue 0}}">Private: Only you can view</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="privacy-radio" value="{{visibilityValue 1}}">Link: Anyone with the link can view</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="privacy-radio" value="{{visibilityValue 2}}" checked>Tag: The request is displayed in a tag group (default)</label>
+      </div>
+      <div id="public-request-div" class="radio">
+        <label><input type="radio" name="privacy-radio" value="{{visibilityValue 3}}">Public: The request is displayed in the public request page</label>
   		</div>
     </div>
     <br />

@@ -10,7 +10,7 @@
     <div class="form-group {{errorClass 'prayerRequest'}}">
       <label class="control-label" for="prayer-request">Request</label>
       <div class="controls">
-          <textarea name="prayer-request" id="prayer-request" type="text" value="{{prayerRequest}}" placeholder="Your prayer request" class="form-control"></textarea>
+          <textarea name="prayer-request" id="prayer-request" type="text" value="{{bodyMessage}}" placeholder="Your prayer request" class="form-control"></textarea>
           <span class="help-block">{{errorMessage 'prayerRequest'}}</span>
       </div>
     </div>
@@ -71,20 +71,23 @@
     <!-- end public tags -->
   {{/if}}
   <!-- end tag section -->
-    <div class="form-group">
-      <label class="control-label" for="title">Private Request</label>
-      <div class="checkbox">
-  	    <label><input type="checkbox" name="private-post" id="private-post" {{checked private}}>
-          Make request private (only viewable through the URL)</label>
-        <small>
-          <ul>
-            <li>Private posts are viewable through the URL or in private tags</li>
-            <li>These posts are highlighted yellow</li>
-          </ul>
-        </small>
-  		</div>
+  <div class="form-group" id="privacy-radio-group">
+    <label class="control-label" for="title">Request Visibility</label><br />
+    <small>Each level inherits the visiblity settings above it.</small><br />
+    <div class="radio">
+      <label><input type="radio" name="privacy-radio" value="{{visibilityValue 0}}" {{privacyRadioCheked 0}}>Private: Only you can view</label>
     </div>
-    <br />
-    <input type="submit" value="Submit" class="btn btn-primary"/>
+    <div class="radio">
+      <label><input type="radio" name="privacy-radio" value="{{visibilityValue 1}}" {{privacyRadioCheked 1}}>Link: Anyone with the link can view</label>
+    </div>
+    <div class="radio">
+      <label><input type="radio" name="privacy-radio" value="{{visibilityValue 2}}" {{privacyRadioCheked 2}}>Tag: The request is displayed in a tag group (default)</label>
+    </div>
+    <div id="public-request-div" class="radio">
+      <label><input type="radio" name="privacy-radio" value="{{visibilityValue 3}}" {{privacyRadioCheked 3}}>Public: The request is displayed in the public request page</label>
+    </div>
+  </div>
+  <br />
+  <input type="submit" value="Submit" class="btn btn-primary"/>
   </form>
 </template>

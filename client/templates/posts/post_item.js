@@ -68,14 +68,6 @@ Template.postItem.helpers({
   },
 
   /**
-   * Converts the private tag array to a KV pair for display in template
-   * @return array KV pair array of the tags
-   */
-  publicTags: function() {
-    return Blaze._globalHelpers.convertTagsArrayToKVPair(this.publicTags);
-  },
-
-  /**
    * Converts the tag array to a KV pair for display in template.
    * @return array KV pair array of the tags
    */
@@ -92,7 +84,7 @@ Template.postItem.helpers({
 
     // If no tags, continue
     if (PrivateTags.find().count() > 0) {
-      return Blaze._globalHelpers.convertPrivateTagsArrayToKVPair(this.privateTags);
+      return Blaze._globalHelpers.getFullPrivateTagObj(this.privateTags);
     }
   },
 });

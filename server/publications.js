@@ -63,7 +63,12 @@ Meteor.publish('publicPosts', function(options) {
   });
 
   // Get all posts that are public, but omit private data
-  return Posts.find( { private:false }, { fields: { privateTags:0 } }, options);
+  return Posts.find(
+    { visibility:Meteor.precariMethods.visibility.PUBLIC },
+    { fields:
+      { privateTags:0 }
+    },
+    options);
 });
 
 /**
@@ -79,6 +84,10 @@ Meteor.publish('postsFromTag', function(options, tag) {
   });
 
   check(tag, String);
+
+  // Restrictions (apply to both public and private tags):
+  // * Hide if private
+  // * Hide if link only
 
   // Process private tag
   if (Meteor.call('isPrivateTag', tag)) {
@@ -96,29 +105,35 @@ Meteor.publish('postsFromTag', function(options, tag) {
     }
 
     // Find the posts matching only that tag and the tags owner
-    return Posts.find( { privateTags: privateTag.label, userId: privateTag.userId },
-                        { fields: { privateTags:0 } }, options );
+    return Posts.find(
+      { privateTags:
+        { label: privateTag.label },
+        userId: privateTag.userId,
+        $or: [
+                { visibility: Meteor.precariMethods.visibility.TAG },
+                { visibility: Meteor.precariMethods.visibility.PUBLIC },
+             ],
+      },
+      { fields:
+        { privateTags:0 }
+      },
+       options );
 
   // Process public tag
   } else {
-    return Posts.find( { publicTags: tag },
-                        { fields: { privateTags:0 } }, options );
+    return Posts.find(
+      { publicTags:
+        { name: tag },
+        $or: [
+                { visibility: Meteor.precariMethods.visibility.TAG },
+                { visibility: Meteor.precariMethods.visibility.PUBLIC },
+             ],
+      },
+      { fields:
+        { privateTags:0 }
+      },
+      options );
   }
-});
-
-/**
- * Publishes the posts belonging to the logged in user
- * @param object options The sort and retreival options
- * @return collection Posts that belong to the logged in user
- */
-Meteor.publish('usersOwnPosts', function(options) {
-  check(options, {
-   sort: Object,
-   limit: Number
-  });
-
-   // Gets the posts for the logged in users
-  return Posts.find({userId: this.userId}, options);
 });
 
 /**
@@ -136,9 +151,39 @@ Meteor.publish('singlePost', function(id) {
     return Posts.find(id);
   }
 
+  // Restrictions:
+  // * Hide if marked private, otherwisie display the post
+
   // Otherwise, get the post. Omit private tags
-  return Posts.find(id, { fields: { privateTags:0 } });
+  return Posts.find(
+    {
+        _id: id,
+        $or: [
+                { visibility: Meteor.precariMethods.visibility.LINK },
+                { visibility: Meteor.precariMethods.visibility.TAG },
+                { visibility: Meteor.precariMethods.visibility.PUBLIC },
+             ],
+    },
+    { fields:
+      { privateTags:0 }
+    });
 });
+
+/**
+ * Publishes the posts belonging to the logged in user
+ * @param object options The sort and retreival options
+ * @return collection Posts that belong to the logged in user
+ */
+Meteor.publish('usersOwnPosts', function(options) {
+  check(options, {
+   sort: Object,
+   limit: Number
+  });
+
+   // Gets the posts for the logged in users
+  return Posts.find({ userId: this.userId }, options);
+});
+
 
 // -------------------------- Tag publications ---------------------------------
 

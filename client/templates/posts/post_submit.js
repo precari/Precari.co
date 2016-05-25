@@ -25,7 +25,7 @@ Template.postSubmit.helpers({
    * Gets the list of public tags.
    */
   userPublicTags: function() {
-    return PublicTags.find().fetch()
+    return PublicTags.find().fetch();
   },
 
   /**
@@ -39,8 +39,34 @@ Template.postSubmit.helpers({
    * Determines if the user can use public tags
    */
   authorizedUser: function() {
-
     return false;
+  },
+
+  /**
+   * Gets the enum value for the visibility setting
+   */
+  visibilityValue: function(num) {
+
+    var visibility;
+
+    switch (num) {
+      case 0:
+        visibility = Meteor.precariMethods.visibility.PRIVATE;
+        break;
+      case 1:
+        visibility = Meteor.precariMethods.visibility.LINK;
+        break;
+      case 2:
+        visibility = Meteor.precariMethods.visibility.TAG;
+        break;
+      case 3:
+        visibility = Meteor.precariMethods.visibility.PUBLIC;
+        break;
+      default:
+      visibility = Meteor.precariMethods.visibility.PRIVATE;
+      break;
+    }
+      return visibility;
   },
 });
 
@@ -71,11 +97,11 @@ Template.postSubmit.events({
     // If comma ',' or carriage return, add tag
     if (e.keyCode == 13 || e.keyCode == 188) {
       var tagText = e.currentTarget.value;
-      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+      var tagType = Meteor.precariMethods.tagType.PRIVATE;
 
       // If public tag, mark public
       if (e.currentTarget.id.indexOf('public') >= 0) {
-          tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+          tagType = Meteor.precariMethods.tagType.PUBLIC;
       }
 
       Blaze._globalHelpers.addTagToForm(tagType, tagText);
@@ -84,34 +110,12 @@ Template.postSubmit.events({
   },
 
   /**
-   * Add a new random private tag
-   * @param jQuery.Event e Event object containing the event data
-   */
-  'click #add-private-tag': function (e) {
-
-    // Get the random tag
-    Meteor.call('generateRandomTag', function(error, result) {
-
-      // start out with less secure random string
-      tagText = Math.random().toString(36).substr(2, 10);
-
-      // If the result was successfully returned, use it.
-      if (result) {
-        tagText = result;
-      }
-
-      var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
-      Blaze._globalHelpers.addTagToForm(tagType, tagText);
-    });
-  },
-
-  /**
    * Add the tag from the list of tags to the post tag list
    * @param jQuery.Event e Event object containing the event data
    */
   'click #user-public-tag-cloud .tag a.add': function (e) {
     var tagText = $(e.currentTarget.parentElement).text();
-    var tagType = Meteor.precariMethods.tags.tagTypeEnum.PUBLIC.name;
+    var tagType = Meteor.precariMethods.tagType.PUBLIC;
     Blaze._globalHelpers.addTagToForm(tagType, tagText);
   },
 
@@ -121,7 +125,7 @@ Template.postSubmit.events({
    */
   'click #user-private-tag-cloud .tag a.add': function (e) {
     var tagText = $(e.currentTarget.parentElement).text();
-    var tagType = Meteor.precariMethods.tags.tagTypeEnum.PRIVATE.name;
+    var tagType = Meteor.precariMethods.tagType.PRIVATE;
     Blaze._globalHelpers.addTagToForm(tagType, tagText);
   },
 
@@ -131,6 +135,20 @@ Template.postSubmit.events({
    */
   'click .tag a.remove': function (e) {
     e.currentTarget.parentElement.remove();
+  },
+
+  'click #privacy-radio-group .radio': function (e) {
+
+    // Visually want the user if making a public request. TODO: Find a better
+    // woy for this. Dialog box?
+    if ($(e.target).find('input[name=privacy-radio]').val() === 'public') {
+      $(e.currentTarget).addClass('alert-danger');
+    } else {
+      // Remove the class if exists on the particluar element
+      if ($(e.currentTarget).attr('id') != 'public-request-div'){
+        $('#public-request-div').removeClass('alert-danger');
+      }
+    }
   },
 
   /**
@@ -145,18 +163,23 @@ Template.postSubmit.events({
     publicTagArray =   getSelectedTags(e, 'public-tag-cloud');
     privateTagArray =   getSelectedTags(e, 'private-tag-cloud');
 
+    publicTagArray = Blaze._globalHelpers.convertTagsToKVPair
+      (Meteor.precariMethods.tagType.PUBLIC, publicTagArray);
+    privateTagArray = Blaze._globalHelpers.convertTagsToKVPair
+      (Meteor.precariMethods.tagType.PRIVATE, privateTagArray);
+
     // Get the data from the fields
     var postData = {
-      prayerRequest: $(e.target).find('[name=prayer-request]').val(),
       title: $(e.target).find('[name=title]').val(),
+      bodyMessage: $(e.target).find('[name=prayer-request]').val(),
       publicTags: publicTagArray,
       privateTags: privateTagArray,
-      private: $(e.target).find('[name=private-post]').is(':checked'),
+      visibility: $(e.target).find('input[name=privacy-radio]:checked').val()
     };
 
     // Validate the data and return any errors
     var errors = validatePost(postData);
-    if (errors.title || errors.prayerRequest || errors.publicTags || errors.privateTags) {
+    if (errors.title || errors.bodyMessage || errors.publicTags || errors.privateTags) {
       return Session.set('postSubmitErrors', errors);
     }
 
