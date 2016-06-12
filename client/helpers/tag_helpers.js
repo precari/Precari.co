@@ -44,12 +44,14 @@ Template.registerHelper('convertTagsToKVPair', function(type, tagArray) {
  * @return Array An array containing the KV data:
  *              [{name: tagName, private: tagPrivacy}]
  */
- Template.registerHelper('getFullPrivateTagObj', function(tagArray) {
+Template.registerHelper('getFullPrivateTagObj', function(tagArray) {
 
   // Return empty array to prevent errors
   if (tagArray === undefined) {
-     return [];
-   }
+    return [];
+  }
+
+  privateTagArray = [];
 
   // Loop through tags getting the data
   for (var i = 0; i < tagArray.length; i++) {
@@ -70,10 +72,10 @@ Template.registerHelper('convertTagsToKVPair', function(type, tagArray) {
     }
 
     // Add to array
-    tagArray[i] = privateTag;
+    privateTagArray.push(privateTag);
   }
 
-  return tagArray;
+  return privateTagArray;
 });
 
 /**

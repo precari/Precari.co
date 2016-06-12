@@ -73,8 +73,8 @@ Template.postItem.helpers({
    */
   privateTags: function() {
 
-    // If the subscription did not return the PrivateTags collection, exit.
-    if (this.privateTags === undefined) {
+    // If no privetags or the user does not own the post, continue.
+    if (this.privateTags === undefined || Meteor.userId() !== this.userId) {
       return;
     }
 
@@ -82,7 +82,8 @@ Template.postItem.helpers({
     // The actual tag name (the private key) needs to be retried from the
     // user's private tags collection.
 
-    // If no tags, continue
+    // If the user (logged in or not) has no prive tags, continue
+    // Otherwise, perform a lookup of the users tags to the tags in the post
     if (PrivateTags.find().count() > 0) {
       return Blaze._globalHelpers.getFullPrivateTagObj(this.privateTags);
     }

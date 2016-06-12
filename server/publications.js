@@ -7,45 +7,18 @@
 
 /******************************************************************************
   URL Query Conditions:
-   - Home page:
+   - Posts on home page/public page: i.e. http://localhost:3000/
      * Posts: Only display PUBLIC posts
-     * Tags: Always display the public tags
-   - PublicTags
+     * PublicTags: Always display public tags;
+     * PrivateTags: Always hide privateTags
+   - Posts from publicTags i.e. http://localhost:3000/tags/tag1
       * Posts: Display ALL posts with the tag attached
-      * Tags: Dispaly ALL public tags; hide ALL private tags for non-logged in user
-              Display private tags if the logged in user owns them
-   - PrivateTags
+      * Tags: Display ALL public tags; hide ALL private tags (no easy way to
+              get to get the private tags from some posts, and not others)
+   - Posts from privateTags: i.e. http://localhost:3000/tags/~WvcdfJqu8Dhf
      * Posts: Display ALL posts with the tag attached
      * Tags:Dispaly ALL public tags; ; hide ALL private tags for non-logged in user
             Display private tags if the logged in user owns them
-
- * mongodb query examples:
-
- // Omits a field:
- db.posts.find({ publicTags: 'tag 2', private: false }, { privateTags:0 })
-
- // Or statement with field omission
- db.posts.find( { $or: [{ publicTags: 'tag 2', private: false },
-                        { privateTags: 'tag 2', private: false }] },
-                { privateTags:0 } )
-
-  // Meteor query (mongodb console doesn't like it for some reason)
-  // Gets public posts containing a specific tag (omitting private data)
-  return Posts.find( {
-                      $or: [
-                              { publicTags: tag, private: false },
-                              { privateTags: tag, private: false }
-                           ]
-                     },
-                     {
-                       fields: { privateTags:0 }
-                     }, options );
-
-   // Gets tag from public tag (omitting private )
-   return Posts.find( { publicTags: tag },
-                      { fields: { privateTags:0 } }, options );
-
-
 
  ******************************************************************************/
 
@@ -66,7 +39,7 @@ Meteor.publish('publicPosts', function(options) {
   return Posts.find(
     { visibility:Meteor.precariMethods.visibility.PUBLIC },
     { fields:
-      { privateTags:0 }
+      { privateTags: false }
     },
     options);
 });
@@ -85,23 +58,33 @@ Meteor.publish('postsFromTag', function(options, tag) {
 
   check(tag, String);
 
-  // Restrictions (apply to both public and private tags):
-  // * Hide if private
-  // * Hide if link only
+  // Restrictions / visibility
+  // * Get posts with visibility set to public or tag.
+  // * If public, do not return privateTags
+  // * If private and user does not own the tag, do not return privateTags
+  // * If private and user is tag owner, return and privateTags
 
   // Process private tag
   if (Meteor.call('isPrivateTag', tag)) {
 
     // Since the tags are stored in the post in human readable form (label),
     // we need to find the corresponding label from the key.
-    // While many of the same labels may exist for different users, the labels
-    // for each user will be unique.
+    // While the same labels may exist for different users, the labels
+    // for each user will be unique per the unique key
 
     // Based on the tag name/key (~5kQcBDugTEad), locate the label ('my tag')
     var privateTag = PrivateTags.findOne({name: tag});
     if (privateTag === undefined) {
-      // set to empty object and let Meteor handle as dataNotFound
-      privateTag = [{}];
+      // return true result and let Meteor handle as dataNotFound
+      return PrivateTags.find({name: tag});
+    }
+
+    // By default, hide private data
+    var fieldsQuery = { fields: { privateTags: false } };
+
+    // If the user owns the tag, return the private data with the post
+    if (privateTag.userId === this.userId) {
+      fieldsQuery = { };
     }
 
     // Find the posts matching only that tag and the tags owner
@@ -113,10 +96,8 @@ Meteor.publish('postsFromTag', function(options, tag) {
                 { visibility: Meteor.precariMethods.visibility.TAG },
                 { visibility: Meteor.precariMethods.visibility.PUBLIC },
              ],
-      },
-      { fields:
-        { privateTags:0 }
-      },
+       },
+       fieldsQuery,
        options );
 
   // Process public tag
@@ -130,7 +111,7 @@ Meteor.publish('postsFromTag', function(options, tag) {
              ],
       },
       { fields:
-        { privateTags:0 }
+        { privateTags: false }
       },
       options );
   }
@@ -144,15 +125,17 @@ Meteor.publish('postsFromTag', function(options, tag) {
 Meteor.publish('singlePost', function(id) {
   check(id, String);
 
+  // Visibility:
+  // * Hide if marked private, otherwisie display the post
+  // * If user owns the post, return all data.
+  // * If user dows not own the post, hide privateTags
+
   var post = Posts.findOne(id);
 
   // If the user owns the post, return the private data with the post
   if (post && post.userId == this.userId) {
     return Posts.find(id);
   }
-
-  // Restrictions:
-  // * Hide if marked private, otherwisie display the post
 
   // Otherwise, get the post. Omit private tags
   return Posts.find(
@@ -165,7 +148,7 @@ Meteor.publish('singlePost', function(id) {
              ],
     },
     { fields:
-      { privateTags:0 }
+      { privateTags: false }
     });
 });
 
