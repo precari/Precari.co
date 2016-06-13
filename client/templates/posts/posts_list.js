@@ -3,7 +3,7 @@ Template.postsList.helpers({
   /*
    * Gets the number of user's posts
    */
-  userPostCount: function() {
+  userPostsCount: function() {
     return Posts.find().count();
   },
 });

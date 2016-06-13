@@ -6,6 +6,12 @@
       {{#each userTags}}
         {{ > privateTagItemWithLink}}
       {{/each}}
+      {{#unless userTagsCount}}
+        <div class="alert alert-info" role="alert">
+          <p>It looks like you don't have any tags. Once you create a prayer
+            request, the tags will automatically show up here. </p>
+        </div>
+      {{/unless}}
     </div>
   {{/if}}
     <h3>Public Tag List</h3>
