@@ -1,3 +1,13 @@
+Template.postsList.helpers({
+
+  /*
+   * Gets the number of user's posts
+   */
+  userPostCount: function() {
+    return Posts.find().count();
+  },
+});
+
 // Handle animations related to post actions
 Template.postsList.onRendered(function () {
   this.find('.wrapper')._uihooks = {
@@ -7,6 +17,7 @@ Template.postsList.onRendered(function () {
         .insertBefore(next)
         .fadeIn();
     },
+
     moveElement: function (node, next) {
       var $node = $(node), $next = $(next);
       var oldTop = $node.offset().top;
@@ -33,7 +44,6 @@ Template.postsList.onRendered(function () {
         .removeClass('animate')
         .css('top', oldTop < newTop ? height : -1 * height);
 
-
       // force a redraw
       $(node).offset();
 
@@ -41,6 +51,7 @@ Template.postsList.onRendered(function () {
       $(node).addClass('animate').css('top', 0);
       $inBetween.addClass('animate').css('top', 0);
     },
+
     removeElement: function(node) {
       $(node).fadeOut(function() {
         $(this).remove();

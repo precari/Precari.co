@@ -1,0 +1,39 @@
+<template name="helpCreatingsPosts">
+<div class="main">
+  {{#if noUserPosts}}
+    <h2>Create your first prayer request</h2>
+    <div class="alert alert-info" role="alert">
+      <p>It looks like you haven't created any prayer requests. Let me help get you started.</p>
+      <p><i>Please check the help pages for detailed information</i></p>
+    </div>
+  {{else}}
+    <h2>Creating a prayer request</h2>
+    {{#unless currentUser}}
+    <div class="alert alert-info" role="alert">
+      <p>It looks like you aren't logged in. Prior to posting a request, you must
+        first create an account and then log in.</p>
+    </div>
+    {{/unless}}
+  {{/if}}
+  <ol>
+    <li>Click on <i>Submit Request</i> in the menu</li>
+    <li>Add a short, but descriptive title</li>
+    <li>Add the details of your request in the request box</li>
+    <li>Add one or more <a href="{{pathFor 'helpUsingTags'}}">private tags</a>
+      <ul>
+        <li>Private tags are only visible to you</li>
+        <li>Tags are how you build lists and organize your requests</li>
+        <li>There is no limit to the number of tags you can add. (i.e. family, health, salvation).
+          This request will show up in each of the lists.</li>
+      </ul>
+    </li>
+    <li>Set the <a href="{{pathFor 'helpVisilbilitySettings'}}">visibility</a> of the request</li>
+    <ul>
+      <li><b>Private:</b> The request is completely hidden and only you can see and access it</li>
+      <li><b>Link:</b> These requests will not show up in a tag list, but only through a unique and private URL</li>
+      <li><b>Tag:</b> These requests show in a tag list</li>
+      <li><b>Public:</b> These requests show up on the main page and anyone using the site can see</li>
+    </ul>
+  </ol>
+</div>
+</template>

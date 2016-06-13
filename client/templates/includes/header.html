@@ -11,29 +11,66 @@
     </div>
     <div class="collapse navbar-collapse" id="navigation">
       <ul class="nav navbar-nav">
-        <li class="{{activeRouteClass 'home' 'latestPosts'}}">
-          <a href="{{pathFor 'latestPosts'}}">Latest Requests</a>
-        </li>
-        <li class="{{activeRouteClass  'topPosts'}}">
-          <a href="{{pathFor 'topPosts'}}">Top Requests</a>
-        </li>
-        <li class="{{activeRouteClass  'leastPosts'}}">
-          <a href="{{pathFor 'leastPosts'}}">Least Requests</a>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Sort requests
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="{{activeRouteClass 'home' 'latestPosts'}}">
+              <a href="{{pathFor 'latestPosts'}}">
+                Most recent requests
+              </a>
+            </li>
+            <li class="{{activeRouteClass 'topPosts'}}">
+              <a href="{{pathFor 'topPosts'}}">
+                Most prayed for requests
+              </a>
+            </li>
+            <li class="{{activeRouteClass  'leastPosts'}}">
+              <a href="{{pathFor 'leastPosts'}}">
+              Least prayed for requests
+              </a>
+            </li>
+          </ul>
         </li>
         <li class="{{activeRouteClass 'tags'}}">
           <a href="{{pathFor 'tagsPage'}}">Tags</a>
         </li>
       {{#if currentUser}}
-        <li class="{{activeRouteClass 'postSubmit'}}">
-          <a href="{{pathFor 'postSubmit'}}">Submit Request</a>
+        <li class="{{activeRouteClass 'myPosts'}}">
+          <a href="{{pathFor 'myPosts'}}">My Requests</a>
         </li>
         <li class="dropdown">
           {{> notifications}}
         </li>
-        <li class="{{activeRouteClass 'myPosts'}}">
-          <a href="{{pathFor 'myPosts'}}">My Requests</a>
+        <li class="{{activeRouteClass 'postSubmit'}}">
+          <a href="{{pathFor 'postSubmit'}}">Submit Request</a>
         </li>
       {{/if}}
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Help
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li class="{{activeRouteClass 'helpCreatingsPosts'}}">
+              <a href="{{pathFor 'helpCreatingsPosts'}}">
+                Creating a prayer request
+              </a>
+            </li>
+            <li class="{{activeRouteClass 'helpUsingTags'}}">
+              <a href="{{pathFor 'helpUsingTags'}}">
+                Using tags
+              </a>
+            </li>
+            <li class="{{activeRouteClass 'helpVisilbilitySettings'}}">
+              <a href="{{pathFor 'helpVisilbilitySettings'}}">
+                Understanding visibility settings
+              </a>
+            </li>
+          </ul>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         {{> loginButtons}}
