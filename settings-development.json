@@ -1,6 +1,8 @@
 {
   "public": {
-    "postsPerPage" : "10",
+    "postsPerPage": "10",
+    "maxTitleLength": "100",
+    "truncateBodyMessageLength": "1000",
     "environment": "development",
     "stage": "true"
   }

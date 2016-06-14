@@ -11,21 +11,6 @@ Template.postItem.helpers({
   },
 
   /**
-   * Returns the CSS class name for the style based on the type of post.
-   * (private or private). This alerts the user as to which of their posts
-   * are private or public
-   */
-  getPostSubClass: function() {
-
-    // If post is flagged as private, set selector
-    if (this.private) {
-      return 'bg-warning';
-    } else {
-      return 'default';
-    }
-  },
-
-  /**
    * Returns the CSS class name for the button indicating if the user
    * has prayed, or not.
    */
@@ -88,6 +73,59 @@ Template.postItem.helpers({
       return Blaze._globalHelpers.getFullPrivateTagObj(this.privateTags);
     }
   },
+
+  /**
+   * Truncates the body message
+   * @return string The message body, either in full or truncated
+  */
+  bodyMessage: function() {
+
+    var truncateLength =
+      parseInt(Meteor.settings.public.truncateBodyMessageLength);
+
+    if (truncateBodyState(this)) {
+      return this.bodyMessage.substring(0, truncateLength ) + '... ';
+    } else {
+      return this.bodyMessage;
+    }
+  },
+
+  /**
+   * Gets the state of the body message and if it was truncated, or not
+   * @return Boolean True if the body was truncated, otherwise False
+   */
+  truncatedBody: function() {
+    return truncateBodyState(this);
+  },
+
+  /**
+   * Gets the glyphicon matching the visibility level
+   * @return string The value of the glyphicon
+  */
+  visibliltyGlyphicon: function() {
+
+    var glyphicon = '';
+
+    switch (this.visibility) {
+      case Meteor.precariMethods.visibility.PRIVATE:
+        glyphicon = 'glyphicon glyphicon-eye-close';
+        break;
+      case Meteor.precariMethods.visibility.LINK:
+        glyphicon = 'glyphicon glyphicon-link';
+        break;
+      case Meteor.precariMethods.visibility.TAG:
+        glyphicon = 'glyphicon glyphicon-tag';
+        break;
+      case Meteor.precariMethods.visibility.PUBLIC:
+        glyphicon = 'glyphicon glyphicon-globe';
+        break;
+      default:
+      break;
+    }
+
+    return glyphicon;
+  },
+
 });
 
 // ---------------------------- Template events -------------------------------
@@ -95,10 +133,29 @@ Template.postItem.helpers({
 Template.postItem.events({
 
   /**
-   * Click event for the pryaed for button
+   * Click event for the prayed for button
    */
   'click .prayable': function(e) {
     e.preventDefault();
     Meteor.call('prayedFor', this._id);
   }
 });
+
+// ---------------------------- Helper methods -------------------------------
+
+/**
+ * Determines if the message body should be truncated, or not
+ * @param object post The post containing the body message
+ * @return Boolean True to truncate, otherwise False
+ */
+ var truncateBodyState = function(post) {
+
+   var truncateLength =
+    parseInt(Meteor.settings.public.truncateBodyMessageLength);
+
+   if (!post.displayFullMessage && post.bodyMessage.length > truncateLength) {
+     return true;
+   } else {
+     return false;
+   }
+};

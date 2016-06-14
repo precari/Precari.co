@@ -68,6 +68,13 @@ Template.postSubmit.helpers({
     }
       return visibility;
   },
+
+  /**
+   * Gets the maximum allowed title length
+   */
+  maxTitleLength: function() {
+    return parseInt(Meteor.settings.public.maxTitleLength);
+  },
 });
 
 // ---------------------------- Template events -------------------------------

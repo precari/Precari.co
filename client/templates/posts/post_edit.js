@@ -63,7 +63,7 @@ Template.postEdit.helpers({
         visibility = Meteor.precariMethods.visibility.PUBLIC;
         break;
       default:
-      visibility = Meteor.precariMethods.visibility.PRIVATE;
+        visibility = Meteor.precariMethods.visibility.PRIVATE;
       break;
     }
       return visibility;
@@ -102,6 +102,13 @@ Template.postEdit.helpers({
       break;
     }
       return checked;
+  },
+
+  /**
+   * Gets the maximum allowed title length
+   */
+  maxTitleLength: function() {
+    return parseInt(Meteor.settings.public.maxTitleLength);
   },
 });
 
