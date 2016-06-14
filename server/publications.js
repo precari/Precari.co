@@ -38,10 +38,10 @@ Meteor.publish('publicPosts', function(options) {
   // Get all posts that are public, but omit private data
   return Posts.find(
     { visibility:Meteor.precariMethods.visibility.PUBLIC },
+    options,
     { fields:
       { privateTags: false }
-    },
-    options);
+    } );
 });
 
 /**
@@ -97,8 +97,8 @@ Meteor.publish('postsFromTag', function(options, tag) {
                 { visibility: Meteor.precariMethods.visibility.PUBLIC },
              ],
        },
-       fieldsQuery,
-       options );
+       options,
+       fieldsQuery );
 
   // Process public tag
   } else {
@@ -110,10 +110,10 @@ Meteor.publish('postsFromTag', function(options, tag) {
                 { visibility: Meteor.precariMethods.visibility.PUBLIC },
              ],
       },
+      options,
       { fields:
         { privateTags: false }
-      },
-      options );
+      } );
   }
 });
 

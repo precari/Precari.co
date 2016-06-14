@@ -1,6 +1,22 @@
+
+// Posts collection for dynamic sorting
+var posts = new ReactiveVar();
+// Dynamic sort object for the current collection (default sort is most recent)
+var sort = new ReactiveVar({ submitted: -1, _id: -1 });
+
+// --------------------------- Template helpers --------------------------------
+
 Template.postsList.helpers({
 
-  /*
+  /**
+   * Returns the posts collection to the template. The router does return this
+   * this, but we need to explicitly specify it here for the dynamic sort
+   */
+  posts: function() {
+    return posts.get();
+  },
+
+  /**
    * Gets the number of user's posts
    */
   userPostsCount: function() {
@@ -8,8 +24,21 @@ Template.postsList.helpers({
   },
 });
 
-// Handle animations related to post actions
+// -------------------------- Template onRendered ------------------------------
+
 Template.postsList.onRendered(function () {
+
+  var template = this;
+
+  /**
+   * On dynamic sort request, autorun is triggered and updates the client-side
+   * collection to reflect the change.
+   */
+  template.autorun(function() {
+    posts.set(Posts.find({}, { sort: sort.get()}));
+  });
+
+  // Handle animations related to post actions
   this.find('.wrapper')._uihooks = {
     insertElement: function (node, next) {
       $(node)
@@ -18,6 +47,10 @@ Template.postsList.onRendered(function () {
         .fadeIn();
     },
 
+    /**
+     * Animations to show the change of items instead of having them just
+     * appear
+     */
     moveElement: function (node, next) {
       var $node = $(node), $next = $(next);
       var oldTop = $node.offset().top;
@@ -58,4 +91,33 @@ Template.postsList.onRendered(function () {
       });
     }
   };
+});
+
+// ----------------------------- Template events -------------------------------
+
+Template.header.events({
+
+  /**
+   * Click event for sort options. These elements reside in header.html
+   */
+  'click .sortable': function(e) {
+    e.preventDefault();
+
+    // Set the dynamic sort option for the current list
+    // Calling sort.set() triggers template.autorun
+
+    switch (e.currentTarget.id) {
+      case 'most-recent-posts':
+        sort.set({ submitted: -1, _id: -1 });
+        break;
+      case 'top-posts':
+        sort.set({ prayedCount: -1, submitted: -1, _id: -1 });
+        break;
+      case 'least-posts':
+        sort.set({ prayedCount: 1, submitted: -1, _id: -1 });
+        break;
+      default:
+        sort.set({});
+    }
+  }
 });
