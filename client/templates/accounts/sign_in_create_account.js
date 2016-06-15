@@ -30,13 +30,15 @@ Template._loginButtonsLoggedOutAllServices.events({
           username: result.username,
           email: result.email,
           name: result.name,
+          firstName: result.firstName,
+          lastName: result.lastName,
           password: result.password
         });
 
         // Populate the form controls with the generated data
         $('#login-username').val(result.username);
         $('#login-email').val(result.email);
-        $('#login-name').val(result.name);
+        $('#login-name').val(result.firstName);
         $('#login-password').val(result.password);
 
         // Prevent initial editing of the account data

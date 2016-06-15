@@ -127,7 +127,7 @@ Template.profileEdit.events({
     if (confirm('Are you sure you want to delete your account?')) {
 
         // Delete the user
-        Meteor.call('deleteUser', Meteor.userId(), function(error, result) {
+        Meteor.call('deleteUser', function(error, result) {
 
           // Display the error to the user and abort
           if (error) {
@@ -135,8 +135,6 @@ Template.profileEdit.events({
           } else {
 
             Router.go('home');
-            // TODO: Implement naxio:flash. This requires a CSS fix
-            // Flash.success('top', 'Profile successfully updated', 5000, true);
           }
     	 });
     }

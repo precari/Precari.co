@@ -22,6 +22,20 @@
 
  ******************************************************************************/
 
+ // -------------------- user activity publications ----------------------------
+
+ /**
+  * Publishes the logged in user's activity
+  * @return collection The logged in user's public data and their activity
+  */
+Meteor.publish('userActivity', function () {
+  check(this.userId, String);
+
+  return Meteor.users.find(
+    { _id: this.userId }, {fields: { userActivity: 1 } }
+  );
+});
+
 // ------------------------- Post publications ---------------------------------
 
 /**
