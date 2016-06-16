@@ -21,8 +21,8 @@ Meteor.methods({
       username: faker.internet.userName(),
       email: faker.internet.email(),
       name: faker.name.findName(),
-	  firstName: faker.name.firstName(),
-	  lastName: faker.name.lastName(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       password: Random.id(16),
     };
   },

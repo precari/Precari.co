@@ -62,7 +62,7 @@ if (Meteor.users.find().count() === 0) {
                   email : faker.internet.email(),
                   password : password,
                   profile  : {
-                      name: faker.name.findName(),
+                      name: faker.name.firstName(),
                       burner: burner
                   }
     });

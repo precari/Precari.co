@@ -29,8 +29,7 @@
   * @return collection The logged in user's public data and their activity
   */
 Meteor.publish('userActivity', function () {
-  check(this.userId, String);
-
+  
   return Meteor.users.find(
     { _id: this.userId }, {fields: { userActivity: 1 } }
   );
@@ -188,7 +187,7 @@ Meteor.publish('usersOwnPosts', function(options) {
  * Publishes the list of a specific user's tags
  * @return collection PrivateTag collection of a user's tags
  */
-Meteor.publish('usersPrivateTags', function() {
+Meteor.publish('userPrivateTags', function() {
 
   // Gets all tags owned by the user
   return PrivateTags.find({userId: this.userId});
