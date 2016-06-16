@@ -215,3 +215,8 @@ div.burner-account p {
 label.sub-label {
   font-size: small;
 }
+
+.myActivity .activity-type {
+  padding-right: 10px;
+  font-size: larger;
+}

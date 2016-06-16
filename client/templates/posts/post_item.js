@@ -66,7 +66,7 @@ Template.postItem.helpers({
 
     var durationLimit =
       parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
-    var lastPrayed = lastPrayedDate(this._id);
+    var lastPrayed = timeLastPrayed(this._id);
 
     // Get the duration, in minutes
     var ms = (new Date() - lastPrayed);
@@ -84,8 +84,8 @@ Template.postItem.helpers({
    * Gets the duration of when the user last prayed with unit text
    * @return String The duration and units of when the user last prayed
    */
-  lastPrayedDuration: function() {
-    return calculateTimeDifference(lastPrayedDate(this._id));
+  timeLastPrayed: function() {
+    return moment(timeLastPrayed(this._id)).fromNow();
   },
 
   /**
@@ -215,7 +215,7 @@ var userPrayed = function(precatis) {
  * @param String postId The ID of the post to get the information about
  * @return Date The date of when the user most recently prayed
  */
-var lastPrayedDate = function(postId) {
+var timeLastPrayed = function(postId) {
 
   // If no user activity is found, return default (Date.now)
   if (!Meteor.user() || !Meteor.user().userActivity) {
@@ -240,36 +240,5 @@ var lastPrayedDate = function(postId) {
   } else {
     // returned single record; get duration
     return interactions.date;
-  }
-};
-
-/**
- * Calculates the different of an earlier time and the current time and returns
- * the units with the largest value (days, hours, minutes). If no days different,
- * returns hours, if not hours different, returns minutes.
- * @param Date time The earlier time to get the difference between
- * @return String Returns the difference of time with units.
- */
-var calculateTimeDifference = function(time) {
-
-  if (!time) {
-    time = Date.now();
-  }
-
-  // Gets the components in format of: DD:HH:MM
-  var msDiff = (new Date() - time);  // milliseconds between now & earlier time
-  var days = Math.round(msDiff / 86400000);                // days
-  var hours = Math.round((msDiff % 86400000) / 3600000);   // hours
-  var minutes = Math.round(((msDiff % 86400000) % 3600000) / 60000); // minutes
-
-  // Get the milliseconds diff and then convert to minutes for easy usability
-  var minDiff = Math.floor(msDiff / 60000);
-
-  if (minDiff > 1440) {
-    return Blaze._globalHelpers.pluralize(days, 'day');
-  } else if (minDiff > 60) {
-    return Blaze._globalHelpers.pluralize(hours, 'hour');
-  } else {
-    return Blaze._globalHelpers.pluralize(minutes, 'minute');
   }
 };

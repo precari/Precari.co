@@ -29,3 +29,12 @@ Template.registerHelper('pluralize', function(n, thing) {
 Template.registerHelper('checked', function(value) {
     return value ? 'checked' : '';
 });
+
+/**
+ * Formats the data for a standardized look
+ * @param Date date Date to format
+ * @return String A formatted date value
+ */
+Template.registerHelper('formatDate', function(date) {
+  return moment(date).format('lll');
+});

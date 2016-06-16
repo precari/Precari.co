@@ -36,3 +36,4 @@ meteorhacks:kadira
 meteorhacks:kadira-profiler
 kadira:debug
 reactive-var
+momentjs:moment

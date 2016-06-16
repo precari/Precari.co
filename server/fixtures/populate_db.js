@@ -228,7 +228,7 @@ if (Posts.find().count() === 0) {
      title: 'test4 request - no public tags',
      userId: user4._id,
      author: user4.profile.name,
-     bodyMessage: faker.lorem.paragraphs(3),
+     bodyMessage: faker.lorem.paragraphs(5),
      submitted: new Date(now - 12 * 3600 * 1000),
      commentsCount: 0,
      precatis: [userId1, userId3, userId3],
@@ -242,11 +242,11 @@ if (Posts.find().count() === 0) {
    Posts.schema.validate(post);
    Posts.insert(post);
 
-  posts = {
+  post = {
     title: 'Request 4 (public)',
     userId: user3._id,
     author: user3.profile.name,
-    bodyMessage: faker.lorem.paragraphs(3),
+    bodyMessage: faker.lorem.paragraphs(5),
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
     precatis: [],
@@ -279,15 +279,15 @@ if (Posts.find().count() === 0) {
 
     post = {
       title: 'Test #' + i,
-      author: user1.profile.name,
       userId: user1._id,
-      bodyMessage: faker.lorem.paragraphs(i),
+      author: user1.profile.name,
+      bodyMessage: faker.lorem.paragraphs(i + 5),
       submitted: new Date(now - i - 15 * 3600 * 1000 + 1),
       commentsCount: 0,
       precatis: [],
       prayedCount: 0,
       publicTags:[publicTag1, tag, user1PublicTag],
-      privateTags: [privateTag1, privateTag2],
+      privateTags:[privateTag1, privateTag2],
       visibility: 'public'
     };
 
