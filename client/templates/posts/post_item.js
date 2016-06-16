@@ -20,55 +20,77 @@ Template.postItem.helpers({
     }
   },
 
+  /**
+   * Determines if the user prayed for the request
+   * @return Boolean True if the user prayed for the request at least once,
+   *                  otherwise false
+   */
   userPrayed: function() {
-    return userPrayed(this);
+    return userPrayed(this.precatis);
   },
 
   /**
-   * Returns the CSS class name for the button indicating if the user
+   * Gets the text for the button depending on whether or not the user has
+   * prayed for the request
+   * @return String The text for the prayedFor button
+   */
+  buttonText: function() {
+    if (userPrayed(this.precatis)) {
+      return 'Pray again';
+    } else {
+      return 'Pray';
+    }
+  },
+
+  /**
+   * Determines the CSS class name for the button indicating if the user
    * has prayed, or not.
+   * @return String The class name for the prayedFor button
    */
   prayedForClass: function() {
 
-    // If user logged in, display button based on the user action
-    // (if they clicked prayed button, or not)
-    if (Meteor.userId()) {
-      if (userPrayed(this)) {
-        return 'btn-success disabled';
-      } else {
-        return 'btn-primary prayable';
-      }
+    var neverPrayed =             'btn-primary prayable';
+    var previouslyPrayed =        'btn-info prayable';
+    var previouslyPrayedOnTimer = 'btn-success disabled';
+
+    // If not logged in, leave disabled. If not prayed for, mark as prayable
+    if (!Meteor.userId()) {
+      return;
+    } else if (!userPrayed(this.precatis)) {
+      return neverPrayed;
+    }
+
+    // Otherwise, the request has been prayed for, but we need to determine
+    // if they can mark the request as prayed for again (prevents from running
+    // up the counter, double clicks, etc.)
+
+    var durationLimit =
+      parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
+    var lastPrayed = lastPrayedDate(this._id);
+
+    // Get the duration, in minutes
+    var ms = (new Date() - lastPrayed);
+    var minutes = Math.floor(ms / 60000);
+
+    // Determine if the use can click the prayed button again
+    if (minutes > durationLimit) {
+      return previouslyPrayed;
+    } else {
+      return previouslyPrayedOnTimer;
     }
   },
 
   /**
    * Gets the duration of when the user last prayed with unit text
+   * @return String The duration and units of when the user last prayed
    */
   lastPrayedDuration: function() {
-
-    // If no user activity and this function gets called, return default
-    if (!Meteor.user().userActivity) {
-      return calculateTimeDifference(Date.now());
-    }
-
-    var postInteractions = Meteor.user().userActivity.postInteraction;
-    var posts = _.where(postInteractions, {postId: this._id}, {type: 'pray'});
-
-    // Retrieve the record
-    if (!posts) {
-      return 'no record found';
-    } else if (posts.length > 0) {
-      // query returned array; get last item in the list and get duration
-      return calculateTimeDifference(posts[posts.length-1].date);
-    } else {
-      // returned single record; get duration
-      return calculateTimeDifference(posts.date);
-    }
+    return calculateTimeDifference(lastPrayedDate(this._id));
   },
 
   /**
    * Converts the tag array to a KV pair for display in template.
-   * @return array KV pair array of the tags
+   * @return Array KV pair array of the tags
    */
   privateTags: function() {
 
@@ -90,7 +112,7 @@ Template.postItem.helpers({
 
   /**
    * Truncates the body message
-   * @return string The message body, either in full or truncated
+   * @return String The message body, either in full or truncated
   */
   bodyMessage: function() {
 
@@ -114,7 +136,7 @@ Template.postItem.helpers({
 
   /**
    * Gets the glyphicon matching the visibility level
-   * @return string The value of the glyphicon
+   * @return String The value of the glyphicon
   */
   visibliltyGlyphicon: function() {
 
@@ -139,7 +161,6 @@ Template.postItem.helpers({
 
     return glyphicon;
   },
-
 });
 
 // ---------------------------- Template events -------------------------------
@@ -159,7 +180,7 @@ Template.postItem.events({
 
 /**
  * Determines if the message body should be truncated, or not
- * @param object post The post containing the body message
+ * @param Object post The post containing the body message
  * @return Boolean True to truncate, otherwise False
  */
  var truncateBodyState = function(post) {
@@ -176,16 +197,49 @@ Template.postItem.events({
 
 /**
  * Determines if the user prayed for the post
- * @param object post The post containing the prayer information
+ * @param Array precatis The precatis list from the post
  * @return Boolean True if the user was found in the prayed list, otherwise false
  */
-var userPrayed = function(post) {
+var userPrayed = function(precatis) {
   var userId = Meteor.userId();
 
-  if (userId && _.include(post.precatis, userId)) {
+  if (userId && _.include(precatis, userId)) {
     return true;
   } else {
     return false;
+  }
+};
+
+/**
+ * Gets the time entry of when the user last prayed
+ * @param String postId The ID of the post to get the information about
+ * @return Date The date of when the user most recently prayed
+ */
+var lastPrayedDate = function(postId) {
+
+  // If no user activity is found, return default (Date.now)
+  if (!Meteor.user() || !Meteor.user().userActivity) {
+    return Date.now();
+  }
+
+  // The post contains the user's ID, now get the times prayed from the
+  // logged in user's account.
+  var postInteractions = Meteor.user().userActivity.postInteraction;
+  var interactions = _.where(postInteractions, {
+                        postId: postId,
+                        type: Meteor.precariMethods.activity.PRAY
+                      });
+
+  // Retrieve the last prayed entry
+  if (!interactions) {
+    // Return default if no interactions founds
+    return Date.now();
+  } else if (interactions.length > 0) {
+    // query returned array; get last item in the list and get duration
+    return interactions[interactions.length-1].date;
+  } else {
+    // returned single record; get duration
+    return interactions.date;
   }
 };
 
@@ -198,16 +252,24 @@ var userPrayed = function(post) {
  */
 var calculateTimeDifference = function(time) {
 
-  var diffMs = (new Date() - time); // milliseconds between now & earlier time
-  var diffDays = Math.round(diffMs / 86400000);                       // days
-  var diffHrs = Math.round((diffMs % 86400000) / 3600000);            // hours
-  var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+  if (!time) {
+    time = Date.now();
+  }
 
-  if (diffDays > 0) {
-    return Blaze._globalHelpers.pluralize(diffDays, 'day');
-  } else if (diffHrs > 0) {
-    return Blaze._globalHelpers.pluralize(diffHrs, 'hour');
+  // Gets the components in format of: DD:HH:MM
+  var msDiff = (new Date() - time);  // milliseconds between now & earlier time
+  var days = Math.round(msDiff / 86400000);                // days
+  var hours = Math.round((msDiff % 86400000) / 3600000);   // hours
+  var minutes = Math.round(((msDiff % 86400000) % 3600000) / 60000); // minutes
+
+  // Get the milliseconds diff and then convert to minutes for easy usability
+  var minDiff = Math.floor(msDiff / 60000);
+
+  if (minDiff > 1440) {
+    return Blaze._globalHelpers.pluralize(days, 'day');
+  } else if (minDiff > 60) {
+    return Blaze._globalHelpers.pluralize(hours, 'hour');
   } else {
-    return Blaze._globalHelpers.pluralize(diffMins, 'minute');
+    return Blaze._globalHelpers.pluralize(minutes, 'minute');
   }
 };

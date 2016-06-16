@@ -3,6 +3,7 @@
     "postsPerPage": "10",
     "maxTitleLength": "100",
     "truncateBodyMessageLength": "1000",
+    "prayAgainDurationInMinutes": "30",
     "environment": "development",
     "stage": "true"
   }

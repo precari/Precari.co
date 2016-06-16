@@ -1,7 +1,7 @@
 <template name="postItem">
   <div class="post">
     <div class="post-header">
-      <a href="#" class="prayedFor btn btn-default {{prayedForClass}}" {{disabled}} >Pray</a>
+      <a href="#" class="prayedFor btn btn-default {{prayedForClass}}" {{disabled}} >{{buttonText}}</a>
       <div class="post-header-userdata">
         {{#if userPrayed}}
             <span class="last-prayed">You last prayed {{lastPrayedDuration}} ago </span>
