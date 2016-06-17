@@ -113,15 +113,15 @@ if (Posts.find().count() === 0) {
 
   var now = new Date().getTime();
 
-  var publicTag1 = Meteor.precariFixtureMethods.buildTagKVPair('public', 'tag 1');
-  var publicTag2 = Meteor.precariFixtureMethods.buildTagKVPair('public', 'tag 2');
-  var publicTag3 = Meteor.precariFixtureMethods.buildTagKVPair('public', 'tag 3');
+  var publicTag1 = Meteor.precariFixtureMethods.buildTagKVPair('public', faker.lorem.words(1).toString());
+  var publicTag2 = Meteor.precariFixtureMethods.buildTagKVPair('public', faker.lorem.words(1).toString());
+  var publicTag3 = Meteor.precariFixtureMethods.buildTagKVPair('public', faker.lorem.words(1).toString());
   var user1PublicTag = Meteor.precariFixtureMethods.buildTagKVPair('public', user1.profile.name);
   var user2PublicTag = Meteor.precariFixtureMethods.buildTagKVPair('public', user2.profile.name);
   var user3PublicTag = Meteor.precariFixtureMethods.buildTagKVPair('public', user3.profile.name);
-  var privateTag1 = Meteor.precariFixtureMethods.buildTagKVPair('private', 'pvt-tag 1');
-  var privateTag2 = Meteor.precariFixtureMethods.buildTagKVPair('private', 'pvt-tag 2');
-  var privateTag3 = Meteor.precariFixtureMethods.buildTagKVPair('private', 'pvt-tag 3');
+  var privateTag1 = Meteor.precariFixtureMethods.buildTagKVPair('private', faker.lorem.words(1).toString());
+  var privateTag2 = Meteor.precariFixtureMethods.buildTagKVPair('private', faker.lorem.words(1).toString());
+  var privateTag3 = Meteor.precariFixtureMethods.buildTagKVPair('private', faker.lorem.words(1).toString());
 
   // Insert the public tags
   Meteor.precariFixtureMethods.publicTagInsert(publicTag1);
@@ -169,7 +169,7 @@ if (Posts.find().count() === 0) {
     userId: user2._id,
     author: user2.profile.name,
     submitted: new Date(now - 5 * 3600 * 1000),
-    body: 'User 2 comment for request 1'
+    body: faker.lorem.sentence()
   });
 
   Comments.insert({
@@ -177,13 +177,13 @@ if (Posts.find().count() === 0) {
     userId: user1._id,
     author: user1.profile.name,
     submitted: new Date(now - 3 * 3600 * 1000),
-    body: 'User 1 follow up comment for request 1'
+    body: faker.lorem.sentence()
   });
 
   post = {
     title: 'Request 2 (URL/Link)',
-    userId: user2._id,
-    author: user2.profile.name,
+    userId: user1._id,
+    author: user1.profile.name,
     bodyMessage: faker.lorem.paragraphs(1),
     submitted: new Date(now - 10 * 3600 * 1000),
     commentsCount: 0,
@@ -203,13 +203,13 @@ if (Posts.find().count() === 0) {
     userId: user3._id,
     author: user3.profile.name,
     submitted: new Date(now - 5 * 3600 * 1000),
-    body: 'User 3 comment for request 2'
+    body: faker.lorem.paragraphs(1)
   });
 
   post = {
     title: 'Request 3 (Tag)',
-    userId: user3._id,
-    author: user3.profile.name,
+    userId: user1._id,
+    author: user1.profile.name,
     bodyMessage: faker.lorem.paragraphs(2),
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
@@ -226,8 +226,8 @@ if (Posts.find().count() === 0) {
 
   post = {
      title: 'test4 request - no public tags',
-     userId: user4._id,
-     author: user4.profile.name,
+     userId: user1._id,
+     author: user1.profile.name,
      bodyMessage: faker.lorem.paragraphs(5),
      submitted: new Date(now - 12 * 3600 * 1000),
      commentsCount: 0,
@@ -244,8 +244,8 @@ if (Posts.find().count() === 0) {
 
   post = {
     title: 'Request 4 (public)',
-    userId: user3._id,
-    author: user3.profile.name,
+    userId: user1._id,
+    author: user1.profile.name,
     bodyMessage: faker.lorem.paragraphs(5),
     submitted: new Date(now - 12 * 3600 * 1000),
     commentsCount: 0,
@@ -263,24 +263,16 @@ if (Posts.find().count() === 0) {
   // Add some additional data
   for (var i = 0; i <= 5; i++) {
 
-    var tag = 'tag ';
-    // var tag = 'tag ' + i;
-
-    if (i > 10) {
-      tag += i - 10;
-    } else {
-      tag += i;
-    }
-
-    tag = Meteor.precariFixtureMethods.buildTagKVPair('public', tag);
+    tag = Meteor.precariFixtureMethods.buildTagKVPair
+                            ('public', faker.lorem.words(1).toString());
 
     // Insert the tag for the posttag
     Meteor.precariFixtureMethods.publicTagInsert(tag);
 
     post = {
-      title: 'Test #' + i,
-      userId: user1._id,
-      author: user1.profile.name,
+      title: faker.lorem.sentence(),
+      userId: user2._id,
+      author: user2.profile.name,
       bodyMessage: faker.lorem.paragraphs(i + 5),
       submitted: new Date(now - i - 15 * 3600 * 1000 + 1),
       commentsCount: 0,
@@ -291,11 +283,14 @@ if (Posts.find().count() === 0) {
       visibility: 'public'
     };
 
+    console.log('adding post: ' + post.title);
+
     Posts.schema.clean(post);
     Posts.schema.validate(post);
     Posts.insert(post);
   }
 
+  console.log('');
    console.log('Created posts...');
    console.log('Fixture data created!');
 }

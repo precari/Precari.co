@@ -29,7 +29,7 @@
   * @return collection The logged in user's public data and their activity
   */
 Meteor.publish('userActivity', function () {
-  
+
   return Meteor.users.find(
     { _id: this.userId }, {fields: { userActivity: 1 } }
   );
@@ -52,9 +52,11 @@ Meteor.publish('publicPosts', function(options) {
   return Posts.find(
     { visibility:Meteor.precariMethods.visibility.PUBLIC },
     options,
-    { fields:
+    {
+      fields:
       { privateTags: false }
-    } );
+    }
+  );
 });
 
 /**
@@ -102,7 +104,8 @@ Meteor.publish('postsFromTag', function(options, tag) {
 
     // Find the posts matching only that tag and the tags owner
     return Posts.find(
-      { privateTags:
+      {
+        privateTags:
         { label: privateTag.label },
         userId: privateTag.userId,
         $or: [
@@ -111,12 +114,14 @@ Meteor.publish('postsFromTag', function(options, tag) {
              ],
        },
        options,
-       fieldsQuery );
+       fieldsQuery
+     );
 
   // Process public tag
   } else {
     return Posts.find(
-      { publicTags:
+      {
+        publicTags:
         { name: tag },
         $or: [
                 { visibility: Meteor.precariMethods.visibility.TAG },
@@ -124,9 +129,11 @@ Meteor.publish('postsFromTag', function(options, tag) {
              ],
       },
       options,
-      { fields:
+      {
+        fields:
         { privateTags: false }
-      } );
+      }
+    );
   }
 });
 
@@ -160,9 +167,11 @@ Meteor.publish('singlePost', function(id) {
                 { visibility: Meteor.precariMethods.visibility.PUBLIC },
              ],
     },
-    { fields:
+    {
+      fields:
       { privateTags: false }
-    });
+    }
+  );
 });
 
 /**
@@ -180,6 +189,94 @@ Meteor.publish('usersOwnPosts', function(options) {
   return Posts.find({ userId: this.userId }, options);
 });
 
+// -------------------- MyActivity Post publications ---------------------------
+
+/**
+ * Publishes the posts that the logged in user has prayed for
+ * @param object options The sort and retreival options
+ * @return collection Posts that the user prayed for
+ */
+Meteor.publish('userPrayedPosts', function(options) {
+  check(options, {
+    sort: Object,
+    limit: Number
+  });
+
+  // Restrictions / visibility
+  // * Get posts unless set to private
+  // * Hide private data
+
+  return Posts.find(
+    {
+      precatis: this.userId,
+      $or: [
+              { visibility: Meteor.precariMethods.visibility.LINK },
+              { visibility: Meteor.precariMethods.visibility.TAG },
+              { visibility: Meteor.precariMethods.visibility.PUBLIC },
+           ],
+    },
+    options,
+    {
+      fields:
+      { privateTags: false }
+    }
+  );
+});
+
+/**
+ * Publishes the posts that the logged in user has commented on
+ * @param object options The sort and retreival options
+ * @return collection Posts that the user prayed for
+ */
+Meteor.publish('userCommentedPosts', function(options) {
+  check(options, {
+    sort: Object,
+    limit: Number
+  });
+
+  // First off, need to retieve the ID from every post that the user has
+  // commented on. These are stored in: user.userActivity.postInteraction
+  var user = Meteor.users.findOne({ _id: this.userId });
+
+  // Define an empty array for the default query to prevent undefined
+  // if one of the properties are not set
+  var postIdList = [];
+
+  // If everything is in order
+  if (user && user.userActivity && user.userActivity.postInteraction) {
+
+    var activityType = Meteor.precariMethods.activity.COMMENT;
+    var postInteractions = user.userActivity.postInteraction;
+
+    // Search the postInteraction array for all entries of type 'comment'
+    var comments = _.where(postInteractions, { type: activityType });
+
+    // From within the comment array, get all of the postIds to use in the
+    // query selector
+    postIdList = _.pluck(comments, 'postId');
+  }
+
+  // Restrictions / visibility
+  // * Get posts unless set to private
+  // * Hide private data
+
+  // Get all posts matching the IDs in the list
+  return Posts.find(
+    {
+      "_id": { "$in": postIdList },
+      $or: [
+              { visibility: Meteor.precariMethods.visibility.LINK },
+              { visibility: Meteor.precariMethods.visibility.TAG },
+              { visibility: Meteor.precariMethods.visibility.PUBLIC },
+           ],
+    },
+    options,
+    {
+      fields:
+      { privateTags: false }
+    }
+  );
+});
 
 // -------------------------- Tag publications ---------------------------------
 

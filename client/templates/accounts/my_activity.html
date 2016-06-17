@@ -1,21 +1,34 @@
 <template name="myActivity">
   <div class="main page">
+  {{#unless postInteraction}}
+    <div class="alert alert-info" role="alert">
+      <p>It looks like you haven't prayed for any requests or left any comments.
+        You can find a random item of prayer on the home page, click on a tag
+        for an organized list of requests, or start your own list and then
+        pray for your own requests.
+      </p>
+    </div>
+  {{else}}
     <div class="myActivity">
+      <p>
+      {{#if hasPrayed}}
+        <a href="{{pathFor 'myActivityPrayed'}}">{{type 'pray'}} View posts you've prayed for</a>
+      {{/if}}
+      {{#if hasCommented}}
+        <span class="divider">|</span>
+        <a href="{{pathFor 'myActivityCommented'}}">{{type 'comment'}} View posts you've commented on</a>
+      {{/if}}
+       </p>
+       <hr />
     {{#each postInteraction}}
       <p>
-        <span class="activity-type">{{type}}</span>
-        <span class="activity-date"><a href="{{pathFor 'postPage' _id=this.postId}}">{{formatDate date}}</a></span>
+        <span class="activity-type">{{type this.type}}</span>
+        <span class="activity-date">
+          <a href="{{pathFor 'postPage' _id=this.postId}}">{{formatDate date}}</a>
+        </span>
       </p>
     {{/each}}
-    {{#unless postInteraction}}
-      <div class="alert alert-info" role="alert">
-        <p>It looks like you haven't prayed for any requests or left any comments.
-          You can find a random item of prayer on the home page, click on a tag
-          for an organized list of requests, or start your own list and then
-          pray for your own requests.
-        </p>
-      </div>
-    {{/unless}}
     </div>
+  {{/unless}}
   </div>
 </template>
