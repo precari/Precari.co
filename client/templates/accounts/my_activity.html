@@ -10,16 +10,41 @@
     </div>
   {{else}}
     <div class="myActivity">
-      <p>
-      {{#if hasPrayed}}
-        <a href="{{pathFor 'myActivityPrayed'}}">{{type 'pray'}} View posts you've prayed for</a>
-      {{/if}}
-      {{#if hasCommented}}
-        <span class="divider">|</span>
-        <a href="{{pathFor 'myActivityCommented'}}">{{type 'comment'}} View posts you've commented on</a>
-      {{/if}}
-       </p>
+      <h2>Posts by activity type</h2>
+      <ul class="list-unstyled">
+        <li><span class="{{visibliltyGlyphicon 'private'}} activity-type"></span>
+          <a href="{{pathFor 'myPostsWithVisibility' visibility='private'}}">
+          View my private posts
+        </a></li>
+        <li><span class="{{visibliltyGlyphicon 'link'}} activity-type"></span>
+          <a href="{{pathFor 'myPostsWithVisibility' visibility='link'}}">
+          View my posts set to link only
+        </a></li>
+        <li><span class="{{visibliltyGlyphicon 'tag'}} activity-type"></span>
+          <a href="{{pathFor 'myPostsWithVisibility' visibility='tag'}}">
+          View my posts set to tag
+        </a></li>
+        <li><span class="{{visibliltyGlyphicon 'public'}} activity-type"></span>
+          <a href="{{pathFor 'myPostsWithVisibility' visibility='public'}}">
+          View my public posts
+        </a></li>
+        <li><span class="activity-type">{{type 'pray'}}</span>
+        {{#if hasPrayed}}
+          <a href="{{pathFor 'myActivityPrayed'}}">View posts you've prayed for</a>
+        {{else}}
+          You haven't prayed for any posts
+        {{/if}}
+        </li>
+        <li><span class="activity-type">{{type 'comment'}}</span>
+        {{#if hasCommented}}
+          <a href="{{pathFor 'myActivityCommented'}}">View posts you've commented on</a>
+        {{else}}
+          You haven't commented on any posts
+        {{/if}}
+        </li>
+      </ul>
        <hr />
+       <h2>Post interaction log</h2>
     {{#each postInteraction}}
       <p>
         <span class="activity-type">{{type this.type}}</span>

@@ -189,6 +189,30 @@ Meteor.publish('usersOwnPosts', function(options) {
   return Posts.find({ userId: this.userId }, options);
 });
 
+/**
+ * Publishes the posts belonging to the logged in user
+ * @param Object options The sort and retreival options
+ * @param String visibility The visibility type to query
+ * @return Collection Posts of a specific visibility that belong to the
+ * logged in user
+ */
+Meteor.publish('usersOwnPostsWithVisibility', function(options, visibility) {
+  check(visibility, String);
+  check(options, {
+   sort: Object,
+   limit: Number
+  });
+
+   // Gets the posts for the logged in users
+  return Posts.find(
+    {
+       userId: this.userId,
+       visibility: visibility,
+     },
+     options
+   );
+});
+
 // -------------------- MyActivity Post publications ---------------------------
 
 /**

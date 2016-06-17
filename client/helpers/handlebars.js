@@ -38,3 +38,31 @@ Template.registerHelper('checked', function(value) {
 Template.registerHelper('formatDate', function(date) {
   return moment(date).format('lll');
 });
+
+/**
+ * Gets the glyphicon matching the visibility level
+ * @return String The value of the glyphicon
+*/
+Template.registerHelper('visibliltyGlyphicon', function(visibility) {
+
+  var glyphicon = '';
+
+  switch (visibility) {
+    case Meteor.precariMethods.visibility.PRIVATE:
+      glyphicon = 'glyphicon glyphicon-eye-close';
+      break;
+    case Meteor.precariMethods.visibility.LINK:
+      glyphicon = 'glyphicon glyphicon-link';
+      break;
+    case Meteor.precariMethods.visibility.TAG:
+      glyphicon = 'glyphicon glyphicon-tag';
+      break;
+    case Meteor.precariMethods.visibility.PUBLIC:
+      glyphicon = 'glyphicon glyphicon-globe';
+      break;
+    default:
+    break;
+  }
+
+  return glyphicon;
+});

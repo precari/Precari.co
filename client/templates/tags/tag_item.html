@@ -43,3 +43,12 @@
     </a>
   </span>
 </template>
+
+<!-- A tag with info Bootstrap button color and no glyphicon -->
+<template name="visibiltyTagItemWithLink">
+  <span class="tag">
+    <a href="{{pathFor 'myPostsWithVisibility'}}">
+      <span class="label label-warning">{{visibility}}<span class="{{visibliltyGlyphicon visibility}}"></span></span>
+    </a>
+  </span>
+</template>

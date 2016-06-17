@@ -217,6 +217,10 @@ label.sub-label {
 }
 
 .myActivity .activity-type {
-  padding-right: 10px;
-  font-size: larger;
+  padding-right: 5px;
+  font-size: medium;
+}
+
+.myActivity ul li {
+  padding-bottom: 5px;
 }
