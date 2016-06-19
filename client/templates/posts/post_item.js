@@ -232,6 +232,6 @@ var userLastPrayedInfo = function(postId) {
     return lastPrayed;
 
   } else {
-    return lasPrayed;
+    return lastPrayed;
   }
 };
