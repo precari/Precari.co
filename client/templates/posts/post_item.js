@@ -30,6 +30,15 @@ Template.postItem.helpers({
   },
 
   /**
+   * Gets the number of times the user prayed for the request
+   * @return Boolean True if the user prayed for the request at least once,
+   *                  otherwise false
+   */
+  userPrayedCount: function() {
+    return userLastPrayedInfo(this._id).count;
+  },
+
+  /**
    * Gets the text for the button depending on whether or not the user has
    * prayed for the request
    * @return String The text for the prayedFor button
@@ -66,10 +75,10 @@ Template.postItem.helpers({
 
     var durationLimit =
       parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
-    var lastPrayed = timeLastPrayed(this._id);
+    var lastPrayedInfo = userLastPrayedInfo(this._id);
 
     // Get the duration, in minutes
-    var ms = (new Date() - lastPrayed);
+    var ms = (new Date() - lastPrayedInfo.date);
     var minutes = Math.floor(ms / 60000);
 
     // Determine if the use can click the prayed button again
@@ -85,7 +94,7 @@ Template.postItem.helpers({
    * @return String The duration and units of when the user last prayed
    */
   timeLastPrayed: function() {
-    return moment(timeLastPrayed(this._id)).fromNow();
+    return moment(userLastPrayedInfo(this._id).date).fromNow();
   },
 
   /**
@@ -187,12 +196,17 @@ var userPrayed = function(precatis) {
  * @param String postId The ID of the post to get the information about
  * @return Date The date of when the user most recently prayed
  */
-var timeLastPrayed = function(postId) {
+var userLastPrayedInfo = function(postId) {
 
   // If no user activity is found, return default (Date.now)
   if (!Meteor.user() || !Meteor.user().userActivity) {
     return Date.now();
   }
+
+  var lastPrayed = {
+    count: 0,
+    date: Date.now(),
+  };
 
   // The post contains the user's ID, now get the times prayed from the
   // logged in user's account.
@@ -203,14 +217,21 @@ var timeLastPrayed = function(postId) {
                       });
 
   // Retrieve the last prayed entry
-  if (!interactions) {
-    // Return default if no interactions founds
-    return Date.now();
-  } else if (interactions.length > 0) {
-    // query returned array; get last item in the list and get duration
-    return interactions[interactions.length-1].date;
+  if (interactions.length > 0) {
+
+    // _.where returned array; get last item in the list and get duration
+    lastPrayed.count = interactions.length;
+    lastPrayed.date = interactions[interactions.length-1].date;
+    return lastPrayed;
+
+  } else if (interactions.date) {
+
+    // _.where returned single record; get duration
+    lastPrayed.count = 1;
+    lastPrayed.date = interactions.date;
+    return lastPrayed;
+
   } else {
-    // returned single record; get duration
-    return interactions.date;
+    return lasPrayed;
   }
 };

@@ -31,7 +31,11 @@
     <div class="post-footer">
       <hr />
       <p>
-        {{prayedCount}} prayed <span class="divider">|</span>
+        {{prayedCount}} prayed
+        {{#if userPrayed}}
+          (You prayed {{userPrayedCount}}x)
+        {{/if}}
+        <span class="divider">|</span>
         <a href="{{pathFor 'postPage'}}">{{pluralize commentsCount "comment"}}</a>
         <span class="divider">|</span>
         {{#each publicTags}}

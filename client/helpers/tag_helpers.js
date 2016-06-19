@@ -156,9 +156,16 @@ Template.registerHelper('buildDefaultTag', function(tag, tagType) {
 Template.registerHelper('getTagData', function(queryData, tagType) {
 
   var collection;
-  var userId = Meteor.user()._id;
   var result;
-
+  var userId = '';
+  
+  // If not logged in
+  if (Meteor.user()) {
+	  userId = Meteor.user()._id;
+  } else {
+	  return result;
+  }
+  
   // Determine collection to query
   if(tagType === Meteor.precariMethods.tagType.PUBLIC) {
     collection = PublicTags;

@@ -2,10 +2,8 @@
   <div class="main page">
   {{#unless postInteraction}}
     <div class="alert alert-info" role="alert">
-      <p>It looks like you haven't prayed for any requests or left any comments.
-        You can find a random item of prayer on the home page, click on a tag
-        for an organized list of requests, or start your own list and then
-        pray for your own requests.
+      <p>We can't find any of your activity on the site. You can pray for other
+        requests, add comments, or create your own requests so others can pray.
       </p>
     </div>
   {{else}}
@@ -13,21 +11,41 @@
       <h2>Posts by activity type</h2>
       <ul class="list-unstyled">
         <li><span class="{{visibliltyGlyphicon 'private'}} activity-type"></span>
+        {{#if privatePostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='private'}}">
-          View my private posts
-        </a></li>
+            View my private posts ({{privatePostCount}}x)
+          </a>
+        {{else}}
+          You don't have any private posts
+        {{/if}}
+        </li>
         <li><span class="{{visibliltyGlyphicon 'link'}} activity-type"></span>
+        {{#if linkPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='link'}}">
-          View my posts set to link only
-        </a></li>
+            View my posts set to link only ({{linkPostCount}}x)
+          </a>
+        {{else}}
+          You don't have any posts set to link only
+        {{/if}}
+        </li>
         <li><span class="{{visibliltyGlyphicon 'tag'}} activity-type"></span>
+        {{#if tagPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='tag'}}">
-          View my posts set to tag
-        </a></li>
+            View my posts set to tag ({{tagPostCount}}x)
+          </a>
+        {{else}}
+          You don't have any posts set to tag
+        {{/if}}
+        </li>
         <li><span class="{{visibliltyGlyphicon 'public'}} activity-type"></span>
+        {{#if publicPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='public'}}">
-          View my public posts
-        </a></li>
+          View my public posts ({{publicPostCount}}x)
+          </a>
+        {{else}}
+          You don't have any public posts
+        {{/if}}
+        </li>
         <li><span class="activity-type">{{type 'pray'}}</span>
         {{#if hasPrayed}}
           <a href="{{pathFor 'myActivityPrayed'}}">View posts you've prayed for</a>
