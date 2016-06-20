@@ -36,13 +36,6 @@ Template.postSubmit.helpers({
   },
 
   /**
-   * Determines if the user can use public tags
-   */
-  authorizedUser: function() {
-    return false;
-  },
-
-  /**
    * Gets the enum value for the visibility setting
    */
   visibilityValue: function(num) {

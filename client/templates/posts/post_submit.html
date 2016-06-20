@@ -41,7 +41,7 @@
     {{/if}}
     </div>
     <!-- end private tags -->
-  {{#if authorizedUser}}
+  {{#if isInRole 'admin,moderator'}}
     <!-- public tags -->
     <div class="form-group {{errorClass 'publicTags'}}">
       <label class="control-label sub-label">Public Tags</label><br />

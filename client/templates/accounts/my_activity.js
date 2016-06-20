@@ -7,6 +7,23 @@ var maxPosts = 99;
 Template.myActivity.helpers({
 
   /**
+   * Returns true if the user has any type of activity
+   * @return Boolean True if the user has activity, otherwise false
+   */
+  hasActivity: function() {
+    if (postCount(Meteor.precariMethods.visibility.PRIVATE) ||
+        postCount(Meteor.precariMethods.visibility.LINK) ||
+        postCount(Meteor.precariMethods.visibility.TAG) ||
+        postCount(Meteor.precariMethods.visibility.PUBLIC) ||
+        interactionArray().length > 0) {
+
+        return true;
+    } else {
+      return false;
+    }
+  },
+
+  /**
    * Gets the number of the user's private posts
    * @return String the number of user's private posts
    */

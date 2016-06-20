@@ -16,7 +16,7 @@ Meteor.precariFixtureMethods = {
     try {
 
       // If env is staging, return true
-      if (Meteor.settings.public.environment === 'staging') {
+      if (Meteor.settings.env.environment === 'staging') {
         return true;
       } else {
         return false;
@@ -43,7 +43,7 @@ Meteor.precariFixtureMethods = {
       }
 
       // If development with staging flag set for instance, stage
-      if (Meteor.isDevelopment && Meteor.settings.public.stage === 'true') {
+      if (Meteor.isDevelopment && Meteor.settings.env.stage === 'true') {
         return true;
       }
 

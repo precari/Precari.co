@@ -4,6 +4,16 @@
     "maxTitleLength": "100",
     "truncateBodyMessageLength": "1000",
     "prayAgainDurationInMinutes": "30",
-    "environment": "staging"
+    "houston_root_route": "precari-admin2",
+    "houston_documents_per_page": 50,
+    "yogiben_admin": {
+      "route": "precari-admin",
+      "appName": "localhost admin",
+      "adminEmails": ["admin1@example.com", "admin2@example.com"]
+    }
+  },
+  "env": {
+    "environment": "staging",
+    "stage": "true"
   }
 }
