@@ -4,10 +4,9 @@
     "maxTitleLength": "100",
     "truncateBodyMessageLength": "1000",
     "prayAgainDurationInMinutes": "30",
-    "houston_root_route": "precari-admin2",
+    "houston_root_route": "admin2",
     "houston_documents_per_page": 50,
     "yogiben_admin": {
-      "route": "precari-admin",
       "appName": "localhost admin",
       "adminEmails": ["admin1@example.com", "admin2@example.com"]
     }
@@ -15,5 +14,8 @@
   "env": {
     "environment": "development",
     "stage": "true"
+  },
+  "mail": {
+    "url": "smtp://postmaster@sandbox2e5cb577b9fa4bf08e06ba7b44305c13.mailgun.org:0132287f0ad2ee389120cf05735ee837@smtp.mailgun.org:587"
   }
 }
