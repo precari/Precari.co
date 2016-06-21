@@ -154,7 +154,30 @@ Template.postItem.events({
   'click .prayable': function(e) {
     e.preventDefault();
     Meteor.call('prayedFor', this._id);
-  }
+  },
+
+  'click .post .delete': function(e) {
+    e.preventDefault();
+
+    // Ask the user
+    if (confirm("Delete request '" + this.title + "'?")) {
+      var currentPostId = this._id;
+
+      // Try removing each of the comments before removing the post
+      _.each(Comments.find({postId: currentPostId}).fetch(), function (comment) {
+
+        Meteor.call('commentRemove', comment, function(error, result) {
+          if (error){
+            throwError(error.reason);
+          }
+        });
+      });
+
+      // remove the post
+      Posts.remove(currentPostId);
+      Router.go('myPosts');
+    }
+  },
 });
 
 // ---------------------------- Helper methods -------------------------------

@@ -15,9 +15,30 @@ Template.header.helpers({
     args.pop();
 
     var active = _.any(args, function(name) {
-      return Router.current() && Router.current().route.getName() === name;
+
+      if (Router.current() && Router.current().route) {
+        return Router.current().route.getName() === name;
+      }
     });
 
     return active && 'active';
-  }
+  },
+
+  /**
+   * Determines is the page has posts (and is sortable)
+   * @return Boolean True if the page is sortable (has posts), otherwise false
+   */
+  isSortable: function() {
+    if(Posts.findOne({})) {
+      // myActivity is an exception. There are posts in memory, but not
+      // displayed on the page. They display the post count infomation
+      if (Router.current().route.getName() == 'myActivity') {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  },
 });

@@ -27,7 +27,17 @@ Template.registerHelper('pluralize', function(n, thing) {
  *                return an empty string
  */
 Template.registerHelper('checked', function(value) {
-    return value ? 'checked' : '';
+  return value ? 'checked' : '';
+});
+
+/**
+ * If value is false, returns 'disabled'
+ * @param Boolean value The value to compare
+ * @return String A string value of 'disabled' if the value is false, otherwise
+ *                return an empty string
+ */
+Template.registerHelper('disabled', function(value) {
+  return value ? '' : 'disabled';
 });
 
 /**
