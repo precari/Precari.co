@@ -1,0 +1,46 @@
+<template name="manageTags">
+  <div class="main page">
+  {{#if currentUser}}
+    <h3>My Tags</h3>
+    {{#unless userTags}}
+      <div class="alert alert-info" role="alert">
+        <p>It looks like you don't have any tags. Once you create a prayer
+          request, the tags will automatically show up here. </p>
+      </div>
+    {{else}}
+    <div class="tag-cloud border">
+      {{#each userTags}}
+        {{ > privateTagItemWithLink}}
+      {{/each}}
+    </div>
+    <div>&nbsp;</div>
+    <div id="manage-tags">
+      <div class="panel panel-default">
+        <div class="panel-heading">Manage tags</div>
+        <div class="panel-body">
+          <p>Click the tag name to rename the tag; Click the
+            <span class="glyphicon glyphicon-remove"></span> to delete the tag
+          </p>
+        </div>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each userTags}}
+            <tr>
+              <td class="edit-tag-label">{{label}}</td>
+              <td class="no-edit"><span class="glyphicon glyphicon-remove no-edit delete"></span></td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div> <!-- End .panel -->
+    </div>
+    {{/unless}}
+  {{/if}}
+  </div>
+</template>

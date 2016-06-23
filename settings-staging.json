@@ -2,6 +2,7 @@
   "public": {
     "postsPerPage": "10",
     "maxTitleLength": "100",
+    "maxTagLength": "50",
     "truncateBodyMessageLength": "1000",
     "prayAgainDurationInMinutes": "30",
     "houston_root_route": "admin2",

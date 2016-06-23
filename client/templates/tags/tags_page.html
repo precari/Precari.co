@@ -2,16 +2,17 @@
   <div class="main page">
   {{#if currentUser}}
     <h3>My Tags</h3>
+    <p><a href="{{pathFor 'manageTags'}}">manage my tags</a></p>
     <div class="tag-cloud border">
-      {{#each userTags}}
-        {{ > privateTagItemWithLink}}
-      {{/each}}
       {{#unless userTagsCount}}
         <div class="alert alert-info" role="alert">
           <p>It looks like you don't have any tags. Once you create a prayer
             request, the tags will automatically show up here. </p>
         </div>
       {{/unless}}
+      {{#each userTags}}
+        {{ > privateTagItemWithLink}}
+      {{/each}}
     </div>
   {{/if}}
     <h3>Public Tag List</h3>
