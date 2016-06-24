@@ -28,28 +28,16 @@ Meteor.methods({
   },
 
   /**
-   * Determines the environment
-   * @return String The value of the current environment (development or production)
-   */
-  getEnvironment: function() {
-    if (process.env.ROOT_URL === 'http://localhost:3000') {
-        return 'development';
-    } else {
-        return 'production';
-    }
-  },
-
-    /**
-   * Determine if the tag is marked as private
-   * @param string tag Tag to determing the privacy setting of
-   * @return Boolean True if the tag is private, otherwise false
-   */
+    * Determine if the tag is marked as private
+    * @param string tag Tag to determing the privacy setting of
+    * @return Boolean True if the tag is private, otherwise false
+    */
   isPrivateTag: function(tag) {
 
-   check(tag, String);
+    check(tag, String);
 
-   // If tag starts with the private tag char, then treat as private
-   return (tag.indexOf(PRIVATE_TAG_CHAR) === 0);
+    // If tag starts with the private tag char, then treat as private
+    return (tag.indexOf(PRIVATE_TAG_CHAR) === 0);
   },
 
 });

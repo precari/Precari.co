@@ -4,57 +4,7 @@
     generating errors when tryign to access Meteor methods in lib.
 */
 
-Meteor.precariFixtureMethods = {
-
-  /**
-   * Determines if the environment is specifically a staging environment
-   * @return Boolean true if the environment is a staging env, otherwise false
-   */
-  isStagingEnvironment: function() {
-
-    // Attempt to get settings var. If undefined, generates a TypeError
-    try {
-
-      // If env is staging, return true
-      if (Meteor.settings.env.environment === 'staging') {
-        return true;
-      } else {
-        return false;
-      }
-
-    } catch (e) {
-        console.log(e);
-        return false;
-    }
-  },
-
-  /**
-   * Determine if the instance should be staged
-   * @return Boolean true to stage the instance, otherwise false
-   */
-  stageCurrentInstance: function() {
-
-    // Attempt to get staging flag. If undefined, generates a TypeError
-    try {
-
-      // If env is staging, always stage
-      if (Meteor.precariFixtureMethods.isStagingEnvironment()) {
-        return true;
-      }
-
-      // If development with staging flag set for instance, stage
-      if (Meteor.isDevelopment && Meteor.settings.env.stage === 'true') {
-        return true;
-      }
-
-      // Otherwise. Do not stage.
-      return false;
-
-    } catch (e) {
-        console.log(e);
-        return false;
-    }
-  },
+Meteor.fixtureMethods = {
 
   /**
    * Converts the tag name to a KV pair {name: tagName} or {label: tagName}
@@ -68,6 +18,9 @@ Meteor.precariFixtureMethods = {
     check(type, String);
     check(name, String);
 
+    // Only access from the server
+    verifyIsServer();
+
       // Build the KV pair
     if (type === 'private') {
       return { label: name };
@@ -77,8 +30,25 @@ Meteor.precariFixtureMethods = {
   },
 
   /**
+   * Single method call to build and insert the public tag
+   * @param String name Name of the tag
+   * @return Object An object containing the KV data:
+   *              {name: tagName} or {label: tagName}
+   */
+  buildAndInsertPublicTag: function(name) {
+
+    check(name, String);
+
+    var tag = Meteor.fixtureMethods.buildTagKVPair('public', name);
+    return Meteor.fixtureMethods.publicTagInsert(tag);
+  },
+
+  /**
    * Inserts the tag into the PublicTags collection (or db). If a tag by the same
-   * name already exists, the ID of the exising tag is returned
+   * name already exists, the ID of the exising tag is returned.
+   *
+   * This bypasses the security features of the client call
+   *
    * @param string tag The tag to insert
    * @return string The id of the inserted tag or the id an exising tog by
                     same name.
@@ -86,6 +56,9 @@ Meteor.precariFixtureMethods = {
   publicTagInsert: function(tag) {
 
     check(tag, Object);
+
+    // Only access from the server
+    verifyIsServer();
 
     // Get the tag by name to check if it exists
     var existingTag = PublicTags.findOne({name: tag.Name});
@@ -114,6 +87,9 @@ Meteor.precariFixtureMethods = {
   /**
    * Inserts the tag into the PrivateTags collection (or db). If a tag by the same
    * name already exists, the ID of the exising tag is returned
+   *
+   * This bypasses the security features of the client call
+   *
    * @param string tagLabel The human readable form of the label
    * @param String userId The ID of the user who created the tag
    * @return object The newly created tag, or an existing tag if a match was found
@@ -122,6 +98,9 @@ Meteor.precariFixtureMethods = {
 
     check(tag, Object);
     check(userId, String);
+
+    // Only access from the server
+    verifyIsServer();
 
     var tagLabel = tag.label;
 
@@ -146,5 +125,18 @@ Meteor.precariFixtureMethods = {
 
     // return the new tag
     return PrivateTags.findOne({_id: id});
+  }
+};
+
+/**
+ * Determines if the call is from the server, or client
+ */
+var verifyIsServer = function() {
+
+  if ( this.connection === undefined ) {
+    return true;
+  } else {
+    var msg = 'This method is only accessable from the server';
+    throw new Meteor.Error('unauthorized-access', msg);
   }
 };

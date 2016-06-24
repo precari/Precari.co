@@ -14,7 +14,11 @@
   },
   "env": {
     "environment": "development",
-    "stage": "true"
+    "stage": "true",
+    "stageData": {
+      "dev":          "true",
+      "CentralAsia":  "false"
+      }
   },
   "mail": {
     "url": "smtp://postmaster@sandbox2e5cb577b9fa4bf08e06ba7b44305c13.mailgun.org:0132287f0ad2ee389120cf05735ee837@smtp.mailgun.org:587"
