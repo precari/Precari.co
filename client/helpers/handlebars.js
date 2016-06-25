@@ -1,11 +1,21 @@
 
-/*
- * handlebars.js contains common helper functions for the templates. These are
- * are accessed from within the templates using the {{func arg}} notation.
- */
+/**
+  * handlebars.js contains common helper functions for the templates. These are
+  * are accessed from within the templates using the {{func arg}} notation.
+  */
+
+ /**
+  * Returns the app display name
+  *
+  * @return String The dispaly name of the app from the settings file
+  */
+ Template.registerHelper('siteName', function() {
+   return Meteor.settings.public.siteName;
+ });
 
 /**
  * Pluralizes an English noun by adding an s
+ *
  * @param Integer n the number of items
  * @param String thing The English word to pluralize
  * @return String A string value of the pluralized thing if n is greater than 1.
@@ -22,6 +32,7 @@ Template.registerHelper('pluralize', function(n, thing) {
 
 /**
  * If value is true, returns 'checked' for the checkbox
+ *
  * @param Boolean value The value to compare
  * @return String A string value of 'checked' if the value is true, otherwise
  *                return an empty string
@@ -32,6 +43,7 @@ Template.registerHelper('checked', function(value) {
 
 /**
  * If value is false, returns 'disabled'
+ *
  * @param Boolean value The value to compare
  * @return String A string value of 'disabled' if the value is false, otherwise
  *                return an empty string
@@ -42,6 +54,7 @@ Template.registerHelper('disabled', function(value) {
 
 /**
  * Formats the data for a standardized look
+ *
  * @param Date date Date to format
  * @return String A formatted date value
  */
@@ -51,6 +64,9 @@ Template.registerHelper('formatDate', function(date) {
 
 /**
  * Gets the glyphicon matching the visibility level
+ *
+ * @param Enum visibility The value of Meteor.precariMethods.visibility
+ *                        to get the glyphicon for
  * @return String The value of the glyphicon
 */
 Template.registerHelper('visibliltyGlyphicon', function(visibility) {

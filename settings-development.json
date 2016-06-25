@@ -1,5 +1,6 @@
 {
   "public": {
+    "siteName": "Precari dev",
     "postsPerPage": "10",
     "maxTitleLength": "100",
     "maxTagLength": "50",
@@ -8,7 +9,7 @@
     "houston_root_route": "admin2",
     "houston_documents_per_page": 50,
     "yogiben_admin": {
-      "appName": "localhost admin",
+      "appName": "Precari dev admin",
       "adminEmails": ["admin1@example.com", "admin2@example.com"]
     }
   },
@@ -21,6 +22,7 @@
       }
   },
   "mail": {
-    "url": "smtp://postmaster@sandbox2e5cb577b9fa4bf08e06ba7b44305c13.mailgun.org:0132287f0ad2ee389120cf05735ee837@smtp.mailgun.org:587"
+    "url": "smtp://postmaster@sandbox2e5cb577b9fa4bf08e06ba7b44305c13.mailgun.org:0132287f0ad2ee389120cf05735ee837@smtp.mailgun.org:587",
+    "from": "Precari dev <no-reply@mailgun.org>"
   }
 }

@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="{{pathFor 'home'}}">Precari</a>
+      <a class="navbar-brand" href="{{pathFor 'home'}}">{{siteName}}</a>
     </div>
     <div class="collapse navbar-collapse" id="navigation">
       <ul class="nav navbar-nav">
@@ -17,12 +17,12 @@
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li  id="most-recent-posts" class="sortable">
+            <li id="most-recent-posts" class="sortable active">
               <a href="#">
-                Most recent prayer requests
+                Latest prayer requests
               </a>
             </li>
-            <li  id="top-posts" class="sortable">
+            <li id="top-posts" class="sortable">
               <a href="#">
                 Most prayed for prayer requests
               </a>
@@ -34,7 +34,7 @@
             </li>
           </ul>
         </li>
-        <li class="{{activeRouteClass 'tags'}}">
+        <li class="{{activeRouteClass 'tagsPage'}}">
           <a href="{{pathFor 'tagsPage'}}">Tags</a>
         </li>
       {{#if currentUser}}

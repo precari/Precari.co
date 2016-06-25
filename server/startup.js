@@ -46,5 +46,9 @@ if (Meteor.stage.stageCurrentInstance()) {
 
 // Process anything that needs to happen each time Meteor starts
 Meteor.startup( function() {
+
+  // mail settings
   process.env.MAIL_URL = Meteor.settings.mail.url;
+  Accounts.emailTemplates.siteName = Meteor.settings.public.siteName;
+  Accounts.emailTemplates.from = Meteor.settings.mail.from;
 });
