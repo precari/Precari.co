@@ -7,11 +7,7 @@
     "truncateBodyMessageLength": "1000",
     "prayAgainDurationInMinutes": "30",
     "houston_root_route": "admin2",
-    "houston_documents_per_page": 50,
-    "yogiben_admin": {
-      "appName": "Precari staging admin",
-      "adminEmails": ["admin1@example.com", "admin2@example.com"]
-    }
+    "houston_documents_per_page": 50
   },
   "env": {
     "environment": "staging",
@@ -24,5 +20,8 @@
   "mail": {
     "url": "smtp://postmaster@sandbox2e5cb577b9fa4bf08e06ba7b44305c13.mailgun.org:0132287f0ad2ee389120cf05735ee837@smtp.mailgun.org:587",
     "from": "Precari dev <no-reply@mailgun.org>"
+  },
+  "yogiben_admin": {
+    "adminEmails": ["admin1@example.com", "admin2@example.com"]
   }
 }
