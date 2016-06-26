@@ -143,6 +143,24 @@ Template.postEdit.events({
       e.currentTarget.value = '';
     }
   },
+  
+  /**
+   * On loose focus event, add new tag from the value in the input control
+   * @param jQuery.Event e Event object containing the event data
+   */
+  'blur .tag-input-textbox': function (e) {
+
+      var tagText = e.currentTarget.value;
+      var tagType = Meteor.precariMethods.tagType.PRIVATE;
+
+      // If public tag, mark public
+      if (e.currentTarget.id.indexOf('public') >= 0) {
+          tagType = Meteor.precariMethods.tagType.PUBLIC;
+      }
+
+      Blaze._globalHelpers.addTagToForm(tagType, tagText);
+      e.currentTarget.value = '';
+  },
 
   /**
    * Add the tag from the list of tags to the post tag list
