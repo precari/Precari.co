@@ -92,3 +92,31 @@ Template.registerHelper('visibliltyGlyphicon', function(visibility) {
 
   return glyphicon;
 });
+
+/**
+ * Gets the CSS class for the specific tag depending on its properties
+ *
+ * @param String property Info about the tag about which icon to get
+ * @return String The value of the CSS class
+*/
+Template.registerHelper('tagLabelColorClass', function(property) {
+
+  var cssClass = '';
+
+  switch (property) {
+    case 'default':
+      cssClass = 'label-info';
+      break;
+    case 'private':
+      cssClass = 'label-success';
+      break;
+    case 'public':
+      cssClass = 'label-primary';
+      break;
+    default:
+      cssClass = 'label-primary';
+    break;
+  }
+
+  return cssClass;
+});

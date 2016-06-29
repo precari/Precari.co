@@ -5,22 +5,27 @@
 
 <!-- A tag with primary Bootstrap button color and check glyhp -->
 <template name="publicTagItemWithCheckGlyph">
-  <span class="tag label label-primary">{{name}}<a class="add glyphicon glyphicon-check"></a></span>
+  <span class="tag label {{tagLabelColorClass 'public'}}">{{name}}<a class="add glyphicon glyphicon-check"></a></span>
 </template>
 
 <!-- A tag with success Bootstrap button color and check glyhp -->
 <template name="privateTagItemWithCheckGlyph">
-  <span class="tag label label-success">{{label}}<a class="add glyphicon glyphicon-check"></a></span>
+  <span class="tag label {{tagLabelColorClass getProperty}}">{{this.label}}<a class="add glyphicon glyphicon-check"></a></span>
 </template>
 
 <!-- A tag with primary Bootstrap button color and remove glyph -->
 <template name="publicTagItemWithRemoveGlyph">
-  <span class="tag label label-primary">{{name}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
+  <span class="tag label {{tagLabelColorClass 'public'}}">{{name}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
 </template>
 
 <!-- A tag with success Bootstrap button color and remove glyph -->
 <template name="privateTagItemWithRemoveGlyph">
-  <span class="tag label label-success">{{label}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
+  <span class="tag label {{tagLabelColorClass getProperty}}">{{this.label}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
+</template>
+
+<!-- A tag with success Bootstrap button color and remove glyph -->
+<template name="defualtTagItemWithRemoveGlyph">
+  <span class="tag label {{tagLabelColorClass 'default'}}">{{label}}<a class="remove glyphicon glyphicon-remove-sign"></a></span>
 </template>
 
 <!-- *********************************************************************** -->
@@ -30,7 +35,7 @@
 <template name="publicTagItemWithLink">
   <span class="tag">
     <a href="{{pathFor 'postsContainingTag'}}">
-      <span class="label label-primary">{{name}}</span>
+      <span class="label {{tagLabelColorClass getProperty}}">{{this.name}}</span>
     </a>
   </span>
 </template>
@@ -39,16 +44,7 @@
 <template name="privateTagItemWithLink">
   <span class="tag">
     <a href="{{pathFor 'postsContainingTag'}}">
-      <span class="label label-success =">{{label}}<span class="glyphicon glyphicon-lock"></span></span>
-    </a>
-  </span>
-</template>
-
-<!-- A tag with info Bootstrap button color and no glyphicon -->
-<template name="visibiltyTagItemWithLink">
-  <span class="tag">
-    <a href="{{pathFor 'myPostsWithVisibility'}}">
-      <span class="label label-warning">{{visibility}}<span class="{{visibliltyGlyphicon visibility}}"></span></span>
+      <span class="label {{tagLabelColorClass getProperty}}">{{this.label}}<span class="glyphicon glyphicon-lock"></span></span>
     </a>
   </span>
 </template>

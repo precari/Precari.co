@@ -13,8 +13,16 @@
       {{/unless}}
     {{/if}}
   </div>
-  {{#unless userPostsCount}}
+{{#unless userPostsCount}}
+  {{#if isMyPostsPage}}
     {{! If userPostCount is zero, display help message }}
     {{> helpCreatingsPosts noUserPosts=true}}
-  {{/unless}}
+  {{else}}
+  <div class="not-found page jumbotron">
+    <h2>Oops...</h2>
+    <p>It looks like this page doesn't contain any data. The data you were
+      expecting to find was likely deleted.</p>
+  </div>
+  {{/if}}
+{{/unless}}
 </template>

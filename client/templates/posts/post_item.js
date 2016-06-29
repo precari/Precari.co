@@ -44,49 +44,36 @@ Template.postItem.helpers({
    * @return String The text for the prayedFor button
    */
   buttonText: function() {
-    if (userPrayed(this.precatis)) {
-      return 'Pray again';
-    } else {
-      return 'Pray';
-    }
-  },
-
-  /**
-   * Determines the CSS class name for the button indicating if the user
-   * has prayed, or not.
-   * @return String The class name for the prayedFor button
-   */
-  prayedForClass: function() {
 
     var neverPrayed =             'btn-primary prayable';
     var previouslyPrayed =        'btn-info prayable';
     var previouslyPrayedOnTimer = 'btn-success disabled';
 
-    // If not logged in, leave disabled. If not prayed for, mark as prayable
-    if (!Meteor.userId()) {
-      return;
-    } else if (!userPrayed(this.precatis)) {
-      return neverPrayed;
+    var text;
+
+    switch (getPrayedForClass(this)) {
+      case neverPrayed:
+        text = 'Pray';
+        break;
+      case previouslyPrayed:
+        text = 'Pray again';
+        break;
+      case previouslyPrayedOnTimer:
+        text = 'Pray again later';
+        break;
+      default:
+        text = 'Pray';
     }
+    return text;
+  },
 
-    // Otherwise, the request has been prayed for, but we need to determine
-    // if they can mark the request as prayed for again (prevents from running
-    // up the counter, double clicks, etc.)
-
-    var durationLimit =
-      parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
-    var lastPrayedInfo = userLastPrayedInfo(this._id);
-
-    // Get the duration, in minutes
-    var ms = (new Date() - lastPrayedInfo.date);
-    var minutes = Math.floor(ms / 60000);
-
-    // Determine if the use can click the prayed button again
-    if (minutes > durationLimit) {
-      return previouslyPrayed;
-    } else {
-      return previouslyPrayedOnTimer;
-    }
+  /**
+   * Gets the CSS class name for the button indicating if the user
+   * has prayed, or not.
+   * @return String The class name for the prayedFor button
+   */
+  prayedForClass: function() {
+    return getPrayedForClass(this);
   },
 
   /**
@@ -181,6 +168,45 @@ Template.postItem.events({
 });
 
 // ---------------------------- Helper methods -------------------------------
+
+/**
+ * Determines the CSS class name for the button indicating if the user
+ * has prayed, or not.
+ * @param Object post The current post
+ * @return String The class name for the prayedFor button
+ */
+var getPrayedForClass = function(post) {
+
+  var neverPrayed =             'btn-primary prayable';
+  var previouslyPrayed =        'btn-info prayable';
+  var previouslyPrayedOnTimer = 'btn-success disabled';
+
+  // If not logged in, leave disabled. If not prayed for, mark as prayable
+  if (!Meteor.userId()) {
+    return;
+  } else if (!userPrayed(post.precatis)) {
+    return neverPrayed;
+  }
+
+  // Otherwise, the request has been prayed for, but we need to determine
+  // if they can mark the request as prayed for again (prevents from running
+  // up the counter, double clicks, etc.)
+
+  var durationLimit =
+    parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
+  var lastPrayedInfo = userLastPrayedInfo(post._id);
+
+  // Get the duration, in minutes
+  var ms = (new Date() - lastPrayedInfo.date);
+  var minutes = Math.floor(ms / 60000);
+
+  // Determine if the use can click the prayed button again
+  if (minutes > durationLimit) {
+    return previouslyPrayed;
+  } else {
+    return previouslyPrayedOnTimer;
+  }
+};
 
 /**
  * Determines if the message body should be truncated, or not

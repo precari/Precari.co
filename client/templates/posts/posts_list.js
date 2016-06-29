@@ -9,6 +9,19 @@ var sort = new ReactiveVar({ submitted: -1, _id: -1 });
 Template.postsList.helpers({
 
   /**
+   * Returns true if the current route is myPosts
+   */
+  isMyPostsPage: function() {
+
+    var route = '';
+
+    if (Router.current() && Router.current().route) {
+      route = Router.current().route.getName();
+    }
+    return (route === 'myPosts');
+  },
+
+  /**
    * Returns the posts collection to the template. The router does return this
    * this, but we need to explicitly specify it here for the dynamic sort
    */

@@ -157,7 +157,7 @@ Template.postSubmit.events({
 
   'click #privacy-radio-group .radio': function (e) {
 
-    // Visually want the user if making a public request. TODO: Find a better
+    // Visually warn the user if making a public request. TODO: Find a better
     // woy for this. Dialog box?
     if ($(e.target).find('input[name=privacy-radio]').val() === 'public') {
       $(e.currentTarget).addClass('alert-danger');

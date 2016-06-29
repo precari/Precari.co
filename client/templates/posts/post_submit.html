@@ -24,7 +24,10 @@
     <div class="form-group {{errorClass 'privateTags'}}">
       <label class="control-label sub-label">Private Tags</label><br />
       <small>Private tags are unique and only show up in private posts and private tag lists.<br /></small>
-      <div id="private-tag-cloud" class="tag-cloud"></div>
+      <div id="private-tag-cloud" class="tag-cloud">
+        {{! always insert the default tag, as the first tag }}
+        {{ > defualtTagItemWithRemoveGlyph}}
+      </div>
     </div>
     <div class="add-tags-container">
       <input name="private-tags-input" id="private-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox"/>
