@@ -1,0 +1,46 @@
+<template name="postSubmitQuick">
+  <div class="post">
+    <div class="row">
+      <div class="col-lg-6">
+        <label class="control-label" for="title">Submit Quick Request</label>
+        <div class="form-group {{errorClass 'bodyMessage'}}">
+          <form id="quick-post">
+            <div class="input-group quick-post">
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span id="tags-dropdown-glyphicon" class="glyphicon glyphicon-tags"></span>
+                  <span class="sr-only">Tags</span>
+                </button>
+                <ul id="tags-dropdown-menu" class="dropdown-menu">
+                {{#each userPrivateTags}}
+                  <li class="{{defaultActiveTag}}"><a href="#">{{label}}</a></li>
+                {{/each}}
+                </ul>
+              </div>
+              <div class="input-group-btn">
+                <button type="button" class="btn btn-default dropdown-toggle"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span id="visibility-dropdown-glyphicon" class="glyphicon glyphicon-lock"></span>
+                  <span class="sr-only">Visibility</span>
+                </button>
+                <ul id="visibility-dropdown-menu" class="dropdown-menu">
+                  <li><a href="#">{{visibilityValue 0}}</a></li>
+                  <li><a href="#">{{visibilityValue 1}}</a></li>
+                  <li class="active"><a href="#">{{visibilityValue 2}}</a></li>
+                  <li><a href="#">{{visibilityValue 3}}</a></li>
+                </ul>
+              </div>
+              <input type="text" class="form-control" placeholder="Short request ({{maxTitleLength}} characters)"
+                      aria-label="Short request ({{maxTitleLength}} characters)" maxlength="{{maxTitleLength}}" />
+              <span class="input-group-btn">
+                <button id="submit-quick-post" class="btn btn-default" type="submit">Submit</button>
+              </span>
+            </div>
+          </form>
+          <span class="help-block">{{errorMessage 'bodyMessage'}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

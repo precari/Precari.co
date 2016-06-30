@@ -63,10 +63,49 @@ Template.registerHelper('formatDate', function(date) {
 });
 
 /**
+* Gets the maximum allowed title length
+ *
+ * @return Integer The length of the request's title
+ */
+Template.registerHelper('maxTitleLength', function() {
+  return parseInt(Meteor.settings.public.maxTitleLength);
+});
+
+/**
+ * Gets the enum value for the visibility setting based on the matching int
+ *
+ * @param String/Integer num The int value of the visibility level
+ * @return String The text value of the corresponding visibility
+*/
+Template.registerHelper('visibilityValue', function(num) {
+
+  var visibility;
+
+  switch (parseInt(num)) {
+    case 0:
+      visibility = Meteor.precariMethods.visibility.PRIVATE;
+      break;
+    case 1:
+      visibility = Meteor.precariMethods.visibility.LINK;
+      break;
+    case 2:
+      visibility = Meteor.precariMethods.visibility.TAG;
+      break;
+    case 3:
+      visibility = Meteor.precariMethods.visibility.PUBLIC;
+      break;
+    default:
+    visibility = Meteor.precariMethods.visibility.PRIVATE;
+    break;
+  }
+    return visibility;
+});
+
+/**
  * Gets the glyphicon matching the visibility level
  *
- * @param Enum visibility The value of Meteor.precariMethods.visibility
- *                        to get the glyphicon for
+ * @param Enum/Integer visibility The value of Meteor.precariMethods.visibility
+ *                     or integer equivilent to get the glyphicon for
  * @return String The value of the glyphicon
 */
 Template.registerHelper('visibliltyGlyphicon', function(visibility) {
@@ -84,6 +123,18 @@ Template.registerHelper('visibliltyGlyphicon', function(visibility) {
       glyphicon = 'glyphicon glyphicon-tag';
       break;
     case Meteor.precariMethods.visibility.PUBLIC:
+      glyphicon = 'glyphicon glyphicon-globe';
+      break;
+    case 0:
+      glyphicon = 'glyphicon glyphicon-eye-close';
+      break;
+    case 1:
+      glyphicon = 'glyphicon glyphicon-link';
+      break;
+    case 2:
+      glyphicon = 'glyphicon glyphicon-tag';
+      break;
+    case 3:
       glyphicon = 'glyphicon glyphicon-globe';
       break;
     default:

@@ -34,40 +34,6 @@ Template.postSubmit.helpers({
   userPrivateTags: function() {
     return PrivateTags.find().fetch();
   },
-
-  /**
-   * Gets the enum value for the visibility setting
-   */
-  visibilityValue: function(num) {
-
-    var visibility;
-
-    switch (num) {
-      case 0:
-        visibility = Meteor.precariMethods.visibility.PRIVATE;
-        break;
-      case 1:
-        visibility = Meteor.precariMethods.visibility.LINK;
-        break;
-      case 2:
-        visibility = Meteor.precariMethods.visibility.TAG;
-        break;
-      case 3:
-        visibility = Meteor.precariMethods.visibility.PUBLIC;
-        break;
-      default:
-      visibility = Meteor.precariMethods.visibility.PRIVATE;
-      break;
-    }
-      return visibility;
-  },
-
-  /**
-   * Gets the maximum allowed title length
-   */
-  maxTitleLength: function() {
-    return parseInt(Meteor.settings.public.maxTitleLength);
-  },
 });
 
 // ---------------------------- Template events -------------------------------

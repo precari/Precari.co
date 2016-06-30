@@ -10,7 +10,7 @@
     <div class="myActivity">
       <h2>Posts by activity type</h2>
       <ul class="list-unstyled">
-        <li><span class="{{visibliltyGlyphicon 'private'}} activity-type"></span>
+        <li><span class="{{visibliltyGlyphicon 0}} activity-type"></span>
         {{#if privatePostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='private'}}">
             View my private posts ({{privatePostCount}}x)
@@ -19,7 +19,7 @@
           You don't have any private posts
         {{/if}}
         </li>
-        <li><span class="{{visibliltyGlyphicon 'link'}} activity-type"></span>
+        <li><span class="{{visibliltyGlyphicon 1}} activity-type"></span>
         {{#if linkPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='link'}}">
             View my posts set to link only ({{linkPostCount}}x)
@@ -28,7 +28,7 @@
           You don't have any posts set to link only
         {{/if}}
         </li>
-        <li><span class="{{visibliltyGlyphicon 'tag'}} activity-type"></span>
+        <li><span class="{{visibliltyGlyphicon 2}} activity-type"></span>
         {{#if tagPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='tag'}}">
             View my posts set to tag ({{tagPostCount}}x)
@@ -37,7 +37,7 @@
           You don't have any posts set to tag
         {{/if}}
         </li>
-        <li><span class="{{visibliltyGlyphicon 'public'}} activity-type"></span>
+        <li><span class="{{visibliltyGlyphicon 3}} activity-type"></span>
         {{#if publicPostCount}}
           <a href="{{pathFor 'myPostsWithVisibility' visibility='public'}}">
           View my public posts ({{publicPostCount}}x)

@@ -38,33 +38,6 @@ Template.postEdit.helpers({
   /**
    * Gets the enum value for the visibility setting
    */
-  visibilityValue: function(num) {
-
-    var visibility;
-
-    switch (num) {
-      case 0:
-        visibility = Meteor.precariMethods.visibility.PRIVATE;
-        break;
-      case 1:
-        visibility = Meteor.precariMethods.visibility.LINK;
-        break;
-      case 2:
-        visibility = Meteor.precariMethods.visibility.TAG;
-        break;
-      case 3:
-        visibility = Meteor.precariMethods.visibility.PUBLIC;
-        break;
-      default:
-        visibility = Meteor.precariMethods.visibility.PRIVATE;
-      break;
-    }
-      return visibility;
-  },
-
-  /**
-   * Gets the enum value for the visibility setting
-   */
   privacyRadioCheked: function(num) {
 
     var checked;
@@ -95,13 +68,6 @@ Template.postEdit.helpers({
       break;
     }
       return checked;
-  },
-
-  /**
-   * Gets the maximum allowed title length
-   */
-  maxTitleLength: function() {
-    return parseInt(Meteor.settings.public.maxTitleLength);
   },
 });
 
@@ -143,7 +109,7 @@ Template.postEdit.events({
       e.currentTarget.value = '';
     }
   },
-  
+
   /**
    * On loose focus event, add new tag from the value in the input control
    * @param jQuery.Event e Event object containing the event data
