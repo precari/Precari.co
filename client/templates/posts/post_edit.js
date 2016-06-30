@@ -189,7 +189,6 @@ Template.postEdit.events({
 
     // Get the data from the fields
     var postData = {
-      title: $(e.target).find('[name=title]').val(),
       bodyMessage: $(e.target).find('[name=prayer-request]').val(),
       publicTags: publicTagArray,
       privateTags: privateTagArray,
@@ -203,7 +202,7 @@ Template.postEdit.events({
 
     // Validate the data and return any errors
     var errors = validatePost(postData);
-    if (errors.title || errors.bodyMessage || errors.publicTags || errors.privateTags) {
+    if (errors.bodyMessage || errors.publicTags || errors.privateTags) {
       return Session.set('postEditErrors', errors);
     }
 

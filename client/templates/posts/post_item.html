@@ -20,12 +20,14 @@
     </div>
     <div class="post-content">
       <h3>
-        <a href="{{pathFor 'postPage'}}">{{title}}</a>
-          <span>{{bodyMessage}}
-          {{#if truncatedBody}}
-            <a href="{{pathFor 'postPage'}}">Read more</a>
-          {{/if}}
-          </span>
+      {{#unless pageIsPostPage}}
+        <a href="{{pathFor 'postPage'}}">Open request</a>
+      {{/unless}}
+        <span>{{bodyMessage}}
+        {{#if truncateBody}}
+          <a href="{{pathFor 'postPage'}}">Read more</a>
+        {{/if}}
+        </span>
       </h3>
     </div>
     <div class="post-footer">

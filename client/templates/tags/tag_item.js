@@ -18,7 +18,7 @@ Template.defualtTagItemWithRemoveGlyph.helpers({
       return tag.label;
     } else {
       // No default tag. On submit the tag will be created
-      return Meteor.settings.public.tags.userDefaultTitle;
+      return Meteor.settings.public.tags.userDefaultLabel;
     }
   },
 });

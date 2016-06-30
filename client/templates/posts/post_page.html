@@ -1,13 +1,11 @@
 <template name="postPage">
   <div class="post-page page">
-    {{> postItem addDisplayFullMessageFlag}}
-
+    {{> postItem}}
     <ul class="comments">
-      {{#each comments}}
-        {{> commentItem}}
-      {{/each}}
+    {{#each comments}}
+      {{> commentItem}}
+    {{/each}}
     </ul>
-
     {{#if currentUser}}
       {{> commentSubmit}}
     {{else}}

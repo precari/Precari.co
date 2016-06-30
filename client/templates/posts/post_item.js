@@ -107,6 +107,16 @@ Template.postItem.helpers({
   },
 
   /**
+   * Determines if the post is currently displayed in its own page,
+   * or in a list page
+   *
+   * @return Boolean True if the page is in a list, otherwise false
+  */
+  pageIsPostPage: function() {
+    return pageIsPostPage(this);
+  },
+
+  /**
    * Truncates the body message
    * @return String The message body, either in full or truncated
   */
@@ -126,7 +136,7 @@ Template.postItem.helpers({
    * Gets the state of the body message and if it was truncated, or not
    * @return Boolean True if the body was truncated, otherwise False
    */
-  truncatedBody: function() {
+  truncateBody: function() {
     return truncateBodyState(this);
   },
 });
@@ -143,11 +153,20 @@ Template.postItem.events({
     Meteor.call('prayedFor', this._id);
   },
 
+  /**
+   * Click event for delete post
+   */
   'click .post .delete': function(e) {
     e.preventDefault();
 
+    // try to get the first few words to give the user some information
+    var words = '';
+    try {
+      words = this.bodyMessage.split(/\s+/).slice(0,5).join(" ");
+    } catch (error) { }
+
     // Ask the user
-    if (confirm("Delete request '" + this.title + "'?")) {
+    if (confirm("Delete request '" + words + "...'?")) {
       var currentPostId = this._id;
 
       // Try removing each of the comments before removing the post
@@ -168,6 +187,23 @@ Template.postItem.events({
 });
 
 // ---------------------------- Helper methods -------------------------------
+
+/**
+ * Determines if the page is the post page (/posts/postId) or a post list page
+ * (/myposts)
+ *
+ * @param Object post The post for the current page
+ * @return Boolean True if the page is the post page, otherwise false.
+ */
+var pageIsPostPage = function(post) {
+
+  try {
+    var slugs = Iron.Location.get().path.split('/');
+    return slugs[slugs.length-1] === post._id;
+  } catch (e) {
+    return false;
+  }
+};
 
 /**
  * Determines the CSS class name for the button indicating if the user
@@ -218,7 +254,7 @@ var getPrayedForClass = function(post) {
    var truncateLength =
     parseInt(Meteor.settings.public.posts.truncateBodyMessageLength);
 
-   if (!post.displayFullMessage && post.bodyMessage.length > truncateLength) {
+   if (!pageIsPostPage(post) && post.bodyMessage.length > truncateLength) {
      return true;
    } else {
      return false;

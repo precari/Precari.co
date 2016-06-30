@@ -103,7 +103,6 @@ Template.postSubmitQuick.events({
 
     // Build post object
     var postData = {
-      title:        getFormElement('input').val(),
       bodyMessage:  getFormElement('input').val(),
       publicTags:   [],
       privateTags:  [tag],
@@ -112,7 +111,7 @@ Template.postSubmitQuick.events({
 
     // Validate the data and return any errors
     var errors = validatePost(postData);
-    if (errors.title || errors.bodyMessage || errors.privateTags) {
+    if (errors.bodyMessage || errors.privateTags) {
       return Session.set('quickPostSubmitErrors', errors);
     }
 

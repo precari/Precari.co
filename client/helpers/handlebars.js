@@ -14,18 +14,9 @@
  });
 
  /**
- * Gets the maximum allowed title length
+ * Gets the maximum allowed tag length
   *
-  * @return Integer The length of the request's title
-  */
- Template.registerHelper('maxTitleLength', function() {
-   return parseInt(Meteor.settings.public.posts.maxTitleLength);
- });
-
- /**
- * Gets the maximum allowed title length
-  *
-  * @return Integer The length of the request's title
+  * @return Integer The max length of a tag
   */
  Template.registerHelper('maxTagLength', function() {
    return parseInt(Meteor.settings.public.tags.maxLength);

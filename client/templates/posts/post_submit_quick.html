@@ -1,7 +1,7 @@
 <template name="postSubmitQuick">
   <div class="post">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-xs-12">
         <label class="control-label" for="title">Submit Quick Request</label>
         <div class="form-group {{errorClass 'bodyMessage'}}">
           <form id="quick-post">
@@ -31,8 +31,8 @@
                   <li><a href="#">{{visibilityValue 3}}</a></li>
                 </ul>
               </div>
-              <input type="text" class="form-control" placeholder="Short request ({{maxTitleLength}} characters)"
-                      aria-label="Short request ({{maxTitleLength}} characters)" maxlength="{{maxTitleLength}}" />
+              <input type="text" class="form-control" placeholder="Add your request"
+                      aria-label="Add your request" />
               <span class="input-group-btn">
                 <button id="submit-quick-post" class="btn btn-default" type="submit">Submit</button>
               </span>

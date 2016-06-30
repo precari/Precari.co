@@ -1,19 +1,11 @@
 <template name="postSubmit">
   <form class="main form page">
-    <div class="form-group {{errorClass 'title'}}">
-      <label class="control-label" for="title">Title</label>
-      <div class="controls">
-          <input name="title" id="title" type="text" value=""
-                placeholder="Short title of your request" class="form-control"  maxlength="{{maxTitleLength}}" />
-          <span class="help-block">{{errorMessage 'title'}}</span>
-      </div>
-    </div>
-    <div class="form-group {{errorClass 'prayerRequest'}}">
+    <div class="form-group {{errorClass 'bodyMessage'}}">
       <label class="control-label" for="prayer-request">Request</label>
       <div class="controls">
           <textarea name="prayer-request" id="prayer-request" type="text" value=""
                     placeholder="Your prayer request" class="form-control"></textarea>
-          <span class="help-block">{{errorMessage 'prayerRequest'}}</span>
+          <span class="help-block">{{errorMessage 'bodyMessage'}}</span>
       </div>
     </div>
     <!-- Start tag section -->
