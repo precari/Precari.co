@@ -10,23 +10,15 @@ Template.defualtTagItemWithRemoveGlyph.helpers({
    */
   label: function() {
 
-    // Get the default tag
-    var tag = PrivateTags.findOne({default: true});
+    // Get the user's default tag
+    var tag = PrivateTags.findOne({userId: Meteor.userId(), default: true});
 
     if (tag) {
       // If found, return the label
       return tag.label;
     } else {
-      // No default tag. Create it.
-
-      // Default label for the tag
-      var label = 'My private list';
-      var options = { default: true };
-
-      // Insert the tag
-      Meteor.call('privateTagInsertWithOptions', label, options, function(error, result) { });
-
-      return label;
+      // No default tag. On submit the tag will be created
+      return Meteor.settings.public.tags.userDefaultTitle;
     }
   },
 });

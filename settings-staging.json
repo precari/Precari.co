@@ -1,13 +1,18 @@
 {
   "public": {
     "siteName": "Precari staging",
-    "postsPerPage": "10",
-    "maxTitleLength": "100",
-    "maxTagLength": "50",
-    "truncateBodyMessageLength": "1000",
-    "prayAgainDurationInMinutes": "30",
     "houston_root_route": "admin2",
     "houston_documents_per_page": 50,
+    "posts": {
+      "postsPerPage": "10",
+      "maxTitleLength": "100",
+      "truncateBodyMessageLength": "1000",
+      "prayAgainDurationInMinutes": "30"
+    },
+    "tags": {
+      "maxLength": "50",
+      "userDefaultTagTitle": "My private list"
+    },
     "analyticsSettings": {
       "Google Analytics" : {"trackingId": ""}
     }

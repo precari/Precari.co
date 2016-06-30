@@ -113,7 +113,7 @@ Template.postItem.helpers({
   bodyMessage: function() {
 
     var truncateLength =
-      parseInt(Meteor.settings.public.truncateBodyMessageLength);
+      parseInt(Meteor.settings.public.posts.truncateBodyMessageLength);
 
     if (truncateBodyState(this)) {
       return this.bodyMessage.substring(0, truncateLength ) + '... ';
@@ -193,7 +193,7 @@ var getPrayedForClass = function(post) {
   // up the counter, double clicks, etc.)
 
   var durationLimit =
-    parseInt(Meteor.settings.public.prayAgainDurationInMinutes);
+    parseInt(Meteor.settings.public.posts.prayAgainDurationInMinutes);
   var lastPrayedInfo = userLastPrayedInfo(post._id);
 
   // Get the duration, in minutes
@@ -216,7 +216,7 @@ var getPrayedForClass = function(post) {
  var truncateBodyState = function(post) {
 
    var truncateLength =
-    parseInt(Meteor.settings.public.truncateBodyMessageLength);
+    parseInt(Meteor.settings.public.posts.truncateBodyMessageLength);
 
    if (!post.displayFullMessage && post.bodyMessage.length > truncateLength) {
      return true;

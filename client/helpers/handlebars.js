@@ -13,6 +13,24 @@
    return Meteor.settings.public.siteName;
  });
 
+ /**
+ * Gets the maximum allowed title length
+  *
+  * @return Integer The length of the request's title
+  */
+ Template.registerHelper('maxTitleLength', function() {
+   return parseInt(Meteor.settings.public.posts.maxTitleLength);
+ });
+
+ /**
+ * Gets the maximum allowed title length
+  *
+  * @return Integer The length of the request's title
+  */
+ Template.registerHelper('maxTagLength', function() {
+   return parseInt(Meteor.settings.public.tags.maxLength);
+ });
+
 /**
  * Pluralizes an English noun by adding an s
  *
@@ -60,15 +78,6 @@ Template.registerHelper('disabled', function(value) {
  */
 Template.registerHelper('formatDate', function(date) {
   return moment(date).format('lll');
-});
-
-/**
-* Gets the maximum allowed title length
- *
- * @return Integer The length of the request's title
- */
-Template.registerHelper('maxTitleLength', function() {
-  return parseInt(Meteor.settings.public.maxTitleLength);
 });
 
 /**

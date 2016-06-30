@@ -3,14 +3,16 @@
     <div class="form-group {{errorClass 'title'}}">
       <label class="control-label" for="title">Title</label>
       <div class="controls">
-          <input name="title" id="title" type="text" value="" placeholder="Short title of your request" class="form-control"  maxlength="{{maxTitleLength}}"/>
+          <input name="title" id="title" type="text" value=""
+                placeholder="Short title of your request" class="form-control"  maxlength="{{maxTitleLength}}" />
           <span class="help-block">{{errorMessage 'title'}}</span>
       </div>
     </div>
     <div class="form-group {{errorClass 'prayerRequest'}}">
       <label class="control-label" for="prayer-request">Request</label>
       <div class="controls">
-          <textarea name="prayer-request" id="prayer-request" type="text" value="" placeholder="Your prayer request" class="form-control"></textarea>
+          <textarea name="prayer-request" id="prayer-request" type="text" value=""
+                    placeholder="Your prayer request" class="form-control"></textarea>
           <span class="help-block">{{errorMessage 'prayerRequest'}}</span>
       </div>
     </div>
@@ -30,7 +32,8 @@
       </div>
     </div>
     <div class="add-tags-container">
-      <input name="private-tags-input" id="private-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox"/>
+      <input name="private-tags-input" id="private-tags-input" type="text" value=""
+            placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox" maxlength="{{maxTagLength}}" />
     {{#if userPrivateTags}}
       <div class="tag-list-container">
         <br />
@@ -51,7 +54,8 @@
       <div id="public-tag-cloud" class="tag-cloud"></div>
     </div>
     <div class="add-tags-container">
-      <input name="public-tags-input" id="public-tags-input" type="text" value="" placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox"/>
+      <input name="public-tags-input" id="public-tags-input" type="text" value=""
+            placeholder="Add new tag through enter key or by comma" class="form-control tag-input-textbox" maxlength="{{maxTagLength}}" />
     {{#if userPublicTags}}
       <div class="tag-list-container">
         <br />

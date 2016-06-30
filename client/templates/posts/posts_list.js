@@ -30,11 +30,29 @@ Template.postsList.helpers({
   },
 
   /**
-   * Gets the number of user's posts
+  * Gets the number of public posts
+  *
+  * @return Integer The number of the public posts
    */
-  userPostsCount: function() {
-    return Posts.find().count();
+  publicPostsCount: function() {
+    return Posts.find({}).count();
   },
+
+  /**
+   * Determines if the quick post panel can be shown based on if the user
+   * has a default tag
+   *
+   * @return Boolean True if user has default tag, otherwise false
+   */
+  showQuickPostPanel: function() {
+    // If the user has a default tag, show the quick post panel to
+    if (PrivateTags.findOne({default: true})) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
 });
 
 // -------------------------- Template onRendered ------------------------------

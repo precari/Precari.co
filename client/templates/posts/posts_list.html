@@ -2,7 +2,7 @@
   <div class="posts page">
     <div class="wrapper">
     {{#if currentUser}}
-      {{#if userPostsCount}}
+      {{#if showQuickPostPanel}}
         {{ > postSubmitQuick this }}
       {{/if}}
     {{/if}}
@@ -18,7 +18,7 @@
       {{/unless}}
     {{/if}}
   </div>
-{{#unless userPostsCount}}
+{{#unless publicPostsCount}}
   {{#if isMyPostsPage}}
     {{! If userPostCount is zero, display help message }}
     {{> helpCreatingsPosts noUserPosts=true}}

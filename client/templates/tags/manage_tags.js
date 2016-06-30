@@ -30,7 +30,7 @@ Template.manageTags.onRendered(function() {
     // upon submit
     if(newValue === '') {
       return false;
-    } else if (newValue.length > parseInt(Meteor.settings.public.maxTagLength)) {
+    } else if (newValue.length > parseInt(Meteor.settings.public.tags.maxLength)) {
       return false;
     }
 
@@ -100,11 +100,10 @@ Template.manageTags.events({
     var originalLabel = this.label;
 
     // Set the new data in the tag
-    var tagData = this;
-    tagData.label = e.currentTarget.innerText;
+    this.label = e.currentTarget.innerText;
 
     // Validate the data and return any errors
-    var errors = validateTag(tagData);
+    var errors = validateTag(this);
     if (errors.label) {
       Session.set('tagErrors', errors);
       throwError(errors.label);
@@ -112,7 +111,7 @@ Template.manageTags.events({
     }
 
     // Update the tag in the collection
-    Meteor.call('privateTagRename', tagData, originalLabel , function(error, result) {
+    Meteor.call('privateTagRename', this, originalLabel , function(error, result) {
       if (error){
         Session.set('tagErrors', { serverError: error.reason });
         throwError(error.reason);
