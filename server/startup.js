@@ -34,11 +34,6 @@ if (Meteor.stage.stageCurrentInstance()) {
       console.log(' --> Staging Central Asia');
       Meteor.stage.stageCentralAsiaRegion();
     }
-
-    // Set users collection in the Houston admin panel
-    Houston.add_collection(Meteor.users);
-    Houston.add_collection(Houston._admins);
-
   } catch (e) {
       console.log(e);
   }
@@ -51,4 +46,8 @@ Meteor.startup( function() {
   process.env.MAIL_URL = Meteor.settings.mail.url;
   Accounts.emailTemplates.siteName = Meteor.settings.public.siteName;
   Accounts.emailTemplates.from = Meteor.settings.mail.from;
+
+  // Set users collection in the Houston admin panel
+  Houston.add_collection(Meteor.users);
+  Houston.add_collection(Houston._admins);
 });
